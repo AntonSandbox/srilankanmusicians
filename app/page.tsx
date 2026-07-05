@@ -17,8 +17,10 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   const location = typeof searchParams.location === 'string' ? searchParams.location : undefined;
   const language = typeof searchParams.language === 'string' ? searchParams.language : undefined;
   const date = typeof searchParams.date === 'string' ? searchParams.date : undefined;
+  const occasion = typeof searchParams.occasion === 'string' ? searchParams.occasion : undefined;
+  const budget = typeof searchParams.budget === 'string' ? searchParams.budget : undefined;
 
-  const hasSearchParams = category || location || language || date;
+  const hasSearchParams = category || location || language || date || occasion || budget;
   
   let vendors: Vendor[] = [];
   let fetchError = null;
@@ -42,7 +44,9 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       p_category: category || null,
       p_location: location || null,
       p_language: language || null,
-      p_date: date || null
+      p_date: date || null,
+      p_occasion: occasion || null,
+      p_budget: budget || null
     };
     
     const { data, error } = await supabase.rpc('search_available_vendors', args);

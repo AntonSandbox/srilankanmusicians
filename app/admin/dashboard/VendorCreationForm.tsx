@@ -4,10 +4,11 @@ import { useState, useTransition } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ImageUploader } from '@/components/ImageUploader';
 import { createVendorAction } from './vendor-actions';
 import { Loader2, Plus, X } from 'lucide-react';
+import { OCCASIONS, SERVICES, LOCATIONS, LANGUAGES, BUDGET_RANGES } from '@/lib/constants';
 
 export function VendorCreationForm() {
   const [isPending, startTransition] = useTransition();
@@ -16,21 +17,20 @@ export function VendorCreationForm() {
 
   // Form states for arrays and complex types
   const [category, setCategory] = useState('');
+  const [location, setLocation] = useState('');
+  const [budgetRange, setBudgetRange] = useState('');
   const [languages, setLanguages] = useState<string[]>([]);
-  const [languageInput, setLanguageInput] = useState('');
+  const [occasions, setOccasions] = useState<string[]>([]);
   
   const [profileImageId, setProfileImageId] = useState<string>('');
   const [portfolioIds, setPortfolioIds] = useState<string[]>([]);
 
-  const handleAddLanguage = () => {
-    if (languageInput.trim() && !languages.includes(languageInput.trim())) {
-      setLanguages([...languages, languageInput.trim()]);
-      setLanguageInput('');
-    }
+  const toggleLanguage = (lang: string) => {
+    setLanguages(prev => prev.includes(lang) ? prev.filter(l => l !== lang) : [...prev, lang]);
   };
 
-  const handleRemoveLanguage = (lang: string) => {
-    setLanguages(languages.filter(l => l !== lang));
+  const toggleOccasion = (occasion: string) => {
+    setOccasions(prev => prev.includes(occasion) ? prev.filter(o => o !== occasion) : [...prev, occasion]);
   };
 
   const handleAddPortfolioImage = (id: string) => {
@@ -55,7 +55,10 @@ export function VendorCreationForm() {
 
     const formData = new FormData(e.currentTarget);
     formData.set('category', category);
+    formData.set('location', location);
+    formData.set('budget_range', budgetRange);
     formData.set('languages', JSON.stringify(languages));
+    formData.set('occasions', JSON.stringify(occasions));
     formData.set('portfolio', JSON.stringify(portfolioIds));
     if (profileImageId) {
       formData.set('profile_image', profileImageId);
@@ -104,17 +107,58 @@ export function VendorCreationForm() {
               <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Florist">Florist</SelectItem>
-              <SelectItem value="DJ">DJ</SelectItem>
-              <SelectItem value="Cake Designer">Cake Designer</SelectItem>
+              {SERVICES.map((serviceGroup) => (
+                <SelectGroup key={serviceGroup.group}>
+                  <SelectLabel>{serviceGroup.group}</SelectLabel>
+                  {serviceGroup.items.map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              ))}
             </SelectContent>
           </Select>
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="location">Location</Label>
-        <Input id="location" name="location" placeholder="City, State" />
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label htmlFor="location">Location</Label>
+          <Select value={location} onValueChange={(val) => setLocation(val || '')} required>
+            <SelectTrigger>
+              <SelectValue placeholder="Select location" />
+            </SelectTrigger>
+            <SelectContent>
+              {LOCATIONS.map((locationGroup) => (
+                <SelectGroup key={locationGroup.group}>
+                  <SelectLabel>{locationGroup.group}</SelectLabel>
+                  {locationGroup.items.map((item) => (
+                    <SelectItem key={item} value={item}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="budget_range">Budget Range</Label>
+          <Select value={budgetRange} onValueChange={(val) => setBudgetRange(val || '')} required>
+            <SelectTrigger>
+              <SelectValue placeholder="Select budget range" />
+            </SelectTrigger>
+            <SelectContent>
+              {BUDGET_RANGES.map((range) => (
+                <SelectItem key={range} value={range}>
+                  {range}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
@@ -131,34 +175,49 @@ export function VendorCreationForm() {
 
       <div className="space-y-2">
         <Label>Languages</Label>
-        <div className="flex gap-2">
-          <Input 
-            value={languageInput}
-            onChange={(e) => setLanguageInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleAddLanguage();
-              }
-            }}
-            placeholder="e.g. English, Spanish" 
-          />
-          <Button type="button" onClick={handleAddLanguage} variant="secondary">
-            <Plus className="w-4 h-4" />
-          </Button>
+        <div className="flex flex-wrap gap-2">
+          {LANGUAGES.map((lang) => (
+            <button
+              key={lang}
+              type="button"
+              onClick={() => toggleLanguage(lang)}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+                languages.includes(lang)
+                  ? 'bg-primary text-primary-foreground border-primary'
+                  : 'bg-white text-foreground hover:bg-slate-100 border-input'
+              }`}
+            >
+              {lang}
+            </button>
+          ))}
         </div>
-        {languages.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-2">
-            {languages.map(lang => (
-              <span key={lang} className="inline-flex items-center gap-1 bg-secondary text-secondary-foreground px-2 py-1 rounded-md text-sm">
-                {lang}
-                <button type="button" onClick={() => handleRemoveLanguage(lang)} className="hover:text-destructive">
-                  <X className="w-3 h-3" />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
+      </div>
+
+      <div className="space-y-2">
+        <Label>Occasions</Label>
+        <div className="space-y-4">
+          {OCCASIONS.map((occasionGroup) => (
+            <div key={occasionGroup.group} className="space-y-2">
+              <h4 className="text-sm font-medium text-muted-foreground">{occasionGroup.group}</h4>
+              <div className="flex flex-wrap gap-2">
+                {occasionGroup.items.map((occasion) => (
+                  <button
+                    key={occasion}
+                    type="button"
+                    onClick={() => toggleOccasion(occasion)}
+                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
+                      occasions.includes(occasion)
+                        ? 'bg-primary text-primary-foreground border-primary'
+                        : 'bg-white text-foreground hover:bg-slate-100 border-input'
+                    }`}
+                  >
+                    {occasion}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="space-y-6 pt-4 border-t">

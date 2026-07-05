@@ -2,6 +2,12 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
+import { OCCASIONS, SERVICES, LOCATIONS, LANGUAGES, BUDGET_RANGES } from '@/lib/constants';
+
+// Pre-compute flattened lists for validation
+const validCategories = SERVICES.flatMap(s => s.items);
+const validLocations = LOCATIONS.flatMap(l => l.items);
+const validOccasions = OCCASIONS.flatMap(o => o.items);
 
 // Initialize Supabase Admin client to bypass RLS
 const supabaseAdmin = createClient(
@@ -18,15 +24,39 @@ export async function createVendorAction(formData: FormData) {
   const contact_email = formData.get('contact_email') as string;
   const login_email = formData.get('login_email') as string;
   const profile_image = formData.get('profile_image') as string;
+  const budget_range = formData.get('budget_range') as string;
 
   const languagesRaw = formData.get('languages') as string;
+  const occasionsRaw = formData.get('occasions') as string;
   const portfolioRaw = formData.get('portfolio') as string;
 
   const languages = languagesRaw ? JSON.parse(languagesRaw) : [];
+  const occasions = occasionsRaw ? JSON.parse(occasionsRaw) : [];
   const portfolio = portfolioRaw ? JSON.parse(portfolioRaw) : [];
 
   if (!name || !category || !login_email) {
     return { success: false, error: 'Name, Category, and Login Email are required.' };
+  }
+
+  // Validate single fields against constants
+  if (category && !validCategories.includes(category)) {
+    return { success: false, error: `Invalid category submitted.` };
+  }
+  if (location && !validLocations.includes(location)) {
+    return { success: false, error: `Invalid location submitted.` };
+  }
+  if (budget_range && !BUDGET_RANGES.includes(budget_range)) {
+    return { success: false, error: `Invalid budget range submitted.` };
+  }
+
+  // Validate array fields against constants
+  if (Array.isArray(languages)) {
+    const invalidLang = languages.find(lang => !LANGUAGES.includes(lang));
+    if (invalidLang) return { success: false, error: `Invalid language: ${invalidLang}` };
+  }
+  if (Array.isArray(occasions)) {
+    const invalidOccasion = occasions.find(occ => !validOccasions.includes(occ));
+    if (invalidOccasion) return { success: false, error: `Invalid occasion: ${invalidOccasion}` };
   }
 
   try {
@@ -80,6 +110,8 @@ export async function createVendorAction(formData: FormData) {
       category,
       location,
       languages,
+      occasions,
+      budget_range,
       contact_email,
       profile_image,
       portfolio,

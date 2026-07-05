@@ -11,6 +11,8 @@ export interface Vendor {
   category: string;
   location: string | null;
   languages: string[];
+  occasions?: string[];
+  budget_range?: string | null;
   contact_email: string | null;
   schedule_url: string | null;
   profile_image: string | null;
