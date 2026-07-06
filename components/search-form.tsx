@@ -31,7 +31,7 @@ export function SearchForm() {
     searchParams.get('date') ? new Date(searchParams.get('date') as string) : undefined
   );
   const [location, setLocation] = useState(searchParams.get('location') || '');
-  const [language, setLanguage] = useState(searchParams.get('language') || '');
+  const [languages, setLanguages] = useState<string[]>(searchParams.getAll('language'));
   const [budget, setBudget] = useState(searchParams.get('budget') || '');
 
   // Sync state if URL changes externally
@@ -40,9 +40,13 @@ export function SearchForm() {
     setCategory(searchParams.get('category') || '');
     setDate(searchParams.get('date') ? new Date(searchParams.get('date') as string) : undefined);
     setLocation(searchParams.get('location') || '');
-    setLanguage(searchParams.get('language') || '');
+    setLanguages(searchParams.getAll('language'));
     setBudget(searchParams.get('budget') || '');
   }, [searchParams]);
+
+  const toggleLanguage = (lang: string) => {
+    setLanguages(prev => prev.includes(lang) ? prev.filter(l => l !== lang) : [...prev, lang]);
+  };
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -61,8 +65,10 @@ export function SearchForm() {
     if (location && location !== 'none') params.set('location', location);
     else params.delete('location');
     
-    if (language && language !== 'none') params.set('language', language);
-    else params.delete('language');
+    params.delete('language');
+    languages.forEach(lang => {
+      params.append('language', lang);
+    });
 
     if (budget && budget !== 'none') params.set('budget', budget);
     else params.delete('budget');
@@ -157,18 +163,45 @@ export function SearchForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="language" className="text-zinc-600 dark:text-zinc-400 font-medium text-xs uppercase tracking-wider">Language</Label>
-          <Select value={language} onValueChange={(val) => setLanguage(val || '')}>
-            <SelectTrigger id="language" className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800">
-              <SelectValue placeholder="All Languages" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">All Languages</SelectItem>
-              {LANGUAGES.map((lang) => (
-                <SelectItem key={lang} value={lang}>{lang}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Label className="text-zinc-600 dark:text-zinc-400 font-medium text-xs uppercase tracking-wider">Language</Label>
+          <Popover>
+            <PopoverTrigger
+              className={cn(
+                "inline-flex items-center justify-between whitespace-nowrap rounded-md text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border h-10 px-4 py-2 w-full font-normal bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800",
+                languages.length === 0 && "text-muted-foreground"
+              )}
+            >
+              <span className="truncate">
+                {languages.length > 0 ? languages.join(', ') : 'All Languages'}
+              </span>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-4 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 shadow-xl rounded-xl">
+              <div className="space-y-3">
+                <h4 className="font-medium text-sm border-b pb-2">Select Languages</h4>
+                <div className="flex flex-col gap-2">
+                  {LANGUAGES.map((lang) => (
+                    <label key={lang} className="flex items-center gap-2 cursor-pointer group">
+                      <div className={cn(
+                        "w-4 h-4 rounded border flex items-center justify-center transition-colors",
+                        languages.includes(lang) 
+                          ? "bg-primary border-primary text-primary-foreground" 
+                          : "border-zinc-300 dark:border-zinc-700 group-hover:border-primary"
+                      )}>
+                        {languages.includes(lang) && <span className="text-[10px]">✓</span>}
+                      </div>
+                      <input 
+                        type="checkbox" 
+                        className="sr-only" 
+                        checked={languages.includes(lang)}
+                        onChange={() => toggleLanguage(lang)}
+                      />
+                      <span className="text-sm text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-100">{lang}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         <div className="space-y-2">

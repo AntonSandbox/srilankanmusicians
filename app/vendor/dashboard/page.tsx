@@ -21,21 +21,16 @@ export default async function VendorDashboardPage() {
     .eq('id', user.id)
     .single();
 
-  const { data: blockedDatesData } = await supabase
-    .from('vendor_blocked_dates')
-    .select('blocked_date')
-    .eq('vendor_id', user.id);
-
-  const blockedDates = (blockedDatesData || []).map(row => {
-    // blocked_date comes back as 'YYYY-MM-DD', convert to local Date object
-    const [year, month, day] = row.blocked_date.split('-');
-    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-  });
+  const { data: availableRangesData } = await supabase
+    .from('vendor_available_ranges')
+    .select('id, start_date, end_date')
+    .eq('vendor_id', user.id)
+    .order('start_date', { ascending: true });
 
   return (
     <VendorDashboardClient 
       vendor={vendorData as Vendor} 
-      blockedDates={blockedDates} 
+      availableRanges={availableRangesData || []} 
     />
   );
 }

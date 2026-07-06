@@ -101,15 +101,28 @@ export const SERVICES = [
 
 export const LOCATIONS = [
   {
-    group: 'Country/Region',
-    items: [
-      'Sri Lanka',
-      'Australia',
-      'United Kingdom',
-      'UAE',
-      'Canada',
-      'Other',
-    ],
+    group: 'Sri Lanka',
+    items: ['Colombo', 'Kandy', 'Galle', 'Negombo', 'Kurunegala', 'Nuwara Eliya'],
+  },
+  {
+    group: 'Australia',
+    items: ['Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide'],
+  },
+  {
+    group: 'United Kingdom',
+    items: ['London', 'Manchester', 'Birmingham', 'Edinburgh', 'Glasgow'],
+  },
+  {
+    group: 'UAE',
+    items: ['Dubai', 'Abu Dhabi', 'Sharjah'],
+  },
+  {
+    group: 'Canada',
+    items: ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa'],
+  },
+  {
+    group: 'Other',
+    items: ['Other / Destination'],
   },
 ];
 
@@ -117,10 +130,6 @@ export const LANGUAGES = [
   'English',
   'Sinhala',
   'Tamil',
-  'English & Sinhala',
-  'English & Tamil',
-  'Sinhala & Tamil',
-  'Trilingual (all three)',
 ];
 
 export const BUDGET_RANGES = [
