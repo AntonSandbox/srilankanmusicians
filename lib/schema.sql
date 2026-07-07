@@ -1,74 +1,121 @@
--- 1. Create the Vendor Category Enum
-CREATE TYPE vendor_category AS ENUM ('Florist', 'DJ', 'Cake Designer');
+-- ==========================================
+-- 1. CORE TABLES
+-- ==========================================
 
--- 2. Create the vendors table
+-- Vendors Table
 CREATE TABLE vendors (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
-  category vendor_category NOT NULL,
-  location TEXT,
-  languages TEXT[] DEFAULT '{}',
-  contact_email TEXT,
-  schedule_url TEXT,
-  profile_image TEXT,
-  portfolio TEXT[] DEFAULT '{}',
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
+    id UUID PRIMARY KEY, -- Links directly to auth.users.id
+    name TEXT NOT NULL,
+    category TEXT NOT NULL,
+    location TEXT NOT NULL,
+    languages TEXT[] NOT NULL DEFAULT '{}',
+    occasions TEXT[] NOT NULL DEFAULT '{}',
+    budget_range TEXT,
+    contact_email TEXT NOT NULL,
+    schedule_url TEXT,
+    profile_image TEXT,
+    portfolio TEXT[] DEFAULT '{}',
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 3. Create the vendor_blocked_dates table
-CREATE TABLE vendor_blocked_dates (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  vendor_id UUID NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
-  blocked_date DATE NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+-- Vendor Available Ranges (Replaced blocked dates)
+CREATE TABLE vendor_available_ranges (
+    id BIGSERIAL PRIMARY KEY,
+    vendor_id UUID NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL
 );
 
--- 4. Enable Row Level Security (RLS)
+-- Vendor Reviews Table
+CREATE TABLE vendor_reviews (
+    id BIGSERIAL PRIMARY KEY,
+    vendor_id UUID NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
+    reviewer_name TEXT NOT NULL,
+    review_text TEXT NOT NULL,
+    review_date DATE NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+
+-- ==========================================
+-- 2. PERFORMANCE INDEXES
+-- ==========================================
+
+-- B-Tree index for exact string matching on heavily filtered columns
+CREATE INDEX idx_vendors_category_location ON vendors (category, location);
+
+-- GIN indexes for lightning-fast array searching
+CREATE INDEX idx_vendors_languages ON vendors USING gin (languages);
+CREATE INDEX idx_vendors_occasions ON vendors USING gin (occasions);
+
+-- Composite index for fast date range scanning
+CREATE INDEX idx_vendor_ranges_composite ON vendor_available_ranges (vendor_id, start_date, end_date);
+
+-- Index for fast review fetching when opening a profile
+CREATE INDEX idx_vendor_reviews_vendor_id ON vendor_reviews (vendor_id);
+
+
+-- ==========================================
+-- 3. ROW LEVEL SECURITY (RLS) POLICIES
+-- ==========================================
+
 ALTER TABLE vendors ENABLE ROW LEVEL SECURITY;
-ALTER TABLE vendor_blocked_dates ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vendor_available_ranges ENABLE ROW LEVEL SECURITY;
+ALTER TABLE vendor_reviews ENABLE ROW LEVEL SECURITY;
 
--- 5. RLS Policies for vendors table
--- Public Read
-CREATE POLICY "Allow public read-only access on vendors" 
-  ON vendors FOR SELECT 
-  USING (true);
+-- Vendors Table Policies
+-- Public can read all vendors. Only the owner can update their profile. (Creation is handled by Admin Service Role).
+CREATE POLICY "Public read access for vendors" ON vendors FOR SELECT USING (true);
+CREATE POLICY "Vendors can update their own profile" ON vendors FOR UPDATE USING (auth.uid() = id);
 
--- Update restricted to owner
-CREATE POLICY "Allow individual update access on vendors" 
-  ON vendors FOR UPDATE 
-  USING (auth.uid() = id);
+-- Available Ranges Policies
+-- Public can read to allow search filtering. Vendors have full control over their own ranges.
+CREATE POLICY "Public read access for ranges" ON vendor_available_ranges FOR SELECT USING (true);
+CREATE POLICY "Vendors can manage their own ranges" ON vendor_available_ranges FOR ALL USING (auth.uid() = vendor_id);
 
--- (Insert/Delete are implicitly blocked because no policies are created for them)
+-- Reviews Policies
+-- Public can read to view on the dialog popup. Vendors can manage their own reviews.
+CREATE POLICY "Public read access for reviews" ON vendor_reviews FOR SELECT USING (true);
+CREATE POLICY "Vendors can manage their own reviews" ON vendor_reviews FOR ALL USING (auth.uid() = vendor_id);
 
--- 6. RLS Policies for vendor_blocked_dates table
--- Public Read
-CREATE POLICY "Allow public read-only access on blocked dates" 
-  ON vendor_blocked_dates FOR SELECT 
-  USING (true);
 
--- Owner specific actions (Insert, Update, Delete)
-CREATE POLICY "Allow owner to insert blocked dates" 
-  ON vendor_blocked_dates FOR INSERT 
-  WITH CHECK (auth.uid() = vendor_id);
+-- ==========================================
+-- 4. SEARCH RPC FUNCTION (STORED PROCEDURE)
+-- ==========================================
 
-CREATE POLICY "Allow owner to update blocked dates" 
-  ON vendor_blocked_dates FOR UPDATE 
-  USING (auth.uid() = vendor_id);
-
-CREATE POLICY "Allow owner to delete blocked dates" 
-  ON vendor_blocked_dates FOR DELETE 
-  USING (auth.uid() = vendor_id);
-
--- 7. Create Indexes
--- B-Tree index for category
-CREATE INDEX idx_vendors_category ON vendors USING BTREE (category);
-
--- B-Tree index for location
-CREATE INDEX idx_vendors_location ON vendors USING BTREE (location);
-
--- GIN index for languages (array)
-CREATE INDEX idx_vendors_languages ON vendors USING GIN (languages);
-
--- Composite index for blocked_date and vendor_id
-CREATE INDEX idx_vendor_blocked_dates_composite ON vendor_blocked_dates (blocked_date, vendor_id);
+CREATE OR REPLACE FUNCTION search_available_vendors(
+  p_category text DEFAULT NULL,
+  p_location text DEFAULT NULL,
+  p_languages text[] DEFAULT NULL,
+  p_date date DEFAULT NULL,
+  p_occasion text DEFAULT NULL,
+  p_budget text DEFAULT NULL
+)
+RETURNS SETOF vendors AS $$
+BEGIN
+  RETURN QUERY
+  SELECT v.*
+  FROM vendors v
+  WHERE 
+    -- 1. Exact Match Filters
+    (p_category IS NULL OR v.category = p_category)
+    AND (p_location IS NULL OR v.location = p_location)
+    AND (p_budget IS NULL OR v.budget_range = p_budget)
+    
+    -- 2. Array Match Filters
+    -- Occasion: Check if the provided occasion string exists anywhere inside the vendor's occasions array
+    AND (p_occasion IS NULL OR p_occasion = ANY(v.occasions))
+    -- Languages: Uses the @> containment operator to ensure the vendor speaks ALL the requested languages
+    AND (p_languages IS NULL OR v.languages @> p_languages)
+    
+    -- 3. Date Range Availability Check
+    -- If a date is provided, ensure there is AT LEAST ONE row in their available_ranges table that encapsulates the date
+    AND (p_date IS NULL OR EXISTS (
+      SELECT 1 
+      FROM vendor_available_ranges ar 
+      WHERE ar.vendor_id = v.id 
+        AND p_date >= ar.start_date 
+        AND p_date <= ar.end_date
+    ));
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
