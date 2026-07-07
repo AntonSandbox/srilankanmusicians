@@ -12,10 +12,10 @@ export const metadata = {
 
 export default async function PublicSearchPage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const searchParams = await props.searchParams;
-  
+
   const category = typeof searchParams.category === 'string' ? searchParams.category : undefined;
   const location = typeof searchParams.location === 'string' ? searchParams.location : undefined;
-  
+
   // language can be string or string[]
   let languages: string[] | undefined = undefined;
   if (Array.isArray(searchParams.language)) {
@@ -29,10 +29,10 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   const budget = typeof searchParams.budget === 'string' ? searchParams.budget : undefined;
 
   const hasSearchParams = category || location || (languages && languages.length > 0) || date || occasion || budget;
-  
+
   let vendors: Vendor[] = [];
   let fetchError = null;
-  
+
   if (hasSearchParams) {
     const cookieStore = await cookies();
     const supabase = createServerClient(
@@ -43,7 +43,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           getAll() {
             return cookieStore.getAll();
           },
-          setAll() {},
+          setAll() { },
         },
       }
     );
@@ -56,7 +56,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       p_occasion: occasion || null,
       p_budget: budget || null
     };
-    
+
     const { data, error } = await supabase.rpc('search_available_vendors', args);
 
     if (error) {
@@ -64,6 +64,22 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       fetchError = error;
     } else if (data) {
       vendors = data as Vendor[];
+
+      if (vendors.length > 0) {
+        const vendorIds = vendors.map(v => v.id);
+
+        const { data: ranges, error: rangesError } = await supabase
+          .from('vendor_available_ranges')
+          .select('vendor_id, start_date, end_date')
+          .in('vendor_id', vendorIds);
+
+        if (ranges && !rangesError) {
+          vendors = vendors.map(v => ({
+            ...v,
+            availabilityRanges: ranges.filter(r => r.vendor_id === v.id)
+          }));
+        }
+      }
     }
   }
 
@@ -82,7 +98,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           <p className="text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto mb-12">
             Discover top-tier florists, visionary DJs, and masterful cake designers available for your special day.
           </p>
-          
+
           <Suspense fallback={<div className="h-32 bg-white/50 rounded-2xl animate-pulse w-full max-w-5xl mx-auto"></div>}>
             <SearchForm />
           </Suspense>
@@ -115,10 +131,10 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {vendors.map((vendor) => (
-                <VendorCard 
-                  key={vendor.id} 
-                  vendor={vendor} 
-                  cloudflareAccountHash={cloudflareAccountHash} 
+                <VendorCard
+                  key={vendor.id}
+                  vendor={vendor}
+                  cloudflareAccountHash={cloudflareAccountHash}
                 />
               ))}
             </div>
