@@ -174,6 +174,18 @@ export function VendorCreationForm() {
       </div>
 
       <div className="space-y-2">
+        <Label htmlFor="video_url">Background Video URL (YouTube only)</Label>
+        <Input 
+          id="video_url" 
+          name="video_url" 
+          type="url" 
+          placeholder="https://www.youtube.com/watch?v=..." 
+          pattern="^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.*$"
+          title="Please enter a valid YouTube URL"
+        />
+      </div>
+
+      <div className="space-y-2">
         <Label>Languages</Label>
         <div className="flex flex-wrap gap-2">
           {LANGUAGES.map((lang) => (

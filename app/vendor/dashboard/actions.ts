@@ -15,11 +15,16 @@ export async function updateVendorProfile(prevState: any, formData: FormData) {
   const budget_range = formData.get('budget_range') as string;
   const contact_email = formData.get('contact_email') as string;
   const schedule_url = formData.get('schedule_url') as string;
+  const video_url = formData.get('video_url') as string;
   const languagesRaw = formData.get('languages') as string;
   const occasionsRaw = formData.get('occasions') as string;
 
   const languages = languagesRaw ? JSON.parse(languagesRaw) : [];
   const occasions = occasionsRaw ? JSON.parse(occasionsRaw) : [];
+
+  if (video_url && !/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.*$/.test(video_url)) {
+    return { error: 'Invalid YouTube URL submitted.' };
+  }
 
   const { error } = await supabase
     .from('vendors')
@@ -30,7 +35,8 @@ export async function updateVendorProfile(prevState: any, formData: FormData) {
       occasions,
       languages,
       contact_email,
-      schedule_url
+      schedule_url,
+      video_url
     })
     .eq('id', user.id);
 

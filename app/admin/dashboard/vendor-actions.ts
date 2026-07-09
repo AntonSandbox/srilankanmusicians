@@ -25,6 +25,7 @@ export async function createVendorAction(formData: FormData) {
   const login_email = formData.get('login_email') as string;
   const profile_image = formData.get('profile_image') as string;
   const budget_range = formData.get('budget_range') as string;
+  const video_url = formData.get('video_url') as string;
 
   const languagesRaw = formData.get('languages') as string;
   const occasionsRaw = formData.get('occasions') as string;
@@ -47,6 +48,9 @@ export async function createVendorAction(formData: FormData) {
   }
   if (budget_range && !BUDGET_RANGES.includes(budget_range)) {
     return { success: false, error: `Invalid budget range submitted.` };
+  }
+  if (video_url && !/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.*$/.test(video_url)) {
+    return { success: false, error: `Invalid YouTube URL submitted.` };
   }
 
   // Validate array fields against constants
@@ -115,6 +119,7 @@ export async function createVendorAction(formData: FormData) {
       contact_email,
       profile_image,
       portfolio,
+      video_url,
     });
 
     if (dbError) {

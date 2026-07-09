@@ -265,6 +265,19 @@ export function VendorDashboardClient({ vendor, availableRanges, initialReviews 
             <Input id="schedule_url" name="schedule_url" defaultValue={vendor.schedule_url || ''} placeholder="https://calendly.com/your-link" />
           </div>
 
+          <div className="space-y-2">
+            <Label htmlFor="video_url">Background Video URL (YouTube only)</Label>
+            <Input 
+              id="video_url" 
+              name="video_url" 
+              type="url" 
+              defaultValue={vendor.video_url || ''} 
+              placeholder="https://www.youtube.com/watch?v=..." 
+              pattern="^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.*$"
+              title="Please enter a valid YouTube URL"
+            />
+          </div>
+
           <Button type="submit" disabled={isProfilePending} className="w-full">
             {isProfilePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Save Profile

@@ -23,6 +23,7 @@ export interface Vendor {
   years_of_experience?: number;
   review_count?: number;
   created_at?: string;
+  video_url?: string | null;
 }
 
 interface VendorCardProps {
@@ -122,9 +123,31 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
               </div>
 
               <div className="relative h-48 sm:h-64 bg-[#1A2530] flex items-center justify-center overflow-hidden">
-                <span className="absolute text-9xl sm:text-[12rem] font-serif italic opacity-10 text-amber-500/20 select-none pointer-events-none">
-                  {vendor.name.charAt(0).toUpperCase()}
-                </span>
+                {(() => {
+                  let youtubeId = null;
+                  if (vendor.video_url) {
+                    const match = vendor.video_url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/);
+                    if (match) youtubeId = match[1];
+                  }
+                  
+                  if (youtubeId) {
+                    return (
+                      <iframe
+                        className="absolute w-full h-[300%] sm:h-[400%] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+                        src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&mute=1&loop=1&playlist=${youtubeId}&controls=0&showinfo=0&rel=0&modestbranding=1`}
+                        title="Background Video"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    );
+                  }
+                  return (
+                    <span className="absolute text-9xl sm:text-[12rem] font-serif italic opacity-10 text-amber-500/20 select-none pointer-events-none">
+                      {vendor.name.charAt(0).toUpperCase()}
+                    </span>
+                  );
+                })()}
               </div>
 
               <div className="p-8 sm:p-12 space-y-10">
