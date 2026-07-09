@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { SearchForm } from '@/components/search-form';
 import { VendorCard, Vendor } from '@/components/vendor-card';
+import { VendorGrid } from '@/components/vendor-grid';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { Sparkles } from 'lucide-react';
@@ -144,7 +145,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         </div>
       </div>
 
-      {/* CATEGORY STRIP */}
+      {/* CATEGORY STRIP
       <div className="cats" id="vendors">
         <div className="container">
           <div className="cats-scroll in">
@@ -157,7 +158,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             <button className="cat-pill"><span className="cp-icon">🎂</span><span className="cp-name">Cake Artist</span><span className="cp-count">14</span></button>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* VENDORS GRID */}
       <div className="vendors">
@@ -181,7 +182,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
               <div className="vendors-hd in">
                 <div className="vhd-left">
                   <div className="vhd-count" id="v-count">Showing {vendors.length} of {totalProfessionals || 542} professionals</div>
-                  <div className="vhd-title">Available <em>this week</em></div>
+                  <div className="vhd-title">Available <em>professionals</em></div>
                 </div>
                 <div className="vhd-sort">
                   <label>Sort by</label>
@@ -194,18 +195,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
                 </div>
               </div>
 
-              <div className="vgrid">
-                {vendors.map((vendor) => (
-                  <VendorCard
-                    key={vendor.id}
-                    vendor={vendor}
-                    cloudflareAccountHash={cloudflareAccountHash}
-                  />
-                ))}
-              </div>
-              <div className="load-more-wrap in">
-                <button className="load-more">Load more professionals <i className="fas fa-chevron-down" style={{ fontSize: '10px' }}></i></button>
-              </div>
+              <VendorGrid vendors={vendors} cloudflareAccountHash={cloudflareAccountHash} />
             </>
           )}
         </div>
