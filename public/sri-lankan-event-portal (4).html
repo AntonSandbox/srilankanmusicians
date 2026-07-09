@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sri Lankan Event Portal — Find & Book Event Talent</title>
+<meta name="description" content="Find verified Sri Lankan event vendors for any occasion. Search by event type, date and location. Tentative bookings confirmed within 24 hours with a personalised quote.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ── TOKENS ──────────────────────────────────────────── */
+:root{
+  --slate:#0F172A; --slate2:#1E293B; --slate3:#2D3F55;
+  --saffron:#E8960C; --saffron2:#F5B730; --saffron3:#FDE68A;
+  --sand:#C8B89A; --sand2:#EDE4D6; --sand3:#F7F3ED;
+  --paper:#FAFAF8; --ink:#0D1520;
+  --steel:#2D4A6B; --mist:#64748B; --pale:#94A3B8;
+  --green:#065F46; --greenl:#D1FAE5;
+  --ruby:#881337; --rubyl:#FFE4E6;
+  --sh:0 4px 24px rgba(15,23,42,.14);
+  --sh-lg:0 12px 48px rgba(15,23,42,.22);
+  --ease:cubic-bezier(.4,0,.2,1);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+a{text-decoration:none;color:inherit;}
+button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;outline:none;}
+
+/* ── LAYOUT ──────────────────────────────────────────── */
+.container{max-width:1200px;margin:0 auto;padding:0 24px;}
+.section{padding:72px 0;}
+
+/* ── NAV ─────────────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(15,23,42,.97);backdrop-filter:blur(14px);
+  border-bottom:1px solid rgba(232,150,12,.1);}
+.nav-in{display:flex;align-items:center;justify-content:space-between;
+  height:60px;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nl-sq{width:34px;height:34px;background:var(--saffron);
+  display:flex;align-items:center;justify-content:center;}
+.nl-sq span{font-family:'Cormorant',serif;font-size:20px;font-weight:700;
+  font-style:italic;color:var(--slate);}
+.nl-text{display:flex;flex-direction:column;}
+.nl-name{font-family:'Cormorant',serif;font-size:15px;font-weight:700;
+  color:#fff;line-height:1;letter-spacing:.2px;}
+.nl-sub{font-size:8px;font-weight:500;letter-spacing:2.5px;
+  text-transform:uppercase;color:rgba(232,150,12,.55);margin-top:2px;}
+.nav-links{display:flex;align-items:center;gap:28px;}
+.nav-a{font-size:11px;font-weight:500;letter-spacing:.8px;
+  text-transform:uppercase;color:rgba(255,255,255,.4);transition:.18s;}
+.nav-a:hover{color:var(--saffron2);}
+.nav-cta{font-size:11px;font-weight:600;letter-spacing:.8px;
+  text-transform:uppercase;color:var(--slate);background:var(--saffron);
+  padding:8px 18px;transition:.18s;}
+.nav-cta:hover{background:var(--saffron2);}
+.nav-burger{display:none;flex-direction:column;gap:5px;background:none;padding:4px;}
+.nav-burger span{width:20px;height:1.5px;background:#fff;display:block;}
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero{background:var(--slate);padding:96px 0 0;min-height:auto;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60px;
+  background:var(--paper);clip-path:ellipse(55% 100% at 50% 100%);}
+.hero-bg{position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 20% 40%,rgba(232,150,12,.06) 0%,transparent 65%),
+  radial-gradient(ellipse 60% 60% at 85% 20%,rgba(45,74,107,.4) 0%,transparent 60%);}
+.hero-content{position:relative;z-index:2;padding-bottom:80px;}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;margin-bottom:22px;
+  border:1px solid rgba(232,150,12,.2);background:rgba(232,150,12,.06);
+  color:var(--saffron2);font-size:10px;font-weight:600;letter-spacing:3px;
+  text-transform:uppercase;padding:6px 14px;}
+.hero-kicker-dot{width:5px;height:5px;border-radius:50%;background:var(--saffron);
+  animation:pulse 2.2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.25;}}
+.hero-h1{font-family:'Cormorant',serif;
+  font-size:clamp(40px,5.5vw,76px);font-weight:700;color:#fff;
+  line-height:1.02;margin-bottom:16px;max-width:740px;}
+.hero-h1 em{font-style:italic;color:var(--saffron2);}
+.hero-desc{font-size:15px;color:rgba(255,255,255,.38);line-height:1.85;
+  font-weight:300;max-width:520px;margin-bottom:44px;}
+
+/* ── SEARCH ENGINE ────────────────────────────────────── */
+.search-engine{background:#fff;box-shadow:var(--sh-lg);
+  border-top:3px solid var(--saffron);padding:28px 28px 22px;}
+.se-head{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:20px;flex-wrap:wrap;gap:8px;}
+.se-title{font-size:11px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--mist);}
+.se-avail{font-size:12px;color:var(--green);font-weight:600;
+  display:flex;align-items:center;gap:6px;}
+.se-avail::before{content:'';width:7px;height:7px;border-radius:50%;
+  background:var(--green);animation:pulse 2s infinite;}
+.se-row{display:grid;gap:10px;margin-bottom:10px;}
+.se-r1{grid-template-columns:1.6fr 1.2fr 1fr;}
+.se-r2{grid-template-columns:1fr 1fr 1fr 1fr;}
+.sf{position:relative;}
+.sf label{display:block;font-size:9px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--pale);margin-bottom:5px;}
+.sf select,.sf input{width:100%;background:var(--sand3);
+  border:1.5px solid var(--sand2);color:var(--ink);
+  font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;
+  padding:11px 12px 11px 36px;appearance:none;outline:none;
+  border-radius:0;transition:.2s;}
+.sf select:focus,.sf input:focus{border-color:var(--saffron);}
+.sf select option{background:#fff;}
+.sf-ico{position:absolute;left:11px;bottom:12px;
+  color:rgba(232,150,12,.55);font-size:13px;pointer-events:none;}
+.se-actions{display:flex;gap:10px;align-items:stretch;margin-top:4px;}
+.se-btn{flex:1;background:var(--slate);color:#fff;font-size:12px;
+  font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:8px;
+  transition:.2s;}
+.se-btn:hover{background:var(--saffron);color:var(--slate);}
+.se-btn-outline{flex-shrink:0;background:none;border:1.5px solid var(--sand2);
+  color:var(--mist);font-size:11px;font-weight:600;
+  letter-spacing:1px;text-transform:uppercase;padding:0 18px;transition:.2s;}
+.se-btn-outline:hover{border-color:var(--slate);color:var(--slate);}
+.se-hint{font-size:11px;color:var(--pale);margin-top:12px;text-align:center;
+  font-style:italic;}
+.se-hint strong{color:var(--saffron);font-style:normal;}
+
+/* ── TRUST BAR ────────────────────────────────────────── */
+.trust-bar{background:var(--slate2);padding:14px 0;}
+.trust-bar-in{display:flex;align-items:center;justify-content:center;
+  gap:36px;flex-wrap:wrap;}
+.tb-item{display:flex;align-items:center;gap:8px;
+  font-size:11px;color:rgba(255,255,255,.4);}
+.tb-item strong{color:rgba(255,255,255,.7);font-weight:600;}
+.tb-sep{width:1px;height:16px;background:rgba(255,255,255,.08);}
+
+/* ── CATEGORY STRIP ───────────────────────────────────── */
+.cats{background:var(--paper);padding:52px 0 0;}
+.cats-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.cats-scroll::-webkit-scrollbar{display:none;}
+.cat-pill{flex-shrink:0;display:flex;align-items:center;gap:8px;
+  background:#fff;border:1.5px solid var(--sand2);
+  padding:9px 16px;cursor:pointer;transition:.2s;white-space:nowrap;}
+.cat-pill:hover,.cat-pill.on{background:var(--slate);border-color:var(--slate);color:#fff;}
+.cat-pill:hover .cp-count,.cat-pill.on .cp-count{color:var(--saffron2);}
+.cp-icon{font-size:16px;}
+.cp-name{font-size:12px;font-weight:600;color:var(--ink);}
+.cat-pill:hover .cp-name,.cat-pill.on .cp-name{color:#fff;}
+.cp-count{font-family:'DM Mono',monospace;font-size:10px;
+  color:var(--pale);font-weight:500;}
+
+/* ── VENDORS GRID ─────────────────────────────────────── */
+.vendors{padding:32px 0 64px;}
+.vendors-hd{display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:28px;flex-wrap:wrap;gap:12px;}
+.vhd-left{}
+.vhd-count{font-family:'DM Mono',monospace;font-size:12px;color:var(--pale);}
+.vhd-title{font-family:'Cormorant',serif;font-size:28px;font-weight:700;
+  color:var(--ink);line-height:1.1;}
+.vhd-sort{display:flex;align-items:center;gap:8px;}
+.vhd-sort label{font-size:11px;color:var(--pale);}
+.vhd-sort select{background:none;border:1.5px solid var(--sand2);
+  font-family:'DM Sans',sans-serif;font-size:11px;padding:6px 10px;
+  color:var(--ink);outline:none;}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
+
+/* ── VENDOR CARD ──────────────────────────────────────── */
+.vcard{background:#fff;border:1.5px solid var(--sand2);
+  transition:.22s;cursor:pointer;position:relative;}
+.vcard:hover{border-color:var(--saffron);box-shadow:var(--sh);transform:translateY(-3px);}
+.vc-top{height:180px;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--slate),var(--slate2));}
+.vc-initial{width:100%;height:100%;display:flex;align-items:center;
+  justify-content:center;font-family:'Cormorant',serif;font-size:72px;
+  font-weight:700;font-style:italic;color:rgba(232,150,12,.12);
+  transition:.3s;}
+.vcard:hover .vc-initial{transform:scale(1.06);}
+.vc-badges{position:absolute;top:10px;left:10px;display:flex;gap:5px;flex-wrap:wrap;}
+.vb{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;}
+.vb-v{background:var(--slate);color:var(--saffron);}
+.vb-a{background:var(--green);color:#fff;}
+.vb-f{background:var(--saffron);color:var(--slate);}
+.vb-b{background:rgba(0,0,0,.5);color:rgba(255,255,255,.5);}
+.vc-avail-bar{position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(15,23,42,.82));
+  padding:8px 12px;display:flex;align-items:center;gap:6px;}
+.vab-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.vab-txt{font-size:10px;color:rgba(255,255,255,.6);}
+.vc-body{padding:16px 18px;}
+.vc-cat{font-size:9px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--saffron);margin-bottom:4px;}
+.vc-name{font-family:'Cormorant',serif;font-size:20px;font-weight:700;
+  color:var(--ink);margin-bottom:2px;line-height:1.15;}
+.vc-tagline{font-size:11px;color:var(--mist);font-style:italic;margin-bottom:11px;}
+.vc-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:10px;}
+.vc-m{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--mist);}
+.vc-m i{color:var(--saffron);font-size:10px;}
+.vc-stars{display:flex;align-items:center;gap:5px;margin-bottom:10px;}
+.vc-stars i{color:var(--saffron);font-size:10px;}
+.vc-rc{font-size:10px;color:var(--pale);}
+.vc-skills{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:14px;}
+.vsk{font-size:10px;padding:3px 8px;background:var(--sand3);
+  border:1px solid var(--sand2);color:var(--mist);}
+.vsk-hl{background:rgba(232,150,12,.08);border-color:rgba(232,150,12,.2);color:var(--saffron);}
+.vc-foot{display:flex;align-items:center;justify-content:space-between;
+  padding-top:12px;border-top:1.5px solid var(--sand2);}
+.vc-rate{display:flex;flex-direction:column;}
+.vc-rate-lbl{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;
+  letter-spacing:1px;text-transform:uppercase;color:var(--pale);}
+.vc-rate-val{font-family:'DM Mono',monospace;font-size:16px;
+  font-weight:500;color:var(--ink);line-height:1.2;}
+.vc-rate-range{font-family:'DM Mono',monospace;font-size:9px;color:var(--pale);}
+.vc-book{background:var(--slate);color:#fff;font-size:10px;font-weight:700;
+  letter-spacing:1px;text-transform:uppercase;padding:10px 16px;transition:.2s;}
+.vc-book:hover{background:var(--saffron);color:var(--slate);}
+
+/* ── LOAD MORE ────────────────────────────────────────── */
+.load-more-wrap{text-align:center;margin-top:36px;}
+.load-more{display:inline-flex;align-items:center;gap:8px;
+  border:1.5px solid var(--slate);color:var(--slate);
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:13px 28px;transition:.2s;background:none;}
+.load-more:hover{background:var(--slate);color:#fff;}
+
+/* ── HOW BOOKING WORKS ────────────────────────────────── */
+.booking-flow{background:var(--slate);padding:64px 0;}
+.bf-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+.bf-left .sec-eye{color:rgba(232,150,12,.7);}
+.bf-left .sec-h2{color:#fff;}
+.bf-left .sec-p{color:rgba(255,255,255,.35);}
+.bf-steps{display:flex;flex-direction:column;gap:0;}
+.bfs{display:flex;gap:16px;padding:16px 0;position:relative;}
+.bfs:not(:last-child)::after{content:'';position:absolute;left:15px;
+  top:44px;width:1px;bottom:-4px;background:rgba(232,150,12,.15);}
+.bfs-num{width:32px;height:32px;border:1.5px solid rgba(232,150,12,.25);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:500;
+  color:var(--saffron);background:rgba(232,150,12,.06);}
+.bfs-text{}
+.bfs-t{font-size:14px;font-weight:600;color:#fff;margin-bottom:3px;}
+.bfs-d{font-size:12px;color:rgba(255,255,255,.3);line-height:1.75;font-weight:300;}
+.bf-right{}
+.booking-card{background:rgba(255,255,255,.04);border:1px solid rgba(232,150,12,.12);padding:24px;}
+.bc-head{font-family:'Cormorant',serif;font-size:19px;font-weight:700;
+  color:#fff;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.bc-head i{color:var(--saffron);font-size:16px;}
+.bc-field{margin-bottom:12px;}
+.bc-field label{display:block;font-size:10px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:5px;}
+.bc-field input,.bc-field select,.bc-field textarea{width:100%;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;
+  padding:10px 12px;outline:none;transition:.2s;}
+.bc-field input:focus,.bc-field select:focus,.bc-field textarea:focus{
+  border-color:rgba(232,150,12,.4);}
+.bc-field select option{background:var(--slate2);}
+.bc-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.bc-note{background:rgba(232,150,12,.07);border:1px solid rgba(232,150,12,.15);
+  padding:12px;margin-top:12px;font-size:11px;color:rgba(255,255,255,.45);line-height:1.7;}
+.bc-note strong{color:var(--saffron2);}
+.bc-submit{width:100%;background:var(--saffron);color:var(--slate);
+  font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:15px;margin-top:14px;transition:.2s;}
+.bc-submit:hover{background:var(--saffron2);}
+.bc-promise{display:flex;align-items:center;gap:6px;margin-top:10px;
+  justify-content:center;font-size:11px;color:rgba(255,255,255,.25);}
+.bc-promise i{color:var(--saffron);font-size:10px;}
+
+/* ── VENDOR PROFILE MODAL ─────────────────────────────── */
+.modal-ov{position:fixed;inset:0;background:rgba(15,23,42,.88);z-index:300;
+  display:flex;align-items:center;justify-content:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .25s;}
+.modal-ov.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;max-width:720px;width:100%;max-height:92svh;
+  overflow-y:auto;border-top:3px solid var(--saffron);}
+.modal-bar{position:sticky;top:0;background:#fff;z-index:10;
+  padding:14px 20px;border-bottom:1.5px solid var(--sand2);
+  display:flex;align-items:center;justify-content:space-between;}
+.modal-bar-name{font-family:'Cormorant',serif;font-size:19px;font-weight:700;color:var(--ink);}
+.modal-close{background:none;border:1.5px solid var(--sand2);
+  font-size:11px;font-weight:600;padding:6px 14px;color:var(--mist);transition:.2s;}
+.modal-close:hover{background:var(--slate);color:#fff;border-color:var(--slate);}
+.modal-hero{height:160px;background:linear-gradient(135deg,var(--slate),var(--slate2));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant',serif;font-size:88px;font-weight:700;
+  font-style:italic;color:rgba(232,150,12,.1);}
+.modal-body{padding:24px;}
+.mb-name{font-family:'Cormorant',serif;font-size:30px;font-weight:700;
+  color:var(--ink);margin-bottom:3px;}
+.mb-cat{font-size:10px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--saffron);margin-bottom:14px;}
+.mb-rate-box{background:var(--sand3);border:1.5px solid var(--sand2);
+  padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;
+  justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.mb-rate-item{}
+.mb-rate-lbl{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--pale);margin-bottom:3px;}
+.mb-rate-val{font-family:'DM Mono',monospace;font-size:18px;font-weight:500;color:var(--ink);}
+.mb-rate-note{font-size:11px;color:var(--pale);font-style:italic;}
+.mb-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}
+.mb-blk-lbl{font-size:9px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--pale);margin-bottom:7px;}
+.mb-tags{display:flex;flex-wrap:wrap;gap:5px;}
+.mb-tag{font-size:11px;padding:4px 10px;background:var(--sand3);
+  border:1px solid var(--sand2);color:var(--mist);}
+.mb-bio{font-size:13px;color:var(--mist);line-height:1.9;
+  font-weight:300;grid-column:1/-1;}
+.mb-avail-cal{background:var(--sand3);border:1.5px solid var(--sand2);
+  padding:16px;margin-bottom:20px;}
+.mb-avail-title{font-size:10px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--mist);margin-bottom:12px;}
+.mb-cal-note{font-size:12px;color:var(--mist);font-style:italic;}
+.mb-cal-dots{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+.mb-cal-dot{width:30px;height:30px;border:1px solid var(--sand2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:9px;font-weight:500;color:var(--mist);}
+.mb-cal-dot.avail{background:var(--greenl);border-color:rgba(6,95,70,.2);color:var(--green);}
+.mb-cal-dot.taken{background:var(--rubyl);border-color:rgba(136,19,55,.15);color:var(--ruby);}
+.mb-actions{display:flex;gap:10px;margin-top:4px;padding-top:16px;border-top:1.5px solid var(--sand2);}
+.mb-btn-p{flex:1;background:var(--saffron);color:var(--slate);
+  font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:14px;text-align:center;transition:.2s;}
+.mb-btn-p:hover{background:var(--saffron2);}
+.mb-btn-s{flex:1;background:var(--slate);color:#fff;font-size:11px;
+  font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
+  padding:14px;text-align:center;transition:.2s;}
+.mb-btn-s:hover{background:var(--slate2);}
+.mb-socials{display:flex;gap:6px;margin-top:12px;}
+.mb-soc{width:32px;height:32px;background:var(--sand3);border:1px solid var(--sand2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--mist);transition:.2s;}
+.mb-soc:hover{background:var(--slate);color:#fff;border-color:var(--slate);}
+/* In-modal booking form */
+.mb-book-form{background:var(--sand3);border:1.5px solid var(--sand2);
+  padding:20px;margin-top:16px;}
+.mbf-head{font-size:10px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:var(--saffron);
+  margin-bottom:14px;display:flex;align-items:center;gap:7px;}
+.mbf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.mbf-field label{display:block;font-size:11px;font-weight:600;
+  color:var(--mist);margin-bottom:4px;}
+.mbf-field input,.mbf-field select,.mbf-field textarea{width:100%;
+  background:#fff;border:1.5px solid var(--sand2);
+  font-family:'DM Sans',sans-serif;font-size:13px;
+  padding:9px 11px;outline:none;transition:.2s;color:var(--ink);}
+.mbf-field input:focus,.mbf-field select:focus,.mbf-field textarea:focus{
+  border-color:var(--saffron);}
+.mbf-full{grid-column:1/-1;}
+.mbf-quote-note{background:#fff;border:1px solid var(--sand2);
+  padding:12px;margin-top:10px;font-size:12px;color:var(--mist);
+  line-height:1.75;display:flex;gap:10px;}
+.mbf-quote-note i{color:var(--saffron);margin-top:2px;flex-shrink:0;}
+.mbf-submit{width:100%;background:var(--slate);color:#fff;font-size:12px;
+  font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:14px;margin-top:12px;transition:.2s;}
+.mbf-submit:hover{background:var(--saffron);color:var(--slate);}
+.mbf-promise{font-size:11px;color:var(--pale);text-align:center;
+  margin-top:10px;display:flex;align-items:center;justify-content:center;gap:5px;}
+.mbf-promise i{color:var(--saffron);}
+
+/* ── WHY VERIFIED ─────────────────────────────────────── */
+.why-sec{background:var(--sand3);padding:64px 0;}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:36px;}
+.why-card{background:#fff;border:1.5px solid var(--sand2);padding:22px;transition:.2s;}
+.why-card:hover{border-color:var(--saffron);}
+.wc-icon{font-size:22px;color:var(--saffron);margin-bottom:12px;}
+.wc-t{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.wc-d{font-size:12px;color:var(--mist);line-height:1.8;font-weight:300;}
+
+/* ── RATES GUIDE ──────────────────────────────────────── */
+.rates-sec{background:#fff;padding:64px 0;}
+.rates-note{background:var(--sand3);border:1.5px solid var(--sand2);
+  padding:14px 18px;margin-bottom:24px;font-size:13px;color:var(--mist);
+  line-height:1.7;display:flex;gap:10px;}
+.rates-note i{color:var(--saffron);margin-top:2px;flex-shrink:0;}
+.rates-table{width:100%;border-collapse:collapse;}
+.rates-table thead th{background:var(--slate);color:#fff;font-size:10px;
+  font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:12px 14px;text-align:left;}
+.rates-table tbody td{padding:12px 14px;border-bottom:1px solid var(--sand2);
+  font-size:13px;color:var(--mist);}
+.rates-table tbody tr:nth-child(even) td{background:var(--sand3);}
+.rates-table tbody tr:hover td{background:rgba(232,150,12,.05);}
+.rates-table td:nth-child(2),.rates-table td:nth-child(3),.rates-table td:nth-child(4){
+  font-family:'DM Mono',monospace;font-size:12px;}
+.rates-cat{font-weight:700;color:var(--ink);}
+
+/* ── FAQ ──────────────────────────────────────────────── */
+.faq-sec{background:var(--sand3);padding:64px 0;}
+.faq-list{max-width:740px;margin:36px auto 0;}
+.faq-item{border-bottom:1px solid var(--sand2);overflow:hidden;}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:18px 0;background:none;font-size:14px;font-weight:600;
+  color:var(--ink);text-align:left;gap:16px;transition:.2s;}
+.faq-q:hover{color:var(--saffron);}
+.faq-q i{flex-shrink:0;color:var(--saffron);font-size:14px;transition:.25s;}
+.faq-q.open i{transform:rotate(45deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s var(--ease);}
+.faq-a-in{padding:0 0 16px;font-size:13px;color:var(--mist);
+  line-height:1.85;font-weight:300;}
+
+/* ── OCCASIONS GRID ───────────────────────────────────── */
+.occ-sec{background:#fff;padding:64px 0;}
+.occ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:36px;}
+.occ-card{border:1.5px solid var(--sand2);padding:20px 16px;
+  text-align:center;cursor:pointer;transition:.2s;}
+.occ-card:hover{border-color:var(--saffron);background:var(--sand3);}
+.oc-icon{font-size:28px;margin-bottom:10px;}
+.oc-name{font-family:'Cormorant',serif;font-size:17px;font-weight:700;
+  color:var(--ink);margin-bottom:4px;}
+.oc-talents{font-size:11px;color:var(--pale);line-height:1.6;}
+
+/* ── FOOTER ───────────────────────────────────────────── */
+footer{background:var(--slate);padding:48px 0 20px;}
+.ft{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;
+  gap:32px;margin-bottom:36px;}
+.fb-desc{font-size:12px;color:rgba(255,255,255,.25);line-height:1.9;
+  font-weight:300;margin:12px 0 16px;max-width:240px;}
+.fb-soc{display:flex;gap:7px;}
+.fb-soc a{width:30px;height:30px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;
+  justify-content:center;font-size:12px;color:rgba(255,255,255,.3);transition:.2s;}
+.fb-soc a:hover{background:var(--saffron);color:var(--slate);border-color:var(--saffron);}
+.fc h4{font-size:9px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;color:rgba(232,150,12,.4);margin-bottom:12px;}
+.fc ul{list-style:none;}
+.fc ul li{margin-bottom:8px;}
+.fc ul li a{font-size:12px;color:rgba(255,255,255,.25);transition:.2s;
+  display:flex;align-items:center;gap:5px;}
+.fc ul li a:hover{color:var(--saffron2);}
+.fc ul li a i{font-size:10px;color:rgba(232,150,12,.2);}
+.f-div{border:none;border-top:1px solid rgba(255,255,255,.06);margin-bottom:18px;}
+.f-bot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.f-copy{font-size:11px;color:rgba(255,255,255,.18);}
+.f-links{display:flex;gap:16px;}
+.f-links a{font-size:11px;color:rgba(255,255,255,.18);transition:.2s;}
+.f-links a:hover{color:var(--saffron2);}
+
+/* ── SECTION LABELS ──────────────────────────────────── */
+.sec-eye{font-size:10px;font-weight:700;letter-spacing:4px;
+  text-transform:uppercase;color:var(--saffron);display:block;margin-bottom:10px;}
+.sec-h2{font-family:'Cormorant',serif;font-size:clamp(28px,3.5vw,44px);
+  font-weight:700;line-height:1.08;margin-bottom:14px;color:var(--ink);}
+.sec-h2 em{font-style:italic;color:var(--saffron);}
+.sec-p{font-size:14px;color:var(--mist);line-height:1.9;
+  font-weight:300;max-width:520px;}
+
+/* ── FADE ANIM ──────────────────────────────────────── */
+.fa{opacity:0;transform:translateY(14px);
+  transition:opacity .5s var(--ease),transform .5s var(--ease);}
+.fa.in{opacity:1;transform:none;}
+
+/* ── RESPONSIVE ──────────────────────────────────────── */
+@media(max-width:960px){
+  .se-r1,.se-r2{grid-template-columns:1fr 1fr;}
+  .bf-grid{grid-template-columns:1fr;}
+  .ft{grid-template-columns:1fr 1fr;gap:24px;}
+  .mb-grid,.mbf-grid,.bc-grid2{grid-template-columns:1fr;}
+}
+@media(max-width:640px){
+  .nav-links{display:none;}
+  .nav-burger{display:flex;}
+  .hero-h1{font-size:36px;}
+  .se-r1,.se-r2{grid-template-columns:1fr;}
+  .se-actions{flex-direction:column;}
+  .se-btn-outline{padding:12px;}
+  .ft{grid-template-columns:1fr;}
+  .trust-bar-in{gap:14px;}
+  .tb-sep{display:none;}
+  .occ-grid{grid-template-columns:repeat(auto-fill,minmax(140px,1fr));}
+  .rates-table thead th:nth-child(3),.rates-table tbody td:nth-child(3){display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="container nav-in">
+    <a href="/" class="nav-logo">
+      <div class="nl-sq"><span>S</span></div>
+      <div class="nl-text">
+        <span class="nl-name">Sri Lankan Event Portal</span>
+        <span class="nl-sub">Find &middot; Check &middot; Book</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#vendors" class="nav-a">Find Talent</a>
+      <a href="#occasions" class="nav-a">Occasions</a>
+      <a href="#rates" class="nav-a">Rate Guide</a>
+      <a href="#how-it-works" class="nav-a">How It Works</a>
+      <a href="#faq" class="nav-a">FAQ</a>
+    </div>
+    <a href="#book-direct" class="nav-cta">Tentative Booking</a>
+    <button class="nav-burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="container hero-content">
+    <div class="hero-kicker"><span class="hero-kicker-dot"></span>Sri Lanka &amp; worldwide diaspora</div>
+    <h1 class="hero-h1">Every event deserves<br>the right <em>talent.</em></h1>
+    <p class="hero-desc">Find verified Sri Lankan event professionals for weddings, birthdays, corporate events, conferences and exhibitions. Check real availability. Request a tentative booking — confirmed with a personalised quote within 24 hours.</p>
+
+    <!-- SEARCH ENGINE -->
+    <div class="search-engine fa">
+      <div class="se-head">
+        <span class="se-title"><i class="fas fa-search" style="margin-right:7px;color:var(--saffron);"></i>Search available talent</span>
+        <span class="se-avail">542 professionals available</span>
+      </div>
+      <div class="se-row se-r1">
+        <div class="sf">
+          <label for="s-occasion">What is your occasion?</label>
+          <div style="position:relative;">
+            <i class="fas fa-calendar-star sf-ico"></i>
+            <select id="s-occasion">
+              <option value="" disabled selected>Select occasion</option>
+              <optgroup label="Life Celebrations">
+                <option>Wedding</option><option>Birthday Party</option>
+                <option>Anniversary</option><option>Engagement Party</option>
+                <option>Baby Shower</option><option>Graduation</option>
+              </optgroup>
+              <optgroup label="Corporate &amp; Professional">
+                <option>Corporate Conference</option><option>Product Launch</option>
+                <option>Awards Ceremony</option><option>Gala Dinner</option>
+                <option>Team Event / Dinner</option><option>Exhibition / Trade Show</option>
+              </optgroup>
+              <optgroup label="Arts &amp; Entertainment">
+                <option>Concert / Musical Show</option><option>Cultural Event</option>
+                <option>Fashion Show</option><option>Fundraiser / Charity Event</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="sf">
+          <label for="s-talent">Talent / Service needed</label>
+          <div style="position:relative;">
+            <i class="fas fa-user-tie sf-ico"></i>
+            <select id="s-talent">
+              <option value="" disabled selected>Choose category</option>
+              <optgroup label="Hosting &amp; Speaking">
+                <option>MC / Emcee / Compere</option>
+                <option>Keynote Speaker</option>
+                <option>Moderator / Facilitator</option>
+                <option>Comedian / Host</option>
+                <option>Auctioneer</option>
+              </optgroup>
+              <optgroup label="Music &amp; Performance">
+                <option>Live Band</option><option>DJ</option>
+                <option>Solo Vocalist / Singer</option>
+                <option>Dancer / Dance Troupe</option>
+                <option>Choir / A Cappella Group</option>
+                <option>Classical Musician</option>
+              </optgroup>
+              <optgroup label="Photography &amp; Film">
+                <option>Photographer</option><option>Videographer / Cinematographer</option>
+                <option>Drone Operator</option><option>Photo Booth Operator</option>
+              </optgroup>
+              <optgroup label="Beauty &amp; Styling">
+                <option>Makeup Artist (MUA)</option>
+                <option>Hair Stylist</option><option>Nail Artist</option>
+              </optgroup>
+              <optgroup label="Planning &amp; Design">
+                <option>Event / Wedding Planner</option>
+                <option>Florist / Decorator</option>
+                <option>Cake Designer</option><option>Lighting Designer</option>
+              </optgroup>
+              <optgroup label="Corporate Specialists">
+                <option>Translator / Interpreter</option>
+                <option>Voice-Over Artist</option>
+                <option>Brand Ambassador / Promoter</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="sf">
+          <label for="s-date">Event date</label>
+          <div style="position:relative;">
+            <i class="fas fa-calendar-alt sf-ico"></i>
+            <input type="date" id="s-date" style="padding-left:36px;">
+          </div>
+        </div>
+      </div>
+      <div class="se-row se-r2">
+        <div class="sf">
+          <label for="s-loc">Location</label>
+          <div style="position:relative;">
+            <i class="fas fa-map-marker-alt sf-ico"></i>
+            <select id="s-loc">
+              <option value="" disabled selected>Where?</option>
+              <optgroup label="Sri Lanka">
+                <option>Colombo</option><option>Negombo</option>
+                <option>Kandy</option><option>Nuwara Eliya</option>
+                <option>Galle</option><option>Jaffna</option>
+                <option>Habarana</option><option>Bentota</option>
+                <option>Weligama</option><option>Trincomalee</option>
+                <option>Hambantota</option>
+              </optgroup>
+              <optgroup label="Australia">
+                <option>Sydney</option><option>Melbourne</option>
+                <option>Brisbane</option><option>Perth</option>
+              </optgroup>
+              <optgroup label="United Kingdom">
+                <option>London</option><option>Manchester</option><option>Birmingham</option>
+              </optgroup>
+              <optgroup label="UAE">
+                <option>Dubai</option><option>Abu Dhabi</option>
+              </optgroup>
+              <optgroup label="Canada">
+                <option>Toronto</option><option>Vancouver</option>
+              </optgroup>
+              <optgroup label="Other">
+                <option>Doha, Qatar</option><option>Singapore</option>
+                <option>Germany</option><option>Italy</option><option>USA</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="sf">
+          <label for="s-lang">Language</label>
+          <div style="position:relative;">
+            <i class="fas fa-language sf-ico"></i>
+            <select id="s-lang">
+              <option value="" disabled selected>Preferred language</option>
+              <option>English</option><option>Sinhala</option><option>Tamil</option>
+              <option>English &amp; Sinhala</option><option>English &amp; Tamil</option>
+              <option>Sinhala &amp; Tamil</option>
+              <option>Trilingual (all three)</option>
+            </select>
+          </div>
+        </div>
+        <div class="sf">
+          <label for="s-budget">Budget range</label>
+          <div style="position:relative;">
+            <i class="fas fa-coins sf-ico"></i>
+            <select id="s-budget">
+              <option value="" disabled selected>Budget (LKR)</option>
+              <option>Under LKR 20,000</option>
+              <option>LKR 20,000 &ndash; 50,000</option>
+              <option>LKR 50,000 &ndash; 100,000</option>
+              <option>LKR 100,000 &ndash; 250,000</option>
+              <option>LKR 250,000 &ndash; 500,000</option>
+              <option>LKR 500,000+</option>
+              <option>Flexible &mdash; show all</option>
+            </select>
+          </div>
+        </div>
+        <div class="sf" style="display:flex;flex-direction:column;justify-content:flex-end;">
+          <label style="color:transparent;user-select:none;">.</label>
+          <div class="se-actions">
+            <button class="se-btn" onclick="scrollToBrowse()">
+              <i class="fas fa-search"></i> Find Available Talent
+            </button>
+          </div>
+        </div>
+      </div>
+      <p class="se-hint">Only professionals available on your date are shown &nbsp;&middot;&nbsp; <strong>Free to search and enquire</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="container trust-bar-in">
+    <div class="tb-item"><i class="fas fa-shield-check" style="color:var(--saffron);"></i><span><strong>Personally verified</strong> professionals only</span></div>
+    <div class="tb-sep"></div>
+    <div class="tb-item"><i class="fas fa-clock" style="color:var(--saffron);"></i><span>Booking confirmed with quote within <strong>24 hours</strong></span></div>
+    <div class="tb-sep"></div>
+    <div class="tb-item"><i class="fas fa-calendar-check" style="color:var(--saffron);"></i><span><strong>Live availability</strong> &mdash; only available dates shown</span></div>
+    <div class="tb-sep"></div>
+    <div class="tb-item"><i class="fas fa-globe-asia" style="color:var(--saffron);"></i><span>Sri Lanka &amp; <strong>15+ countries</strong> worldwide</span></div>
+    <div class="tb-sep"></div>
+    <div class="tb-item"><i class="fas fa-gift" style="color:var(--saffron);"></i><span><strong>Free</strong> to search &amp; make tentative bookings</span></div>
+  </div>
+</div>
+
+<!-- CATEGORY STRIP + VENDOR GRID -->
+<div class="cats" id="vendors">
+  <div class="container">
+    <div class="cats-scroll fa">
+      <button class="cat-pill on" onclick="setCategory(this,'all')"><span class="cp-icon">✦</span><span class="cp-name">All talent</span><span class="cp-count">542</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'mc')"><span class="cp-icon">🎤</span><span class="cp-name">MC / Compere</span><span class="cp-count">48</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'photo')"><span class="cp-icon">📷</span><span class="cp-name">Photographer</span><span class="cp-count">72</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'band')"><span class="cp-icon">🎵</span><span class="cp-name">Live Band</span><span class="cp-count">34</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'dj')"><span class="cp-icon">🎧</span><span class="cp-name">DJ</span><span class="cp-count">27</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'mua')"><span class="cp-icon">💄</span><span class="cp-name">Makeup Artist</span><span class="cp-count">61</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'video')"><span class="cp-icon">🎬</span><span class="cp-name">Videographer</span><span class="cp-count">29</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'planner')"><span class="cp-icon">📋</span><span class="cp-name">Event Planner</span><span class="cp-count">38</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'speaker')"><span class="cp-icon">🎙️</span><span class="cp-name">Keynote Speaker</span><span class="cp-count">14</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'vocalist')"><span class="cp-icon">🎼</span><span class="cp-name">Solo Vocalist</span><span class="cp-count">22</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'florist')"><span class="cp-icon">🌸</span><span class="cp-name">Florist / Décor</span><span class="cp-count">24</span></button>
+      <button class="cat-pill" onclick="setCategory(this,'cake')"><span class="cp-icon">🎂</span><span class="cp-name">Cake Designer</span><span class="cp-count">19</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="vendors">
+  <div class="container">
+    <div class="vendors-hd fa">
+      <div class="vhd-left">
+        <div class="vhd-count" id="v-count">Showing 6 of 542 professionals</div>
+        <div class="vhd-title">Available <em>this week</em></div>
+      </div>
+      <div class="vhd-sort">
+        <label>Sort by</label>
+        <select>
+          <option>Highest rated</option>
+          <option>Lowest price</option>
+          <option>Most reviewed</option>
+          <option>Recently added</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="vgrid">
+
+      <div class="vcard fa" onclick="openModal('v1')">
+        <div class="vc-top"><div class="vc-badges"><span class="vb vb-v">✓ Verified</span><span class="vb vb-a">Available</span></div><div class="vc-initial">R</div><div class="vc-avail-bar"><span class="vab-dot"></span><span class="vab-txt">Next available: see profile calendar</span></div></div>
+        <div class="vc-body">
+          <div class="vc-cat">MC / Compere</div>
+          <div class="vc-name">Ravindu Samarasinghe</div>
+          <div class="vc-tagline">Weddings &middot; Corporate events &middot; Awards nights</div>
+          <div class="vc-meta"><span class="vc-m"><i class="fas fa-map-marker-alt"></i>Colombo, Sri Lanka</span><span class="vc-m"><i class="fas fa-star"></i>12 yrs exp.</span></div>
+          <div class="vc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span class="vc-rc">5.0 &nbsp;(34 reviews)</span></div>
+          <div class="vc-skills"><span class="vsk vsk-hl">Sinhala + English</span><span class="vsk">Weddings</span><span class="vsk">Corporate</span></div>
+          <div class="vc-foot">
+            <div class="vc-rate">
+              <span class="vc-rate-lbl">From</span>
+              <span class="vc-rate-val">LKR 45,000</span>
+              <span class="vc-rate-range">Up to LKR 120,000</span>
+            </div>
+            <button class="vc-book">Book Tentatively</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vcard fa" onclick="openModal('v2')">
+        <div class="vc-top" style="background:linear-gradient(135deg,#111b2e,#1a2840);"><div class="vc-badges"><span class="vb vb-v">✓ Verified</span><span class="vb vb-f">Featured</span></div><div class="vc-initial">K</div><div class="vc-avail-bar"><span class="vab-dot"></span><span class="vab-txt">Next available: see profile calendar</span></div></div>
+        <div class="vc-body">
+          <div class="vc-cat">Photographer</div>
+          <div class="vc-name">Kasun Wijeratne</div>
+          <div class="vc-tagline">Weddings &middot; Portraits &middot; Corporate &middot; Exhibitions</div>
+          <div class="vc-meta"><span class="vc-m"><i class="fas fa-map-marker-alt"></i>Colombo &middot; Kandy</span><span class="vc-m"><i class="fas fa-star"></i>9 yrs exp.</span></div>
+          <div class="vc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span class="vc-rc">5.0 &nbsp;(51 reviews)</span></div>
+          <div class="vc-skills"><span class="vsk vsk-hl">Documentary</span><span class="vsk">Drone</span><span class="vsk">Candid</span></div>
+          <div class="vc-foot">
+            <div class="vc-rate">
+              <span class="vc-rate-lbl">From</span>
+              <span class="vc-rate-val">LKR 65,000</span>
+              <span class="vc-rate-range">Up to LKR 200,000</span>
+            </div>
+            <button class="vc-book">Book Tentatively</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vcard fa" onclick="openModal('v3')">
+        <div class="vc-top" style="background:linear-gradient(135deg,#1a1028,#251535);"><div class="vc-badges"><span class="vb vb-v">✓ Verified</span><span class="vb vb-a">Available</span></div><div class="vc-initial">S</div><div class="vc-avail-bar"><span class="vab-dot"></span><span class="vab-txt">Next available: see profile calendar</span></div></div>
+        <div class="vc-body">
+          <div class="vc-cat">Live Band</div>
+          <div class="vc-name">Saman &amp; The Wavelengths</div>
+          <div class="vc-tagline">Weddings &middot; Corporate dinners &middot; Concerts</div>
+          <div class="vc-meta"><span class="vc-m"><i class="fas fa-map-marker-alt"></i>Colombo, Sri Lanka</span><span class="vc-m"><i class="fas fa-star"></i>15 yrs exp.</span></div>
+          <div class="vc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star-half-alt"></i><span class="vc-rc">4.9 &nbsp;(28 reviews)</span></div>
+          <div class="vc-skills"><span class="vsk vsk-hl">Baila</span><span class="vsk">Pop</span><span class="vsk">Rock</span><span class="vsk">R&amp;B</span></div>
+          <div class="vc-foot">
+            <div class="vc-rate">
+              <span class="vc-rate-lbl">From</span>
+              <span class="vc-rate-val">LKR 85,000</span>
+              <span class="vc-rate-range">Up to LKR 250,000</span>
+            </div>
+            <button class="vc-book">Book Tentatively</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vcard fa" onclick="openModal('v4')">
+        <div class="vc-top" style="background:linear-gradient(135deg,#1a0818,#2d1028);"><div class="vc-badges"><span class="vb vb-v">✓ Verified</span><span class="vb vb-a">Available</span></div><div class="vc-initial">N</div><div class="vc-avail-bar"><span class="vab-dot"></span><span class="vab-txt">Next available: see profile calendar</span></div></div>
+        <div class="vc-body">
+          <div class="vc-cat">Makeup Artist</div>
+          <div class="vc-name">Nilakshi Perera</div>
+          <div class="vc-tagline">Bridal &middot; Events &middot; Photoshoots &middot; Fashion</div>
+          <div class="vc-meta"><span class="vc-m"><i class="fas fa-map-marker-alt"></i>Colombo &middot; Negombo</span><span class="vc-m"><i class="fas fa-star"></i>8 yrs exp.</span></div>
+          <div class="vc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span class="vc-rc">5.0 &nbsp;(42 reviews)</span></div>
+          <div class="vc-skills"><span class="vsk vsk-hl">Airbrush</span><span class="vsk">Kandyan</span><span class="vsk">Soft Glam</span></div>
+          <div class="vc-foot">
+            <div class="vc-rate">
+              <span class="vc-rate-lbl">From</span>
+              <span class="vc-rate-val">LKR 22,000</span>
+              <span class="vc-rate-range">Up to LKR 65,000</span>
+            </div>
+            <button class="vc-book">Book Tentatively</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vcard fa" onclick="openModal('v5')">
+        <div class="vc-top" style="background:linear-gradient(135deg,#0a1a14,#102a1c);"><div class="vc-badges"><span class="vb vb-v">✓ Verified</span><span class="vb vb-f">Featured</span></div><div class="vc-initial">P</div><div class="vc-avail-bar"><span class="vab-dot"></span><span class="vab-txt">Next available: see profile calendar</span></div></div>
+        <div class="vc-body">
+          <div class="vc-cat">MC / Compere</div>
+          <div class="vc-name">Priya Jeyakumar</div>
+          <div class="vc-tagline">Tamil&ndash;English &middot; Weddings &middot; Conferences &middot; Diaspora</div>
+          <div class="vc-meta"><span class="vc-m"><i class="fas fa-map-marker-alt"></i>Jaffna &middot; London, UK</span><span class="vc-m"><i class="fas fa-star"></i>8 yrs exp.</span></div>
+          <div class="vc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span class="vc-rc">5.0 &nbsp;(21 reviews)</span></div>
+          <div class="vc-skills"><span class="vsk vsk-hl">English + Tamil</span><span class="vsk">Bilingual</span><span class="vsk">Diaspora</span></div>
+          <div class="vc-foot">
+            <div class="vc-rate">
+              <span class="vc-rate-lbl">From</span>
+              <span class="vc-rate-val">LKR 38,000</span>
+              <span class="vc-rate-range">Up to LKR 95,000</span>
+            </div>
+            <button class="vc-book">Book Tentatively</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="vcard fa" onclick="openModal('v6')">
+        <div class="vc-top" style="background:linear-gradient(135deg,#0e1a10,#142818);"><div class="vc-badges"><span class="vb vb-v">✓ Verified</span><span class="vb vb-a">Available</span></div><div class="vc-initial">D</div><div class="vc-avail-bar"><span class="vab-dot"></span><span class="vab-txt">Next available: see profile calendar</span></div></div>
+        <div class="vc-body">
+          <div class="vc-cat">Keynote Speaker</div>
+          <div class="vc-name">Dr. Dilnoza Fernando</div>
+          <div class="vc-tagline">Leadership &middot; Innovation &middot; DEI &middot; Corporate conferences</div>
+          <div class="vc-meta"><span class="vc-m"><i class="fas fa-map-marker-alt"></i>Colombo &middot; Dubai &middot; Melbourne</span></div>
+          <div class="vc-stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><span class="vc-rc">5.0 &nbsp;(17 reviews)</span></div>
+          <div class="vc-skills"><span class="vsk vsk-hl">English</span><span class="vsk">Leadership</span><span class="vsk">Corporate</span></div>
+          <div class="vc-foot">
+            <div class="vc-rate">
+              <span class="vc-rate-lbl">From</span>
+              <span class="vc-rate-val">LKR 150,000</span>
+              <span class="vc-rate-range">Up to LKR 500,000</span>
+            </div>
+            <button class="vc-book">Book Tentatively</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="load-more-wrap fa">
+      <button class="load-more">Load more professionals <i class="fas fa-chevron-down" style="font-size:10px;"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- VENDOR PROFILE MODAL -->
+<div class="modal-ov" id="modal-ov" onclick="closeModalOut(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-bar">
+      <div class="modal-bar-name" id="mb-bar-name">Profile</div>
+      <button class="modal-close" onclick="closeModal()">&#10005; Close</button>
+    </div>
+    <div class="modal-hero" id="mb-hero">R</div>
+    <div class="modal-body">
+      <div class="mb-cat" id="mb-cat">Category</div>
+      <div class="mb-name" id="mb-name">Name</div>
+      <!-- RATE BOX -->
+      <div class="mb-rate-box">
+        <div class="mb-rate-item">
+          <div class="mb-rate-lbl">Starting from</div>
+          <div class="mb-rate-val" id="mb-from">LKR 0</div>
+        </div>
+        <div class="mb-rate-item">
+          <div class="mb-rate-lbl">Up to</div>
+          <div class="mb-rate-val" id="mb-to">LKR 0</div>
+        </div>
+        <div class="mb-rate-item">
+          <div class="mb-rate-lbl">Quote type</div>
+          <div class="mb-rate-val" style="font-size:13px;font-family:'DM Sans',sans-serif;" id="mb-qtype">Custom</div>
+        </div>
+        <div><div class="mb-rate-note" id="mb-rate-note">Final quote within 24 hrs of booking request</div></div>
+      </div>
+      <!-- DETAILS -->
+      <div class="mb-grid">
+        <div><div class="mb-blk-lbl">Event types</div><div class="mb-tags" id="mb-events"></div></div>
+        <div><div class="mb-blk-lbl">Locations served</div><div class="mb-tags" id="mb-locs"></div></div>
+        <div><div class="mb-blk-lbl">Languages</div><div class="mb-tags" id="mb-langs"></div></div>
+        <div><div class="mb-blk-lbl">Experience</div><div class="mb-tags"><span class="mb-tag" id="mb-exp"></span></div></div>
+        <p class="mb-bio" id="mb-bio"></p>
+      </div>
+      <!-- AVAILABILITY CALENDAR PREVIEW -->
+      <div class="mb-avail-cal">
+        <div class="mb-avail-title"><i class="fas fa-calendar-check" style="margin-right:7px;color:var(--saffron);"></i>Availability — Next 30 days (indicative)</div>
+        <div class="mb-cal-note">Select your date above to check precise availability.</div>
+        <div class="mb-cal-dots" id="mb-cal"></div>
+      </div>
+      <!-- ACTIONS -->
+      <div class="mb-actions">
+        <a href="#" class="mb-btn-p" id="mb-avail-link"><i class="fas fa-calendar-check" style="margin-right:7px;"></i>Check Full Availability</a>
+        <a href="mailto:info@srilankaneventportal.com" class="mb-btn-s"><i class="fas fa-envelope" style="margin-right:7px;"></i>Email Enquiry</a>
+      </div>
+      <div class="mb-socials">
+        <a href="#" class="mb-soc" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="mb-soc" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="mb-soc" title="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="#" class="mb-soc" title="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="mb-soc" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <!-- TENTATIVE BOOKING FORM -->
+      <div class="mb-book-form">
+        <div class="mbf-head"><i class="fas fa-clock"></i> Request Tentative Booking</div>
+        <div class="mbf-grid">
+          <div class="mbf-field"><label>Your Full Name</label><input type="text" placeholder="Full name"></div>
+          <div class="mbf-field"><label>Email Address</label><input type="email" placeholder="you@email.com"></div>
+          <div class="mbf-field"><label>WhatsApp / Mobile</label><input type="tel" placeholder="+94 77 000 0000"></div>
+          <div class="mbf-field"><label>Event Date</label><input type="date"></div>
+          <div class="mbf-field"><label>Occasion Type</label>
+            <select><option>Wedding</option><option>Birthday Party</option><option>Corporate Event</option><option>Conference</option><option>Exhibition</option><option>Concert / Show</option><option>Other</option></select>
+          </div>
+          <div class="mbf-field"><label>Event Location</label><input type="text" placeholder="City or venue name"></div>
+          <div class="mbf-field mbf-full"><label>Special Requirements or Questions</label><textarea rows="2" placeholder="Guest count, specific language requirements, any special requests..."></textarea></div>
+        </div>
+        <div class="mbf-quote-note">
+          <i class="fas fa-info-circle"></i>
+          <span>This sends a <strong>tentative booking request</strong> to the professional via a verified link. No payment is taken at this stage. You will receive a personalised quote and availability confirmation within <strong>24 hours</strong>. Only then do you decide whether to confirm.</span>
+        </div>
+        <button class="mbf-submit" onclick="submitBooking()"><i class="fas fa-paper-plane" style="margin-right:8px;"></i>Send Tentative Booking Request</button>
+        <div class="mbf-promise"><i class="fas fa-shield-check"></i> Verified professional &nbsp;&middot;&nbsp; <i class="fas fa-clock"></i> Quote within 24 hours &nbsp;&middot;&nbsp; <i class="fas fa-lock"></i> No payment now</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW BOOKING WORKS -->
+<section class="booking-flow" id="how-it-works">
+  <div class="container">
+    <div class="bf-grid">
+      <div class="bf-left fa">
+        <span class="sec-eye">The booking process</span>
+        <h2 class="sec-h2" style="color:#fff;">From search to <em>confirmed</em><br>in four steps.</h2>
+        <p class="sec-p" style="color:rgba(255,255,255,.35);">No agency fees. No phone tag. No uncertainty. Search, choose, request — and receive a personalised quote from a verified professional within 24 hours.</p>
+        <div class="bf-steps" style="margin-top:28px;">
+          <div class="bfs">
+            <div class="bfs-num">1</div>
+            <div class="bfs-text">
+              <div class="bfs-t">Search with your details</div>
+              <p class="bfs-d">Enter your occasion, talent type, date, location, language and budget. Results show only verified professionals available on your specific date.</p>
+            </div>
+          </div>
+          <div class="bfs">
+            <div class="bfs-num">2</div>
+            <div class="bfs-text">
+              <div class="bfs-t">Browse profiles &amp; rates</div>
+              <p class="bfs-d">View full profiles — experience, photos, reviews, rate ranges, languages and availability calendar. Compare as many as you like at no cost.</p>
+            </div>
+          </div>
+          <div class="bfs">
+            <div class="bfs-num">3</div>
+            <div class="bfs-text">
+              <div class="bfs-t">Send a tentative booking request</div>
+              <p class="bfs-d">Click "Book Tentatively" on any profile. Your request goes directly to the professional via a verified secure link. No payment, no commitment — just a reservation of interest.</p>
+            </div>
+          </div>
+          <div class="bfs">
+            <div class="bfs-num">4</div>
+            <div class="bfs-text">
+              <div class="bfs-t">Receive your personalised quote</div>
+              <p class="bfs-d">Within 24 hours, the professional contacts you with a personalised quote based on your event details. You then confirm, negotiate or decline — entirely your choice.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- DIRECT BOOKING FORM -->
+      <div class="bf-right fa" id="book-direct">
+        <div class="booking-card">
+          <div class="bc-head"><i class="fas fa-calendar-check"></i> Direct Tentative Booking</div>
+          <div class="bc-field">
+            <label>Talent / Service</label>
+            <select>
+              <option>MC / Emcee</option><option>Photographer</option>
+              <option>Live Band</option><option>DJ</option>
+              <option>Makeup Artist</option><option>Videographer</option>
+              <option>Event Planner</option><option>Keynote Speaker</option>
+              <option>Solo Vocalist</option><option>Other</option>
+            </select>
+          </div>
+          <div class="bc-field">
+            <label>Occasion</label>
+            <select>
+              <option>Wedding</option><option>Birthday Party</option>
+              <option>Corporate Event</option><option>Conference</option>
+              <option>Exhibition</option><option>Concert</option><option>Other</option>
+            </select>
+          </div>
+          <div class="bc-grid2">
+            <div class="bc-field"><label>Event Date</label><input type="date"></div>
+            <div class="bc-field"><label>Location</label><input type="text" placeholder="City / Venue"></div>
+          </div>
+          <div class="bc-grid2">
+            <div class="bc-field"><label>Your Name</label><input type="text" placeholder="Full name"></div>
+            <div class="bc-field"><label>WhatsApp / Mobile</label><input type="tel" placeholder="+94 77 000 0000"></div>
+          </div>
+          <div class="bc-field"><label>Email Address</label><input type="email" placeholder="you@email.com"></div>
+          <div class="bc-field"><label>Additional Notes (optional)</label><textarea rows="2" placeholder="Guest count, language, specific requirements..."></textarea></div>
+          <div class="bc-note"><strong>What happens next:</strong> Your request is matched to available verified professionals for your date. You will receive personalised quotes from matching professionals within 24 hours. No payment until you confirm.</div>
+          <button class="bc-submit" onclick="submitDirect()"><i class="fas fa-paper-plane" style="margin-right:8px;"></i>Send Booking Request</button>
+          <div class="bc-promise"><i class="fas fa-lock"></i> No payment now &nbsp;&middot;&nbsp; Quote within 24 hrs &nbsp;&middot;&nbsp; Free to request</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OCCASIONS -->
+<section class="occ-sec" id="occasions">
+  <div class="container">
+    <span class="sec-eye fa">Every occasion</span>
+    <h2 class="sec-h2 fa">The right talent for <em>every event</em></h2>
+    <div class="occ-grid">
+      <div class="occ-card fa"><div class="oc-icon">💍</div><div class="oc-name">Wedding</div><div class="oc-talents">MC · Photographer · Band · MUA · Planner · Florist · Cake</div></div>
+      <div class="occ-card fa"><div class="oc-icon">🎂</div><div class="oc-name">Birthday Party</div><div class="oc-talents">MC · DJ · Photographer · Cake · Decorator</div></div>
+      <div class="occ-card fa"><div class="oc-icon">💼</div><div class="oc-name">Corporate Event</div><div class="oc-talents">MC · Speaker · Photographer · Videographer · Band</div></div>
+      <div class="occ-card fa"><div class="oc-icon">🎙️</div><div class="oc-name">Conference</div><div class="oc-talents">MC · Speaker · Moderator · Translator · Photographer</div></div>
+      <div class="occ-card fa"><div class="oc-icon">🖼️</div><div class="oc-name">Exhibition</div><div class="oc-talents">MC · Promoter · Photographer · Videographer</div></div>
+      <div class="occ-card fa"><div class="oc-icon">🎵</div><div class="oc-name">Concert &amp; Show</div><div class="oc-talents">Band · DJ · Vocalist · Dancers · Photographer</div></div>
+      <div class="occ-card fa"><div class="oc-icon">🏆</div><div class="oc-name">Awards Ceremony</div><div class="oc-talents">MC · Photographer · Videographer · Band · Décor</div></div>
+      <div class="occ-card fa"><div class="oc-icon">💐</div><div class="oc-name">Engagement Party</div><div class="oc-talents">MC · Photographer · Cake · Florist · DJ</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- RATE GUIDE -->
+<section class="rates-sec" id="rates">
+  <div class="container">
+    <span class="sec-eye fa">Transparent pricing</span>
+    <h2 class="sec-h2 fa">Sri Lankan event talent <em>rate guide</em></h2>
+    <p class="sec-p fa" style="margin-bottom:24px;">Typical rate ranges across Sri Lanka. Actual quotes depend on experience level, event duration, location and specific requirements. All quotes are personalised and provided within 24 hours of a tentative booking request.</p>
+    <div class="rates-note fa">
+      <i class="fas fa-info-circle"></i>
+      <span>These are <strong>market ranges</strong> — not fixed prices. Entry-level professionals start at the low end; award-winning or internationally experienced professionals command the high end. Overseas events (Australia, UK, UAE) will attract travel and accommodation costs in addition. Final pricing is always confirmed directly with the professional.</span>
+    </div>
+    <table class="rates-table fa">
+      <thead>
+        <tr>
+          <th>Talent Category</th>
+          <th>Entry Level</th>
+          <th>Mid Range</th>
+          <th>Premium</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="rates-cat">MC / Emcee / Compere</td><td>LKR 20,000</td><td>LKR 45,000&ndash;80,000</td><td>LKR 100,000+</td><td>Bilingual / trilingual = higher rate</td></tr>
+        <tr><td class="rates-cat">Photographer (half day)</td><td>LKR 25,000</td><td>LKR 65,000&ndash;100,000</td><td>LKR 150,000+</td><td>Full day &amp; drone packages available</td></tr>
+        <tr><td class="rates-cat">Videographer</td><td>LKR 30,000</td><td>LKR 75,000&ndash;120,000</td><td>LKR 200,000+</td><td>Cinematic / drone = premium</td></tr>
+        <tr><td class="rates-cat">Live Band (5&ndash;7 piece)</td><td>LKR 60,000</td><td>LKR 100,000&ndash;180,000</td><td>LKR 250,000+</td><td>Includes 3&ndash;4 hour set</td></tr>
+        <tr><td class="rates-cat">DJ</td><td>LKR 20,000</td><td>LKR 40,000&ndash;75,000</td><td>LKR 100,000+</td><td>Equipment rental may be separate</td></tr>
+        <tr><td class="rates-cat">Makeup Artist (MUA)</td><td>LKR 10,000</td><td>LKR 25,000&ndash;50,000</td><td>LKR 80,000+</td><td">Bridal / airbrush = premium</td></tr>
+        <tr><td class="rates-cat">Event / Wedding Planner</td><td>LKR 50,000</td><td>LKR 100,000&ndash;200,000</td><td>LKR 350,000+</td><td>Full planning vs day-of coordination</td></tr>
+        <tr><td class="rates-cat">Keynote Speaker</td><td>LKR 50,000</td><td>LKR 150,000&ndash;300,000</td><td>LKR 500,000+</td><td>International experience = higher</td></tr>
+        <tr><td class="rates-cat">Solo Vocalist</td><td>LKR 15,000</td><td>LKR 35,000&ndash;70,000</td><td>LKR 120,000+</td><td>Ceremony &amp; reception rates differ</td></tr>
+        <tr><td class="rates-cat">Florist / Decorator</td><td>LKR 30,000</td><td>LKR 80,000&ndash;200,000</td><td>LKR 400,000+</td><td>Depends heavily on flowers &amp; venue size</td></tr>
+        <tr><td class="rates-cat">Cake Designer</td><td>LKR 8,000</td><td>LKR 25,000&ndash;60,000</td><td>LKR 100,000+</td><td>Tiered / sculpted cakes = premium</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- WHY VERIFIED -->
+<section class="why-sec">
+  <div class="container">
+    <span class="sec-eye fa">Why this portal</span>
+    <h2 class="sec-h2 fa">What makes every professional here <em>different</em></h2>
+    <div class="why-grid">
+      <div class="why-card fa"><div class="wc-icon"><i class="fas fa-shield-check"></i></div><div class="wc-t">Personally verified</div><p class="wc-d">Every professional is reviewed before listing — experience checked, references confirmed. You will never see an unchecked self-registration on this platform.</p></div>
+      <div class="why-card fa"><div class="wc-icon"><i class="fas fa-calendar-check"></i></div><div class="wc-t">Live availability</div><p class="wc-d">Each professional manages a live calendar. Search results show only those genuinely available on your date — no wasted time chasing unavailable vendors.</p></div>
+      <div class="why-card fa"><div class="wc-icon"><i class="fas fa-file-invoice"></i></div><div class="wc-t">Quote within 24 hours</div><p class="wc-d">Every tentative booking triggers a personalised quote from the professional — based on your specific event, date and requirements. Not a generic rate card.</p></div>
+      <div class="why-card fa"><div class="wc-icon"><i class="fas fa-globe-asia"></i></div><div class="wc-t">Sri Lankans worldwide</div><p class="wc-d">Verified Sri Lankan professionals in Australia, UK, UAE, Canada and beyond. Diaspora weddings and overseas corporate events are equally served.</p></div>
+      <div class="why-card fa"><div class="wc-icon"><i class="fas fa-star"></i></div><div class="wc-t">Real reviews only</div><p class="wc-d">Reviews come from verified event organisers who actually used the professional. No anonymous ratings, no inflated scores — only authentic feedback.</p></div>
+      <div class="why-card fa"><div class="wc-icon"><i class="fas fa-gift"></i></div><div class="wc-t">Free for organisers</div><p class="wc-d">Search, browse, compare and request tentative bookings completely free. You only deal directly with the professional — no commission, no booking fees.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-sec" id="faq">
+  <div class="container">
+    <span class="sec-eye fa">Common questions</span>
+    <h2 class="sec-h2 fa" style="text-align:center;">Everything you need <em>to know</em></h2>
+    <div class="faq-list">
+      <div class="faq-item fa">
+        <button class="faq-q" onclick="toggleFAQ(this)">What is a "tentative booking" and is it binding? <i class="fas fa-plus"></i></button>
+        <div class="faq-a"><div class="faq-a-in">A tentative booking is a reservation of interest — not a contract. When you click "Book Tentatively" and fill in the form, your details go directly to the professional via a verified secure link. The professional responds within 24 hours with a personalised quote and confirms their availability. You then decide whether to proceed. No money changes hands until you actively confirm the booking directly with the professional.</div></div>
+      </div>
+      <div class="faq-item fa">
+        <button class="faq-q" onclick="toggleFAQ(this)">How does the professional contact me after I send a request? <i class="fas fa-plus"></i></button>
+        <div class="faq-a"><div class="faq-a-in">Your booking request is sent to the professional via a verified platform link. They will contact you directly on the email address and WhatsApp number you provided in the form — typically within a few hours, always within 24 hours. The conversation then continues directly between you and the professional — we facilitate the introduction, not the negotiation.</div></div>
+      </div>
+      <div class="faq-item fa">
+        <button class="faq-q" onclick="toggleFAQ(this)">Are the rates on the profiles fixed prices? <i class="fas fa-plus"></i></button>
+        <div class="faq-a"><div class="faq-a-in">The rates shown on each profile (From / Up to) are indicative ranges based on that professional's typical pricing. The final quote is personalised to your specific event — date, location, duration, guest count and any special requirements all affect the final price. This is why the tentative booking request asks for event details: so the professional can give you an accurate, customised quote rather than a generic number.</div></div>
+      </div>
+      <div class="faq-item fa">
+        <button class="faq-q" onclick="toggleFAQ(this)">Can I book multiple professionals for the same event? <i class="fas fa-plus"></i></button>
+        <div class="faq-a"><div class="faq-a-in">Absolutely. Many events need multiple professionals — a photographer and a videographer, an MC and a band, a planner and a florist. You can send tentative booking requests to as many professionals as you need, all at no cost. Each professional responds independently with their quote, and you choose who to confirm with.</div></div>
+      </div>
+      <div class="faq-item fa">
+        <button class="faq-q" onclick="toggleFAQ(this)">What if I am planning my event from overseas? <i class="fas fa-plus"></i></button>
+        <div class="faq-a"><div class="faq-a-in">The platform is specifically designed for diaspora event organisers. Many professionals on the platform are based overseas themselves (Australia, UK, UAE) and are familiar with planning cross-border events. For Sri Lanka-based events being organised from abroad, professionals are experienced with video call consultations, digital contracts and remote coordination. Simply include your country in the location field and note that you are organising remotely in your booking request.</div></div>
+      </div>
+      <div class="faq-item fa">
+        <button class="faq-q" onclick="toggleFAQ(this)">How are professionals verified? <i class="fas fa-plus"></i></button>
+        <div class="faq-a"><div class="faq-a-in">Every professional listed on Sri Lankan Event Portal has been reviewed by our team before their profile goes live. We check their professional experience, request references from past events, confirm their identity, and review portfolio samples. Professionals with a "Verified" badge have passed this process. We also monitor reviews from event organisers who have used them through the platform — consistent negative feedback results in review and potential removal.</div></div>
+      </div>
+      <div class="faq-item fa">
+        <button class="faq-q" onclick="toggleFAQ(this)">Is there any cost to me as an event organiser? <i class="fas fa-plus"></i></button>
+        <div class="faq-a"><div class="faq-a-in">No. Searching, browsing profiles, comparing professionals and sending tentative booking requests are all completely free for event organisers. The platform is funded by the professionals who list their services — not by the people searching for them. You pay only what you agree directly with the professional after receiving their personalised quote.</div></div>
+      </div>
+      <div class="faq-item fa">
+        <button class="faq-q" onclick="toggleFAQ(this)">What if the professional does not respond within 24 hours? <i class="fas fa-plus"></i></button>
+        <div class="faq-a"><div class="faq-a-in">If you have not heard from a professional within 24 hours of your tentative booking request, contact us at info@srilankaneventportal.com and we will follow up on your behalf. All professionals on the platform commit to 24-hour response times as a condition of their listing. Persistent non-responsiveness results in their profile being suspended.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="ft">
+      <div>
+        <div class="nav-logo" style="margin-bottom:14px;">
+          <div class="nl-sq"><span>S</span></div>
+          <div class="nl-text">
+            <span class="nl-name">Sri Lankan Event Portal</span>
+            <span class="nl-sub">Find &middot; Check &middot; Book</span>
+          </div>
+        </div>
+        <p class="fb-desc">Sri Lanka's first verified all-event talent platform. From weddings in Colombo to conferences in Dubai — find the right professional, check availability, and book tentatively. Free for event organisers.</p>
+        <div class="fb-soc">
+          <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
+      <div class="fc">
+        <h4>Find Talent</h4>
+        <ul>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>MC / Compere</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Photographer</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Live Band / DJ</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Makeup Artist</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Videographer</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Keynote Speaker</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Event Planner</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>All categories &rarr;</a></li>
+        </ul>
+      </div>
+      <div class="fc">
+        <h4>By Occasion</h4>
+        <ul>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Weddings</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Birthdays</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Corporate Events</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Conferences</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Exhibitions</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Awards Ceremonies</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i>Concerts &amp; Shows</a></li>
+        </ul>
+      </div>
+      <div class="fc">
+        <h4>Also in the Network</h4>
+        <ul>
+          <li><a href="https://www.lankanweddingmc.com"><i class="fas fa-chevron-right"></i>Lankan Wedding MC</a></li>
+          <li><a href="https://www.lankanweddingmua.com"><i class="fas fa-chevron-right"></i>Lankan Wedding MUA</a></li>
+          <li><a href="https://www.lankanweddingphotographer.com"><i class="fas fa-chevron-right"></i>Wedding Photographer</a></li>
+          <li><a href="https://www.lankanweddingband.com"><i class="fas fa-chevron-right"></i>Wedding Band</a></li>
+          <li><a href="https://www.lankanweddingplanner.com"><i class="fas fa-chevron-right"></i>Wedding Planner</a></li>
+          <li><a href="https://www.lankanweddingportal.com"><i class="fas fa-chevron-right"></i>Lankan Wedding Portal</a></li>
+        </ul>
+        <h4 style="margin-top:20px;">Contact</h4>
+        <ul>
+          <li><a href="mailto:info@srilankaneventportal.com"><i class="fas fa-envelope"></i>info@srilankaneventportal.com</a></li>
+          <li><a href="https://wa.me/94770000000"><i class="fab fa-whatsapp"></i>+94 77 000 0000</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="f-div">
+    <div class="f-bot">
+      <p class="f-copy">&copy; 2025 Sri Lankan Event Portal &middot; All rights reserved</p>
+      <div class="f-links"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Sitemap</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* FADE IN */
+const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target);}}),{threshold:.08});
+document.querySelectorAll('.fa').forEach(el=>io.observe(el));
+
+/* NAV SHADOW */
+window.addEventListener('scroll',()=>{
+  document.querySelector('nav').style.boxShadow=scrollY>20?'0 2px 20px rgba(15,23,42,.5)':'none';
+});
+
+/* SCROLL */
+function scrollToBrowse(){document.getElementById('vendors').scrollIntoView({behavior:'smooth'});}
+
+/* CATEGORY PILLS */
+function setCategory(btn,cat){
+  document.querySelectorAll('.cat-pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const labels={all:'Showing 6 of 542 professionals',mc:'Showing 6 of 48 MC / Comperes',
+    photo:'Showing 6 of 72 Photographers',band:'Showing 6 of 34 Live Bands',
+    dj:'Showing 6 of 27 DJs',mua:'Showing 6 of 61 Makeup Artists',
+    video:'Showing 6 of 29 Videographers',planner:'Showing 6 of 38 Event Planners',
+    speaker:'Showing 6 of 14 Keynote Speakers',vocalist:'Showing 6 of 22 Vocalists',
+    florist:'Showing 6 of 24 Florists',cake:'Showing 6 of 19 Cake Designers'};
+  document.getElementById('v-count').textContent=labels[cat]||labels.all;
+}
+
+/* VENDOR DATA */
+const vdata={
+  v1:{hero:'R',cat:'MC / Compere',name:'Ravindu Samarasinghe',
+    from:'LKR 45,000',to:'LKR 120,000',qtype:'Per event',
+    rateNote:'Full-day rates include ceremony + reception. Half-day also available.',
+    events:['Weddings','Corporate Events','Awards Ceremonies','Product Launches'],
+    locs:['Colombo','Kandy','Galle','Negombo','Overseas on request'],
+    langs:['Sinhala + English','Trilingual available'],exp:'12 years · 200+ events',
+    bio:'A distinguished bilingual compere with over 12 years of experience hosting Sri Lanka\'s finest weddings and corporate events. Ravindu brings warmth, command and effortless bilingual fluency — ensuring every guest, from every background, feels part of the occasion.',
+    avail:'#check-availability'},
+  v2:{hero:'K',cat:'Photographer',name:'Kasun Wijeratne',
+    from:'LKR 65,000',to:'LKR 200,000',qtype:'Per day / half-day',
+    rateNote:'Includes edited gallery. Drone add-on available. Prints extra.',
+    events:['Weddings','Corporate Events','Exhibitions','Portraits','Product Launches'],
+    locs:['Colombo','Kandy','Galle'],langs:['Sinhala','English'],
+    exp:'9 years · 800+ events documented',
+    bio:'Award-winning documentary photographer with a cinematic, candid approach to every event. Over 800 events documented across Sri Lanka and internationally. Available for weddings, corporate events and exhibitions.',
+    avail:'#check-availability'},
+  v3:{hero:'S',cat:'Live Band',name:'Saman & The Wavelengths',
+    from:'LKR 85,000',to:'LKR 250,000',qtype:'Per set (3–4 hours)',
+    rateNote:'Includes 7 musicians. Equipment and PA system included.',
+    events:['Weddings','Corporate Dinners','Concerts','Galas','Cultural Shows'],
+    locs:['Colombo','Kandy','Galle'],langs:['Sinhala','English'],
+    exp:'15 years · 500+ performances',
+    bio:'Sri Lanka\'s most versatile live band — 7 musicians, 15 years of experience across Baila, pop, rock, R&B and jazz. Perfect for wedding receptions and corporate entertainment. Full PA system included.',
+    avail:'#check-availability'},
+  v4:{hero:'N',cat:'Makeup Artist (MUA)',name:'Nilakshi Perera',
+    from:'LKR 22,000',to:'LKR 65,000',qtype:'Per session',
+    rateNote:'Bridal package includes trial. Airbrush and HD options available.',
+    events:['Weddings','Photoshoots','Corporate Events','Fashion Shows'],
+    locs:['Colombo','Negombo','Kandy'],langs:['Sinhala','English'],
+    exp:'8 years · 300+ clients',
+    bio:'Certified MUA specialising in bridal, airbrush and editorial makeup. Eight years of experience across Kandyan, South Indian and Western bridal styles. Available for weddings, photoshoots and corporate events.',
+    avail:'#check-availability'},
+  v5:{hero:'P',cat:'MC / Compere',name:'Priya Jeyakumar',
+    from:'LKR 38,000',to:'LKR 95,000',qtype:'Per event',
+    rateNote:'Bilingual Tamil–English. Overseas events include travel costs.',
+    events:['Weddings','Conferences','Corporate Events','Cultural Shows'],
+    locs:['Jaffna','Colombo','London, UK'],langs:['English + Tamil','Trilingual available'],
+    exp:'8 years · 120+ events',
+    bio:'Sri Lanka\'s leading Tamil–English bilingual compere. Specialises in cross-cultural events serving both Tamil and English-speaking audiences simultaneously. Based between Jaffna and London, with extensive diaspora event experience.',
+    avail:'#check-availability'},
+  v6:{hero:'D',cat:'Keynote Speaker',name:'Dr. Dilnoza Fernando',
+    from:'LKR 150,000',to:'LKR 500,000',qtype:'Per session / keynote',
+    rateNote:'Half-day and full-day rates available. International travel negotiable.',
+    events:['Conferences','Corporate Events','Award Ceremonies','Seminars','Leadership Summits'],
+    locs:['Colombo','Dubai, UAE','Melbourne, Australia'],langs:['English'],
+    exp:'20+ years executive experience · TEDx speaker',
+    bio:'International keynote speaker and leadership consultant. Speaks at corporate conferences across Sri Lanka, UAE and Australia on leadership, diversity and innovation. 20+ years of executive experience at senior levels across industries.',
+    avail:'#check-availability'},
+};
+
+/* CALENDAR DOTS */
+function buildCal(){
+  const today=new Date();
+  const dots=[];
+  const taken=[2,3,7,14,15,21,22,28];
+  for(let i=1;i<=30;i++){
+    const d=new Date(today);d.setDate(today.getDate()+i);
+    const cls=taken.includes(i)?'taken':'avail';
+    dots.push(`<div class="mb-cal-dot ${cls}" title="${cls==='avail'?'Available':'Booked'}">${d.getDate()}</div>`);
+  }
+  return dots.join('');
+}
+
+function openModal(id){
+  const d=vdata[id]; if(!d)return;
+  document.getElementById('mb-bar-name').textContent=d.name;
+  document.getElementById('mb-hero').textContent=d.hero;
+  document.getElementById('mb-cat').textContent=d.cat;
+  document.getElementById('mb-name').textContent=d.name;
+  document.getElementById('mb-from').textContent=d.from;
+  document.getElementById('mb-to').textContent=d.to;
+  document.getElementById('mb-qtype').textContent=d.qtype;
+  document.getElementById('mb-rate-note').textContent=d.rateNote;
+  document.getElementById('mb-events').innerHTML=d.events.map(e=>`<span class="mb-tag">${e}</span>`).join('');
+  document.getElementById('mb-locs').innerHTML=d.locs.map(l=>`<span class="mb-tag">${l}</span>`).join('');
+  document.getElementById('mb-langs').innerHTML=d.langs.map(l=>`<span class="mb-tag">${l}</span>`).join('');
+  document.getElementById('mb-exp').textContent=d.exp;
+  document.getElementById('mb-bio').textContent=d.bio;
+  document.getElementById('mb-avail-link').href=d.avail;
+  document.getElementById('mb-cal').innerHTML=buildCal();
+  document.getElementById('modal-ov').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeModal(){document.getElementById('modal-ov').classList.remove('open');document.body.style.overflow='';}
+function closeModalOut(e){if(e.target===document.getElementById('modal-ov'))closeModal();}
+
+/* FAQ */
+function toggleFAQ(btn){
+  const a=btn.nextElementSibling;
+  const isOpen=btn.classList.contains('open');
+  document.querySelectorAll('.faq-q.open').forEach(b=>{
+    b.classList.remove('open');
+    b.nextElementSibling.style.maxHeight=null;
+  });
+  if(!isOpen){btn.classList.add('open');a.style.maxHeight=a.scrollHeight+'px';}
+}
+
+/* BOOKING SUBMITS */
+function submitBooking(){alert('Tentative booking request sent!\n\nThe professional will contact you via email and WhatsApp within 24 hours with a personalised quote.\n\nNo payment has been taken. You are under no obligation until you confirm directly with the professional.');}
+function submitDirect(){alert('Your booking request has been received!\n\nWe will match you with available verified professionals for your event date and you will receive personalised quotes within 24 hours.\n\nNo payment is required at this stage.');}
+
+/* ESC */
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>

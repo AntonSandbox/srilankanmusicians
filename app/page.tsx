@@ -92,17 +92,36 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   const cloudflareAccountHash = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
 
   return (
-    <main className="min-h-screen bg-[#d1b350] font-sans selection:bg-rose-100 selection:text-rose-900">
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-rose-50/50 to-transparent dark:from-rose-950/20" />
-        <div className="container px-4 mx-auto relative z-10 text-center">
-          <h1 className="text-5xl lg:text-7xl font-extrabold text-zinc-900 dark:text-white tracking-tight mb-6">
-            Find Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-500">Perfect Match</span>
-          </h1>
-          <p className="text-xl text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto mb-12">
-            Discover top-tier florists, visionary DJs, and masterful cake designers available for your special day.
-          </p>
+    <>
+      {/* NAV */}
+      <nav>
+        <div className="container nav-in">
+          <a href="/" className="nav-logo">
+            <div className="nl-sq"><span>S</span></div>
+            <div className="nl-text">
+              <span className="nl-name">Sri Lankan Event Portal</span>
+              <span className="nl-sub">Find &middot; Check &middot; Book</span>
+            </div>
+          </a>
+          <div className="nav-links">
+            <a href="#vendors" className="nav-a">Find Talent</a>
+            <a href="#occasions" className="nav-a">Occasions</a>
+            <a href="#rates" className="nav-a">Rate Guide</a>
+            <a href="#how-it-works" className="nav-a">How It Works</a>
+            <a href="#faq" className="nav-a">FAQ</a>
+          </div>
+          <a href="#book-direct" className="nav-cta">Tentative Booking</a>
+          <button className="nav-burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+        </div>
+      </nav>
+
+      {/* HERO */}
+      <section className="hero">
+        <div className="hero-bg"></div>
+        <div className="container hero-content">
+          <div className="hero-kicker"><span className="hero-kicker-dot"></span>Sri Lanka &amp; worldwide diaspora</div>
+          <h1 className="hero-h1">Every event deserves<br />the right <em>talent.</em></h1>
+          <p className="hero-desc">Find verified Sri Lankan event professionals for weddings, birthdays, corporate events, conferences and exhibitions. Check real availability. Request a tentative booking — confirmed with a personalised quote within 24 hours.</p>
 
           <Suspense fallback={<div className="h-32 bg-white/50 rounded-2xl animate-pulse w-full max-w-5xl mx-auto"></div>}>
             <SearchForm />
@@ -110,54 +129,222 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         </div>
       </section>
 
-      {/* Results Section */}
-      <section className="container px-4 mx-auto pb-32">
-        {!hasSearchParams ? (
-          <div className="text-center py-24 bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-            <Sparkles className="w-12 h-12 mx-auto text-rose-400 mb-4 opacity-50" />
-            <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">Start Your Search</h2>
-            <p className="text-zinc-500 dark:text-zinc-400">Use the filters above to find available vendors.</p>
+      {/* TRUST BAR */}
+      <div className="trust-bar">
+        <div className="container trust-bar-in">
+          <div className="tb-item"><i className="fas fa-shield-check" style={{ color: 'var(--saffron)' }}></i><span><strong>Personally verified</strong> professionals only</span></div>
+          <div className="tb-sep"></div>
+          <div className="tb-item"><i className="fas fa-clock" style={{ color: 'var(--saffron)' }}></i><span>Booking confirmed with quote within <strong>24 hours</strong></span></div>
+          <div className="tb-sep"></div>
+          <div className="tb-item"><i className="fas fa-calendar-check" style={{ color: 'var(--saffron)' }}></i><span><strong>Live availability</strong> &mdash; only available dates shown</span></div>
+          <div className="tb-sep"></div>
+          <div className="tb-item"><i className="fas fa-globe-asia" style={{ color: 'var(--saffron)' }}></i><span>Sri Lanka &amp; <strong>15+ countries</strong> worldwide</span></div>
+          <div className="tb-sep"></div>
+          <div className="tb-item"><i className="fas fa-gift" style={{ color: 'var(--saffron)' }}></i><span><strong>Free</strong> to search &amp; make tentative bookings</span></div>
+        </div>
+      </div>
+
+      {/* CATEGORY STRIP */}
+      <div className="cats" id="vendors">
+        <div className="container">
+          <div className="cats-scroll in">
+            <button className="cat-pill on"><span className="cp-icon">✦</span><span className="cp-name">All talent</span><span className="cp-count">542</span></button>
+            <button className="cat-pill"><span className="cp-icon">🎤</span><span className="cp-name">MC / Compere</span><span className="cp-count">48</span></button>
+            <button className="cat-pill"><span className="cp-icon">📷</span><span className="cp-name">Photographer</span><span className="cp-count">72</span></button>
+            <button className="cat-pill"><span className="cp-icon">🎵</span><span className="cp-name">Live Band</span><span className="cp-count">34</span></button>
+            <button className="cat-pill"><span className="cp-icon">🎧</span><span className="cp-name">DJ</span><span className="cp-count">27</span></button>
+            <button className="cat-pill"><span className="cp-icon">💄</span><span className="cp-name">Makeup Artist</span><span className="cp-count">61</span></button>
+            <button className="cat-pill"><span className="cp-icon">🎬</span><span className="cp-name">Videographer</span><span className="cp-count">29</span></button>
           </div>
-        ) : fetchError ? (
-          <div className="text-center py-12 text-red-500 bg-red-50 dark:bg-red-950/20 rounded-2xl">
-            <p>Oops! Something went wrong while searching. Please try again.</p>
-          </div>
-        ) : vendors.length === 0 ? (
-          <div className="text-center py-24 bg-white dark:bg-zinc-900 rounded-3xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-            <h2 className="text-2xl font-bold text-zinc-800 dark:text-zinc-200 mb-2">No Vendors Found</h2>
-            <p className="text-zinc-500 dark:text-zinc-400">Try adjusting your filters to find more results.</p>
-          </div>
-        ) : (
-          <div>
-            <div className="flex justify-between items-end mb-8">
-              <div className="text-[#181644]">
-                <div className="font-['Adobe_Caslon_Pro',_serif] text-base mb-1">
-                  Showing {vendors.length} out of {totalProfessionals || 542} professionals
+        </div>
+      </div>
+
+      {/* VENDORS GRID */}
+      <div className="vendors">
+        <div className="container">
+          {!hasSearchParams ? (
+            <div className="text-center py-24 bg-white rounded-3xl border border-zinc-200 shadow-sm" style={{ borderColor: 'var(--sand2)', background: 'var(--paper)' }}>
+              <h2 className="text-2xl font-bold mb-2 font-['Cormorant',serif]" style={{ color: 'var(--ink)' }}>Start Your Search</h2>
+              <p style={{ color: 'var(--mist)' }}>Use the filters above to find available vendors.</p>
+            </div>
+          ) : fetchError ? (
+            <div className="text-center py-12 text-red-500 bg-red-50 rounded-2xl">
+              <p>Oops! Something went wrong while searching. Please try again.</p>
+            </div>
+          ) : vendors.length === 0 ? (
+            <div className="text-center py-24 rounded-3xl border shadow-sm" style={{ borderColor: 'var(--sand2)', background: 'var(--paper)' }}>
+              <h2 className="text-2xl font-bold mb-2 font-['Cormorant',serif]" style={{ color: 'var(--ink)' }}>No Vendors Found</h2>
+              <p style={{ color: 'var(--mist)' }}>Try adjusting your filters to find more results.</p>
+            </div>
+          ) : (
+            <>
+              <div className="vendors-hd in">
+                <div className="vhd-left">
+                  <div className="vhd-count" id="v-count">Showing {vendors.length} of {totalProfessionals || 542} professionals</div>
+                  <div className="vhd-title">Available <em>this week</em></div>
                 </div>
-                <h2 className="text-[32px] text-[#181644]">
-                  <span className="font-['Adobe_Caslon_Pro',_serif] font-semibold">Available</span>{' '}
-                  <span className="font-['Adobe_Caslon_Pro',_serif] italic">this week</span>
-                </h2>
+                <div className="vhd-sort">
+                  <label>Sort by</label>
+                  <select>
+                    <option>Highest rated</option>
+                    <option>Lowest price</option>
+                    <option>Most reviewed</option>
+                    <option>Recently added</option>
+                  </select>
+                </div>
               </div>
-              <div className="flex items-center gap-4 text-xs text-[#181644] font-['Adobe_Caslon_Pro',_serif]">
-                <span className="uppercase tracking-wider">Sort by</span>
-                <select className="border border-[#181644]/20 rounded-sm px-3 py-1.5 bg-white text-sm outline-none">
-                  <option>Highest rated</option>
-                </select>
+
+              <div className="vgrid">
+                {vendors.map((vendor) => (
+                  <VendorCard
+                    key={vendor.id}
+                    vendor={vendor}
+                    cloudflareAccountHash={cloudflareAccountHash}
+                  />
+                ))}
+              </div>
+              <div className="load-more-wrap in">
+                <button className="load-more">Load more professionals <i className="fas fa-chevron-down" style={{ fontSize: '10px' }}></i></button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* OCCASIONS */}
+      <section className="occ-sec" id="occasions">
+        <div className="container">
+          <span className="sec-eye in">Every occasion</span>
+          <h2 className="sec-h2 in">The right talent for <em>every event</em></h2>
+          <div className="occ-grid">
+            <div className="occ-card in"><div className="oc-icon">💍</div><div className="oc-name">Wedding</div><div className="oc-talents">MC · Photographer · Band · MUA · Planner · Florist · Cake</div></div>
+            <div className="occ-card in"><div className="oc-icon">🎂</div><div className="oc-name">Birthday Party</div><div className="oc-talents">MC · DJ · Photographer · Cake · Decorator</div></div>
+            <div className="occ-card in"><div className="oc-icon">💼</div><div className="oc-name">Corporate Event</div><div className="oc-talents">MC · Speaker · Photographer · Videographer · Band</div></div>
+            <div className="occ-card in"><div className="oc-icon">🎙️</div><div className="oc-name">Conference</div><div className="oc-talents">MC · Speaker · Moderator · Translator · Photographer</div></div>
+            <div className="occ-card in"><div className="oc-icon">🖼️</div><div className="oc-name">Exhibition</div><div className="oc-talents">MC · Promoter · Photographer · Videographer</div></div>
+            <div className="occ-card in"><div className="oc-icon">🎵</div><div className="oc-name">Concert &amp; Show</div><div className="oc-talents">Band · DJ · Vocalist · Dancers · Photographer</div></div>
+            <div className="occ-card in"><div className="oc-icon">🏆</div><div className="oc-name">Awards Ceremony</div><div className="oc-talents">MC · Photographer · Videographer · Band · Décor</div></div>
+            <div className="occ-card in"><div className="oc-icon">💐</div><div className="oc-name">Engagement Party</div><div className="oc-talents">MC · Photographer · Cake · Florist · DJ</div></div>
+          </div>
+        </div>
+      </section>
+
+      {/* RATE GUIDE */}
+      <section className="rates-sec" id="rates">
+        <div className="container">
+          <span className="sec-eye in">Transparent pricing</span>
+          <h2 className="sec-h2 in">Sri Lankan event talent <em>rate guide</em></h2>
+          <p className="sec-p in" style={{ marginBottom: '24px' }}>Typical rate ranges across Sri Lanka. Actual quotes depend on experience level, event duration, location and specific requirements. All quotes are personalised and provided within 24 hours of a tentative booking request.</p>
+          <div className="rates-note in">
+            <i className="fas fa-info-circle"></i>
+            <span>These are <strong>market ranges</strong> — not fixed prices. Entry-level professionals start at the low end; award-winning or internationally experienced professionals command the high end. Overseas events (Australia, UK, UAE) will attract travel and accommodation costs in addition. Final pricing is always confirmed directly with the professional.</span>
+          </div>
+          <table className="rates-table in">
+            <thead>
+              <tr>
+                <th>Talent Category</th>
+                <th>Entry Level</th>
+                <th>Mid Range</th>
+                <th>Premium</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td className="rates-cat">MC / Emcee / Compere</td><td>LKR 20,000</td><td>LKR 45,000&ndash;80,000</td><td>LKR 100,000+</td><td>Bilingual / trilingual = higher rate</td></tr>
+              <tr><td className="rates-cat">Photographer (half day)</td><td>LKR 25,000</td><td>LKR 65,000&ndash;100,000</td><td>LKR 150,000+</td><td>Full day &amp; drone packages available</td></tr>
+              <tr><td className="rates-cat">Videographer</td><td>LKR 30,000</td><td>LKR 75,000&ndash;120,000</td><td>LKR 200,000+</td><td>Cinematic / drone = premium</td></tr>
+              <tr><td className="rates-cat">Live Band (5&ndash;7 piece)</td><td>LKR 60,000</td><td>LKR 100,000&ndash;180,000</td><td>LKR 250,000+</td><td>Includes 3&ndash;4 hour set</td></tr>
+              <tr><td className="rates-cat">DJ</td><td>LKR 20,000</td><td>LKR 40,000&ndash;75,000</td><td>LKR 100,000+</td><td>Equipment rental may be separate</td></tr>
+              <tr><td className="rates-cat">Makeup Artist (MUA)</td><td>LKR 10,000</td><td>LKR 25,000&ndash;50,000</td><td>LKR 80,000+</td><td>Bridal / airbrush = premium</td></tr>
+              <tr><td className="rates-cat">Event / Wedding Planner</td><td>LKR 50,000</td><td>LKR 100,000&ndash;200,000</td><td>LKR 350,000+</td><td>Full planning vs day-of coordination</td></tr>
+              <tr><td className="rates-cat">Keynote Speaker</td><td>LKR 50,000</td><td>LKR 150,000&ndash;300,000</td><td>LKR 500,000+</td><td>International experience = higher</td></tr>
+              <tr><td className="rates-cat">Solo Vocalist</td><td>LKR 15,000</td><td>LKR 35,000&ndash;70,000</td><td>LKR 120,000+</td><td>Ceremony &amp; reception rates differ</td></tr>
+              <tr><td className="rates-cat">Florist / Decorator</td><td>LKR 30,000</td><td>LKR 80,000&ndash;200,000</td><td>LKR 400,000+</td><td>Depends heavily on flowers &amp; venue size</td></tr>
+              <tr><td className="rates-cat">Cake Designer</td><td>LKR 8,000</td><td>LKR 25,000&ndash;60,000</td><td>LKR 100,000+</td><td>Tiered / sculpted cakes = premium</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* WHY VERIFIED */}
+      <section className="why-sec">
+        <div className="container">
+          <span className="sec-eye in">Why this portal</span>
+          <h2 className="sec-h2 in">What makes every professional here <em>different</em></h2>
+          <div className="why-grid">
+            <div className="why-card in"><div className="wc-icon"><i className="fas fa-shield-check"></i></div><div className="wc-t">Personally verified</div><p className="wc-d">Every professional is reviewed before listing — experience checked, references confirmed. You will never see an unchecked self-registration on this platform.</p></div>
+            <div className="why-card in"><div className="wc-icon"><i className="fas fa-calendar-check"></i></div><div className="wc-t">Live availability</div><p className="wc-d">Each professional manages a live calendar. Search results show only those genuinely available on your date — no wasted time chasing unavailable vendors.</p></div>
+            <div className="why-card in"><div className="wc-icon"><i className="fas fa-file-invoice"></i></div><div className="wc-t">Quote within 24 hours</div><p className="wc-d">Every tentative booking triggers a personalised quote from the professional — based on your specific event, date and requirements. Not a generic rate card.</p></div>
+            <div className="why-card in"><div className="wc-icon"><i className="fas fa-globe-asia"></i></div><div className="wc-t">Sri Lankans worldwide</div><p className="wc-d">Verified Sri Lankan professionals in Australia, UK, UAE, Canada and beyond. Diaspora weddings and overseas corporate events are equally served.</p></div>
+            <div className="why-card in"><div className="wc-icon"><i className="fas fa-star"></i></div><div className="wc-t">Real reviews only</div><p className="wc-d">Reviews come from verified event organisers who actually used the professional. No anonymous ratings, no inflated scores — only authentic feedback.</p></div>
+            <div className="why-card in"><div className="wc-icon"><i className="fas fa-gift"></i></div><div className="wc-t">Free for organisers</div><p className="wc-d">Search, browse, compare and request tentative bookings completely free. You only deal directly with the professional — no commission, no booking fees.</p></div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="faq-sec" id="faq">
+        <div className="container">
+          <span className="sec-eye in">Common questions</span>
+          <h2 className="sec-h2 in" style={{ textAlign: 'center' }}>Everything you need <em>to know</em></h2>
+          <div className="faq-list">
+            <div className="faq-item in">
+              <button className="faq-q">What is a "tentative booking" and is it binding? <i className="fas fa-plus"></i></button>
+              <div className="faq-a" style={{ maxHeight: '1000px' }}><div className="faq-a-in">A tentative booking is a reservation of interest — not a contract. When you click "Book Tentatively" and fill in the form, your details go directly to the professional via a verified secure link. The professional responds within 24 hours with a personalised quote and confirms their availability. You then decide whether to proceed. No money changes hands until you actively confirm the booking directly with the professional.</div></div>
+            </div>
+            {/* other faqs can be populated here later or left as is for now */}
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer>
+        <div className="container">
+          <div className="ft">
+            <div>
+              <div className="nav-logo" style={{ marginBottom: '14px' }}>
+                <div className="nl-sq"><span>S</span></div>
+                <div className="nl-text">
+                  <span className="nl-name">Sri Lankan Event Portal</span>
+                  <span className="nl-sub">Find &middot; Check &middot; Book</span>
+                </div>
+              </div>
+              <p className="fb-desc">Sri Lanka's first verified all-event talent platform. From weddings in Colombo to conferences in Dubai — find the right professional, check availability, and book tentatively. Free for event organisers.</p>
+              <div className="fb-soc">
+                <a href="#" title="Instagram"><i className="fab fa-instagram"></i></a>
+                <a href="#" title="Facebook"><i className="fab fa-facebook-f"></i></a>
+                <a href="#" title="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
+                <a href="#" title="YouTube"><i className="fab fa-youtube"></i></a>
+                <a href="#" title="WhatsApp"><i className="fab fa-whatsapp"></i></a>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {vendors.map((vendor) => (
-                <VendorCard
-                  key={vendor.id}
-                  vendor={vendor}
-                  cloudflareAccountHash={cloudflareAccountHash}
-                />
-              ))}
+            <div className="fc">
+              <h4>Find Talent</h4>
+              <ul>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>MC / Compere</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Photographer</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Live Band / DJ</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Makeup Artist</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Videographer</a></li>
+              </ul>
+            </div>
+            <div className="fc">
+              <h4>Also in the Network</h4>
+              <ul>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Lankan Wedding MC</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Lankan Wedding MUA</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Wedding Photographer</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Wedding Band</a></li>
+              </ul>
             </div>
           </div>
-        )}
-      </section>
-    </main>
+          <hr className="f-div" />
+          <div className="f-bot">
+            <p className="f-copy">&copy; 2025 Sri Lankan Event Portal &middot; All rights reserved</p>
+            <div className="f-links"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Sitemap</a></div>
+          </div>
+        </div>
+      </footer>
+    </>
   );
 }

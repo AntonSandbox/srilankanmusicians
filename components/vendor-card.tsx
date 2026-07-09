@@ -61,82 +61,56 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger render={<div className="bg-[#ffffff] flex flex-col cursor-pointer transition-transform duration-300 hover:-translate-y-1 shadow-sm h-full border border-[#181644]/10 rounded-sm overflow-hidden" />}>
-          {/* Top Section */}
-          <div className="relative h-[220px] bg-[#67beeb] flex items-center justify-center overflow-hidden">
-            <div className="absolute top-4 left-4 flex gap-3 z-10">
-               <span className="flex items-center gap-1.5 text-[11px] uppercase font-['Adobe_Caslon_Pro',_serif] text-[#ffffff] tracking-wider">
-                  <span className="text-[#d1b350] font-sans">✓</span> VERIFIED
-               </span>
-               <span className="bg-[#006400] text-[#ffffff] text-[10px] px-2 py-0.5 uppercase font-['Adobe_Caslon_Pro',_serif] tracking-wider">
-                  AVAILABLE
-               </span>
+      <DialogTrigger render={<div className="vcard in cursor-pointer" />}>
+          <div className="vc-top">
+            <div className="vc-badges">
+              <span className="vb vb-v">✓ Verified</span>
+              <span className="vb vb-a">Available</span>
             </div>
-            
-            <span className="text-[120px] italic text-[#181644]/10 font-serif pointer-events-none select-none z-0">
-              {vendor.name.charAt(0).toUpperCase()}
-            </span>
-            
-            <div className="absolute bottom-4 left-4 flex items-center gap-2 text-[#ffffff] text-[10px] uppercase tracking-wider font-sans z-10">
-              <div className="w-1.5 h-1.5 rounded-full bg-teal-400"></div>
-              NEXT AVAILABLE: SEE PROFILE CALENDAR
+            <div className="vc-initial">{vendor.name.charAt(0).toUpperCase()}</div>
+            <div className="vc-avail-bar">
+              <span className="vab-dot"></span>
+              <span className="vab-txt">Next available: see profile calendar</span>
             </div>
           </div>
-          
-          {/* Bottom Section */}
-          <div className="p-6 text-[#181644] flex flex-col flex-grow">
-            <div className="text-[11px] uppercase tracking-widest mb-1.5 text-amber-500 font-['Adobe_Caslon_Pro',_serif]">
-              {vendor.category}
+          <div className="vc-body">
+            <div className="vc-cat">{vendor.category}</div>
+            <div className="vc-name">{vendor.name}</div>
+            <div className="vc-tagline">{vendor.occasions?.join(' · ')}</div>
+            <div className="vc-meta">
+              <span className="vc-m"><i className="fas fa-map-marker-alt"></i>{vendor.location || 'Remote'}</span>
+              {vendor.years_of_experience && <span className="vc-m"><i className="fas fa-star"></i>{vendor.years_of_experience} yrs exp.</span>}
             </div>
-            
-            <h3 className="text-[22px] font-['Playfair_Display',_serif] font-bold mb-1.5 leading-tight">
-              {vendor.name}
-            </h3>
-            
-            <div className="text-[10px] uppercase tracking-widest text-[#181644]/60 mb-3 font-sans italic">
-              {vendor.occasions?.join(' • ')}
+            <div className="vc-stars">
+              <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
+              <span className="vc-rc">5.0 &nbsp;({vendor.review_count || 0} reviews)</span>
             </div>
-            
-            <div className="flex items-center gap-4 text-xs mb-3">
-              <div className="flex items-center gap-1 font-['Adobe_Caslon_Pro',_serif]">
-                <MapPin className="w-3.5 h-3.5 text-amber-500" /> {vendor.location || 'Remote'}
+            <div className="vc-skills">
+              {vendor.languages?.map(lang => (
+                <span key={lang} className="vsk vsk-hl">{lang}</span>
+              ))}
+              {vendor.occasions?.slice(0, 2).map(occ => (
+                <span key={occ} className="vsk">{occ}</span>
+              ))}
+            </div>
+            <div className="vc-foot">
+              <div className="vc-rate">
+                <span className="vc-rate-lbl">From</span>
+                {(() => {
+                  const splitBudget = vendor.budget_range?.split(/[-–]/).map(s => s.trim());
+                  const isRange = splitBudget && splitBudget.length === 2;
+                  if (isRange) {
+                    return (
+                      <>
+                        <span className="vc-rate-val">{splitBudget[0]}</span>
+                        <span className="vc-rate-range">Up to {splitBudget[1]}</span>
+                      </>
+                    )
+                  }
+                  return <span className="vc-rate-val text-sm">{vendor.budget_range || 'Contact'}</span>
+                })()}
               </div>
-            </div>
-            
-            <div className="flex flex-wrap gap-2 mb-6">
-               {vendor.languages?.map(lang => (
-                 <span key={lang} className="text-[11px] border border-amber-200 text-amber-600 px-2.5 py-1 font-['Adobe_Caslon_Pro',_serif] uppercase bg-amber-50/20">
-                   {lang}
-                 </span>
-               ))}
-               {vendor.occasions?.slice(0, 2).map(occ => (
-                 <span key={occ} className="text-[11px] border border-amber-200 text-amber-600 px-2.5 py-1 font-['Adobe_Caslon_Pro',_serif] uppercase bg-amber-50/20">
-                   {occ}
-                 </span>
-               ))}
-            </div>
-            
-            <div className="border-t border-[#181644]/10 pt-5 mt-auto flex justify-between items-end">
-              <div className="font-['Adobe_Caslon_Pro',_serif]">
-                 <div className="text-[11px] text-[#181644]/50 uppercase tracking-widest mb-0.5">From</div>
-                 {(() => {
-                    const splitBudget = vendor.budget_range?.split(/[-–]/).map(s => s.trim());
-                    const isRange = splitBudget && splitBudget.length === 2;
-                    if (isRange) {
-                      return (
-                        <>
-                          <div className="text-lg font-bold">{splitBudget[0]}</div>
-                          <div className="text-[11px] text-[#181644]/50 mt-0.5">Up to {splitBudget[1]}</div>
-                        </>
-                      )
-                    }
-                    return <div className="text-lg font-bold">{vendor.budget_range || 'Contact for pricing'}</div>
-                 })()}
-              </div>
-              
-              <div className="bg-[#181644] text-[#ffffff] px-5 py-2.5 text-xs font-['Adobe_Caslon_Pro',_serif] font-semibold italic uppercase tracking-wider hover:bg-[#181644]/90 transition-colors">
-                BOOK TENTATIVELY
-              </div>
+              <button className="vc-book">Book Tentatively</button>
             </div>
           </div>
       </DialogTrigger>

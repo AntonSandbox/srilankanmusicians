@@ -77,155 +77,111 @@ export function SearchForm() {
   };
 
   return (
-    <form onSubmit={handleSearch} className="w-full max-w-7xl mx-auto bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 transition-all">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 items-end">
-        
-        <div className="space-y-2">
-          <Label htmlFor="occasion" className="text-zinc-600 dark:text-zinc-400 font-medium text-xs uppercase tracking-wider">What is your occasion?</Label>
-          <Select value={occasion} onValueChange={(val) => setOccasion(val || '')}>
-            <SelectTrigger id="occasion" className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800">
-              <SelectValue placeholder="All Occasions" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">All Occasions</SelectItem>
-              {OCCASIONS.map((group) => (
-                <SelectGroup key={group.group}>
-                  <SelectLabel>{group.group}</SelectLabel>
-                  {group.items.map((item) => (
-                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                  ))}
-                </SelectGroup>
-              ))}
-            </SelectContent>
-          </Select>
+    <div className="search-engine mt-12 mx-auto text-left rounded-lg overflow-visible">
+      <form onSubmit={handleSearch}>
+        <div className="se-head">
+          <span className="se-title"><i className="fas fa-search" style={{marginRight:'7px',color:'var(--saffron)'}}></i>Search available talent</span>
+          <span className="se-avail">Search our verified professionals</span>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="category" className="text-zinc-600 dark:text-zinc-400 font-medium text-xs uppercase tracking-wider">Talent / Service</Label>
-          <Select value={category} onValueChange={(val) => setCategory(val || '')}>
-            <SelectTrigger id="category" className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800">
-              <SelectValue placeholder="All Services" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">All Services</SelectItem>
-              {SERVICES.map((group) => (
-                <SelectGroup key={group.group}>
-                  <SelectLabel>{group.group}</SelectLabel>
-                  {group.items.map((item) => (
-                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                  ))}
-                </SelectGroup>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label className="text-zinc-600 dark:text-zinc-400 font-medium text-xs uppercase tracking-wider">Event Date</Label>
-          <Popover>
-            <PopoverTrigger
-              className={cn(
-                "inline-flex items-center justify-start whitespace-nowrap rounded-md text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border h-10 px-4 py-2 w-full font-normal bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800",
-                !date && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {date ? format(date, "PPP") : <span>Pick a date</span>}
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0 bg-white dark:bg-zinc-950">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={(d) => { setDate(d); }}
+        <div className="se-row se-r1">
+          <div className="sf">
+            <label htmlFor="s-occasion">What is your occasion?</label>
+            <div style={{position:'relative'}}>
+              <i className="fas fa-calendar-star sf-ico"></i>
+              <select id="s-occasion" value={occasion} onChange={(e) => setOccasion(e.target.value)}>
+                <option value="none">All Occasions</option>
+                {OCCASIONS.map((group) => (
+                  <optgroup key={group.group} label={group.group}>
+                    {group.items.map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="sf">
+            <label htmlFor="s-talent">Talent / Service needed</label>
+            <div style={{position:'relative'}}>
+              <i className="fas fa-user-tie sf-ico"></i>
+              <select id="s-talent" value={category} onChange={(e) => setCategory(e.target.value)}>
+                <option value="none">All Services</option>
+                {SERVICES.map((group) => (
+                  <optgroup key={group.group} label={group.group}>
+                    {group.items.map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="sf">
+            <label htmlFor="s-date">Event date</label>
+            <div style={{position:'relative'}}>
+              <i className="fas fa-calendar-alt sf-ico"></i>
+              <input 
+                type="date" 
+                id="s-date" 
+                style={{paddingLeft:'36px'}} 
+                value={date ? format(date, 'yyyy-MM-dd') : ''}
+                onChange={(e) => setDate(e.target.value ? new Date(e.target.value) : undefined)}
               />
-            </PopoverContent>
-          </Popover>
+            </div>
+          </div>
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="location" className="text-zinc-600 dark:text-zinc-400 font-medium text-xs uppercase tracking-wider">Location</Label>
-          <Select value={location} onValueChange={(val) => setLocation(val || '')}>
-            <SelectTrigger id="location" className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800">
-              <SelectValue placeholder="All Locations" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">All Locations</SelectItem>
-              {LOCATIONS.map((group) => (
-                <SelectGroup key={group.group}>
-                  <SelectLabel>{group.group}</SelectLabel>
-                  {group.items.map((item) => (
-                    <SelectItem key={item} value={item}>{item}</SelectItem>
-                  ))}
-                </SelectGroup>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="se-row se-r2">
+          <div className="sf">
+            <label htmlFor="s-loc">Location</label>
+            <div style={{position:'relative'}}>
+              <i className="fas fa-map-marker-alt sf-ico"></i>
+              <select id="s-loc" value={location} onChange={(e) => setLocation(e.target.value)}>
+                <option value="none">All Locations</option>
+                {LOCATIONS.map((group) => (
+                  <optgroup key={group.group} label={group.group}>
+                    {group.items.map((item) => (
+                      <option key={item} value={item}>{item}</option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="sf">
+            <label htmlFor="s-lang">Language</label>
+            <div style={{position:'relative'}}>
+              <i className="fas fa-language sf-ico"></i>
+              <select id="s-lang" value={languages[0] || 'none'} onChange={(e) => setLanguages(e.target.value === 'none' ? [] : [e.target.value])}>
+                <option value="none">Preferred language</option>
+                {LANGUAGES.map(lang => (
+                  <option key={lang} value={lang}>{lang}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="sf">
+            <label htmlFor="s-budget">Budget range</label>
+            <div style={{position:'relative'}}>
+              <i className="fas fa-coins sf-ico"></i>
+              <select id="s-budget" value={budget} onChange={(e) => setBudget(e.target.value)}>
+                <option value="none">Any Budget</option>
+                {BUDGET_RANGES.map(range => (
+                  <option key={range} value={range}>{range}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="sf" style={{display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
+            <label style={{color:'transparent',userSelect:'none'}}>.</label>
+            <div className="se-actions">
+              <button type="submit" className="se-btn">
+                <i className="fas fa-search"></i> Find Available Talent
+              </button>
+            </div>
+          </div>
         </div>
-
-        <div className="space-y-2">
-          <Label className="text-zinc-600 dark:text-zinc-400 font-medium text-xs uppercase tracking-wider">Language</Label>
-          <Popover>
-            <PopoverTrigger
-              className={cn(
-                "inline-flex items-center justify-between whitespace-nowrap rounded-md text-sm ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 border h-10 px-4 py-2 w-full font-normal bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800",
-                languages.length === 0 && "text-muted-foreground"
-              )}
-            >
-              <span className="truncate">
-                {languages.length > 0 ? languages.join(', ') : 'All Languages'}
-              </span>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-4 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800 shadow-xl rounded-xl">
-              <div className="space-y-3">
-                <h4 className="font-medium text-sm border-b pb-2">Select Languages</h4>
-                <div className="flex flex-col gap-2">
-                  {LANGUAGES.map((lang) => (
-                    <label key={lang} className="flex items-center gap-2 cursor-pointer group">
-                      <div className={cn(
-                        "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                        languages.includes(lang) 
-                          ? "bg-primary border-primary text-primary-foreground" 
-                          : "border-zinc-300 dark:border-zinc-700 group-hover:border-primary"
-                      )}>
-                        {languages.includes(lang) && <span className="text-[10px]">✓</span>}
-                      </div>
-                      <input 
-                        type="checkbox" 
-                        className="sr-only" 
-                        checked={languages.includes(lang)}
-                        onChange={() => toggleLanguage(lang)}
-                      />
-                      <span className="text-sm text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-100">{lang}</span>
-                    </label>
-                  ))}
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="budget" className="text-zinc-600 dark:text-zinc-400 font-medium text-xs uppercase tracking-wider">Budget Range</Label>
-          <Select value={budget} onValueChange={(val) => setBudget(val || '')}>
-            <SelectTrigger id="budget" className="bg-white dark:bg-zinc-950 border-zinc-300 dark:border-zinc-800">
-              <SelectValue placeholder="Any Budget" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">Any Budget</SelectItem>
-              {BUDGET_RANGES.map((range) => (
-                <SelectItem key={range} value={range}>{range}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="pt-2 lg:pt-0">
-          <Button type="submit" className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white shadow-lg transition-transform hover:scale-[1.02]">
-            <Search className="mr-2 h-4 w-4" />
-            Search
-          </Button>
-        </div>
-      </div>
-    </form>
+        <p className="se-hint">Only professionals available on your date are shown &nbsp;&middot;&nbsp; <strong>Free to search and enquire</strong></p>
+      </form>
+    </div>
   );
 }
