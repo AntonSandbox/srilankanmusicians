@@ -33,20 +33,25 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   let vendors: Vendor[] = [];
   let fetchError = null;
 
-  if (hasSearchParams) {
-    const cookieStore = await cookies();
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() {
-            return cookieStore.getAll();
-          },
-          setAll() { },
+  const cookieStore = await cookies();
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll();
         },
-      }
-    );
+        setAll() { },
+      },
+    }
+  );
+
+  const { count: totalProfessionals } = await supabase
+    .from('vendors')
+    .select('*', { count: 'exact', head: true });
+
+  if (hasSearchParams) {
 
     const args = {
       p_category: category || null,
@@ -87,7 +92,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   const cloudflareAccountHash = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
 
   return (
-    <main className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans selection:bg-rose-100 selection:text-rose-900">
+    <main className="min-h-screen bg-[#d1b350] font-sans selection:bg-rose-100 selection:text-rose-900">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-rose-50/50 to-transparent dark:from-rose-950/20" />
@@ -125,9 +130,21 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         ) : (
           <div>
             <div className="flex justify-between items-end mb-8">
-              <h2 className="text-3xl font-bold text-zinc-900 dark:text-white">
-                Available Vendors <span className="text-zinc-400 text-lg font-normal">({vendors.length})</span>
-              </h2>
+              <div className="text-[#181644]">
+                <div className="font-['Adobe_Caslon_Pro',_serif] text-base mb-1">
+                  Showing {vendors.length} out of {totalProfessionals || 542} professionals
+                </div>
+                <h2 className="text-[32px] text-[#181644]">
+                  <span className="font-['Adobe_Caslon_Pro',_serif] font-semibold">Available</span>{' '}
+                  <span className="font-['Adobe_Caslon_Pro',_serif] italic">this week</span>
+                </h2>
+              </div>
+              <div className="flex items-center gap-4 text-xs text-[#181644] font-['Adobe_Caslon_Pro',_serif]">
+                <span className="uppercase tracking-wider">Sort by</span>
+                <select className="border border-[#181644]/20 rounded-sm px-3 py-1.5 bg-white text-sm outline-none">
+                  <option>Highest rated</option>
+                </select>
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               {vendors.map((vendor) => (

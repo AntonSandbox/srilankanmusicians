@@ -2,9 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Calendar, Globe2, MapPin, Clock, Send, Info, Lock, X, Star } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { sendTentativeBookingRequest } from '@/app/actions/booking';
 import { getVendorReviews } from '@/app/actions/vendors';
 import { format } from 'date-fns';
@@ -22,6 +20,9 @@ export interface Vendor {
   profile_image: string | null;
   portfolio: string[];
   availabilityRanges?: { start_date: string; end_date: string }[];
+  years_of_experience?: number;
+  review_count?: number;
+  average_rating?: number;
 }
 
 interface VendorCardProps {
@@ -59,40 +60,86 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
   const profileImageUrl = getImageUrl(vendor.profile_image);
 
   return (
-    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-      <div className="relative h-64 overflow-hidden">
-        <img 
-          src={profileImageUrl} 
-          alt={vendor.name} 
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-        <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
-          {vendor.category}
-        </div>
-      </div>
-      <CardContent className="p-6">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h3 className="text-xl font-bold text-zinc-900 dark:text-zinc-50 mb-1">{vendor.name}</h3>
-            <div className="flex items-center text-zinc-500 dark:text-zinc-400 text-sm">
-              <MapPin className="w-4 h-4 mr-1" />
-              {vendor.location || 'Remote'}
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger render={<div className="bg-[#ffffff] flex flex-col cursor-pointer transition-transform duration-300 hover:-translate-y-1 shadow-sm h-full border border-[#181644]/10 rounded-sm overflow-hidden" />}>
+          {/* Top Section */}
+          <div className="relative h-[220px] bg-[#67beeb] flex items-center justify-center overflow-hidden">
+            <div className="absolute top-4 left-4 flex gap-3 z-10">
+               <span className="flex items-center gap-1.5 text-[11px] uppercase font-['Adobe_Caslon_Pro',_serif] text-[#ffffff] tracking-wider">
+                  <span className="text-[#d1b350] font-sans">✓</span> VERIFIED
+               </span>
+               <span className="bg-[#006400] text-[#ffffff] text-[10px] px-2 py-0.5 uppercase font-['Adobe_Caslon_Pro',_serif] tracking-wider">
+                  AVAILABLE
+               </span>
+            </div>
+            
+            <span className="text-[120px] italic text-[#181644]/10 font-serif pointer-events-none select-none z-0">
+              {vendor.name.charAt(0).toUpperCase()}
+            </span>
+            
+            <div className="absolute bottom-4 left-4 flex items-center gap-2 text-[#ffffff] text-[10px] uppercase tracking-wider font-sans z-10">
+              <div className="w-1.5 h-1.5 rounded-full bg-teal-400"></div>
+              NEXT AVAILABLE: SEE PROFILE CALENDAR
             </div>
           </div>
-        </div>
-
-        {vendor.languages && vendor.languages.length > 0 && (
-          <div className="flex items-center text-zinc-500 dark:text-zinc-400 text-sm mb-6">
-            <Globe2 className="w-4 h-4 mr-1" />
-            {vendor.languages.join(', ')}
+          
+          {/* Bottom Section */}
+          <div className="p-6 text-[#181644] flex flex-col flex-grow">
+            <div className="text-[11px] uppercase tracking-widest mb-1.5 text-amber-500 font-['Adobe_Caslon_Pro',_serif]">
+              {vendor.category}
+            </div>
+            
+            <h3 className="text-[22px] font-['Playfair_Display',_serif] font-bold mb-1.5 leading-tight">
+              {vendor.name}
+            </h3>
+            
+            <div className="text-[10px] uppercase tracking-widest text-[#181644]/60 mb-3 font-sans italic">
+              {vendor.occasions?.join(' • ')}
+            </div>
+            
+            <div className="flex items-center gap-4 text-xs mb-3">
+              <div className="flex items-center gap-1 font-['Adobe_Caslon_Pro',_serif]">
+                <MapPin className="w-3.5 h-3.5 text-amber-500" /> {vendor.location || 'Remote'}
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap gap-2 mb-6">
+               {vendor.languages?.map(lang => (
+                 <span key={lang} className="text-[11px] border border-amber-200 text-amber-600 px-2.5 py-1 font-['Adobe_Caslon_Pro',_serif] uppercase bg-amber-50/20">
+                   {lang}
+                 </span>
+               ))}
+               {vendor.occasions?.slice(0, 2).map(occ => (
+                 <span key={occ} className="text-[11px] border border-amber-200 text-amber-600 px-2.5 py-1 font-['Adobe_Caslon_Pro',_serif] uppercase bg-amber-50/20">
+                   {occ}
+                 </span>
+               ))}
+            </div>
+            
+            <div className="border-t border-[#181644]/10 pt-5 mt-auto flex justify-between items-end">
+              <div className="font-['Adobe_Caslon_Pro',_serif]">
+                 <div className="text-[11px] text-[#181644]/50 uppercase tracking-widest mb-0.5">From</div>
+                 {(() => {
+                    const splitBudget = vendor.budget_range?.split(/[-–]/).map(s => s.trim());
+                    const isRange = splitBudget && splitBudget.length === 2;
+                    if (isRange) {
+                      return (
+                        <>
+                          <div className="text-lg font-bold">{splitBudget[0]}</div>
+                          <div className="text-[11px] text-[#181644]/50 mt-0.5">Up to {splitBudget[1]}</div>
+                        </>
+                      )
+                    }
+                    return <div className="text-lg font-bold">{vendor.budget_range || 'Contact for pricing'}</div>
+                 })()}
+              </div>
+              
+              <div className="bg-[#181644] text-[#ffffff] px-5 py-2.5 text-xs font-['Adobe_Caslon_Pro',_serif] font-semibold italic uppercase tracking-wider hover:bg-[#181644]/90 transition-colors">
+                BOOK TENTATIVELY
+              </div>
+            </div>
           </div>
-        )}
-
-        <div className="flex flex-col sm:flex-row gap-3 mt-4">
-          <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger className="flex-1 w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-zinc-300 dark:border-zinc-700 bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
-              View Profile
-            </DialogTrigger>
+      </DialogTrigger>
             <DialogContent showCloseButton={false} className="max-w-4xl w-full max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 bg-white dark:bg-zinc-950">
               <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-0 z-10">
                 <DialogTitle className="text-xl font-bold font-serif">{vendor.name}</DialogTitle>
@@ -325,20 +372,7 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
                 </form>
               </div>
               </div>
-            </DialogContent>
-          </Dialog>
-
-          {vendor.schedule_url ? (
-            <a href={vendor.schedule_url} target="_blank" rel="noopener noreferrer" className="flex-1 w-full inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors h-9 px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:hover:bg-zinc-200 dark:text-black">
-              Schedule
-            </a>
-          ) : (
-            <Button disabled className="flex-1 w-full">
-              Not Available
-            </Button>
-          )}
-        </div>
-      </CardContent>
-    </Card>
+      </DialogContent>
+    </Dialog>
   );
 }

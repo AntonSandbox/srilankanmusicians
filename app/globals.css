@@ -2,6 +2,48 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+@font-face {
+  font-family: 'Adobe_Caslon_Pro';
+  src: url('/fonts/ACaslonPro-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Adobe_Caslon_Pro';
+  src: url('/fonts/ACaslonPro-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Adobe_Caslon_Pro';
+  src: url('/fonts/ACaslonPro-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Adobe_Caslon_Pro';
+  src: url('/fonts/ACaslonPro-SemiboldItalic.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Adobe_Caslon_Pro';
+  src: url('/fonts/ACaslonPro-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Adobe_Caslon_Pro';
+  src: url('/fonts/ACaslonPro-BoldItalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
