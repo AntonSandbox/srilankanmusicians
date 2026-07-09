@@ -39,6 +39,7 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
   const [reviews, setReviews] = useState<any[]>([]);
   const [isLoadingReviews, setIsLoadingReviews] = useState(false);
   const [hasFetchedReviews, setHasFetchedReviews] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen && !hasFetchedReviews) {
@@ -61,14 +62,21 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
   const profileImageUrl = getImageUrl(vendor.profile_image);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger render={<div className="vcard in cursor-pointer" />}>
           <div className="vc-top">
             <div className="vc-badges">
               <span className="vb vb-v">✓ Verified</span>
               <span className="vb vb-a">Available</span>
             </div>
-            <div className="vc-initial">{vendor.name.charAt(0).toUpperCase()}</div>
+            {vendor.portfolio && vendor.portfolio.length > 0 ? (
+              <div className="vc-initial overflow-hidden border-0 bg-transparent">
+                <img src={getImageUrl(vendor.portfolio[0])} alt={vendor.name} className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className="vc-initial">{vendor.name.charAt(0).toUpperCase()}</div>
+            )}
             <div className="vc-avail-bar">
               <span className="vab-dot"></span>
               <span className="vab-txt">Next available: see profile calendar</span>
@@ -114,7 +122,7 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
             </div>
           </div>
       </DialogTrigger>
-            <DialogContent showCloseButton={false} className="max-w-4xl w-full max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 bg-white dark:bg-zinc-950">
+            <DialogContent showCloseButton={false} className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[60vw] xl:max-w-[50vw] w-full max-h-[90vh] overflow-y-auto p-0 gap-0 border-0 bg-white dark:bg-zinc-950">
               <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-0 z-10">
                 <DialogTitle className="text-xl font-bold font-serif">{vendor.name}</DialogTitle>
                 <DialogClose className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-md px-3 py-1.5 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
@@ -218,6 +226,24 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
                     </div>
                   )}
                 </div>
+                {vendor.portfolio && vendor.portfolio.length > 0 && (
+                  <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 p-6 rounded-lg mt-10">
+                    <div className="flex items-center gap-2 text-zinc-500 font-bold tracking-wider text-sm mb-4 uppercase">
+                      PORTFOLIO
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                      {vendor.portfolio.map((imgId, idx) => (
+                        <div 
+                          key={idx} 
+                          className="aspect-[4/3] rounded-md overflow-hidden bg-zinc-100 dark:bg-zinc-900 border border-amber-100 dark:border-amber-900/30 cursor-pointer"
+                          onClick={() => setSelectedImage(getImageUrl(imgId)!)}
+                        >
+                          <img src={getImageUrl(imgId)!} alt={`Portfolio ${idx + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 p-6 rounded-lg">
                   <div className="flex items-center gap-2 text-zinc-500 font-bold tracking-wider text-sm mb-2 uppercase">
@@ -369,6 +395,24 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
               </div>
               </div>
       </DialogContent>
-    </Dialog>
+      </Dialog>
+
+      {selectedImage && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-10 cursor-pointer backdrop-blur-sm" onClick={() => setSelectedImage(null)}>
+          <button 
+            className="absolute top-6 right-6 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 rounded-full p-2 transition-all z-[101]"
+            onClick={() => setSelectedImage(null)}
+          >
+            <X className="w-8 h-8" />
+          </button>
+          <img 
+            src={selectedImage} 
+            alt="Full screen portfolio" 
+            className="max-w-full max-h-full object-contain rounded-md shadow-2xl cursor-default select-none" 
+            onClick={(e) => e.stopPropagation()} 
+          />
+        </div>
+      )}
+    </>
   );
 }
