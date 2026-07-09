@@ -63,7 +63,7 @@ export async function sendTentativeBookingRequest(prevState: any, formData: Form
     await resend.emails.send({
       from: 'Platform <onboarding@mail.spytlabs.com>',
       to: toEmails,
-      reply_to: email,
+      replyTo: email,
       subject: `New Booking Request for ${vendorName}`,
       html: emailHtml,
     });

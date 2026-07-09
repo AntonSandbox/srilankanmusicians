@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase-server';
 import { format } from 'date-fns';
+import { revalidatePath } from 'next/cache';
 
 export async function updateVendorProfile(prevState: any, formData: FormData) {
   const supabase = await createClient();
@@ -74,5 +75,54 @@ export async function deleteAvailableRange(id: string) {
     .eq('vendor_id', user.id);
 
   if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function addVendorReview(prevState: any, formData: FormData) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { error: 'Unauthorized' };
+
+  const reviewer_name = formData.get('reviewer_name') as string;
+  const review_text = formData.get('review_text') as string;
+  const review_date_raw = formData.get('review_date') as string;
+
+  if (!reviewer_name || !review_text || !review_date_raw) {
+    return { error: 'Missing required fields' };
+  }
+
+  const review_date = format(new Date(review_date_raw), 'yyyy-MM-dd');
+
+  const { error } = await supabase
+    .from('vendor_reviews')
+    .insert({
+      vendor_id: user.id,
+      reviewer_name,
+      review_text,
+      review_date
+    });
+
+  if (error) return { error: error.message };
+  
+  revalidatePath('/vendor/dashboard');
+  return { success: 'Review added successfully' };
+}
+
+export async function deleteVendorReview(id: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { error: 'Unauthorized' };
+
+  const { error } = await supabase
+    .from('vendor_reviews')
+    .delete()
+    .eq('id', id)
+    .eq('vendor_id', user.id);
+
+  if (error) return { error: error.message };
+  
+  revalidatePath('/vendor/dashboard');
   return { success: true };
 }

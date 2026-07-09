@@ -27,10 +27,17 @@ export default async function VendorDashboardPage() {
     .eq('vendor_id', user.id)
     .order('start_date', { ascending: true });
 
+  const { data: reviewsData } = await supabase
+    .from('vendor_reviews')
+    .select('*')
+    .eq('vendor_id', user.id)
+    .order('review_date', { ascending: false });
+
   return (
     <VendorDashboardClient 
       vendor={vendorData as Vendor} 
       availableRanges={availableRangesData || []} 
+      initialReviews={reviewsData || []}
     />
   );
 }

@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { Calendar, Globe2, MapPin, Clock, Send, Info, Lock, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Calendar, Globe2, MapPin, Clock, Send, Info, Lock, X, Star } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { sendTentativeBookingRequest } from '@/app/actions/booking';
+import { getVendorReviews } from '@/app/actions/vendors';
+import { format } from 'date-fns';
 
 export interface Vendor {
   id: string;
@@ -30,6 +32,23 @@ interface VendorCardProps {
 export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{ success: boolean; error?: string; message?: string } | null>(null);
+  
+  const [isOpen, setIsOpen] = useState(false);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const [isLoadingReviews, setIsLoadingReviews] = useState(false);
+  const [hasFetchedReviews, setHasFetchedReviews] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && !hasFetchedReviews) {
+      setIsLoadingReviews(true);
+      getVendorReviews(vendor.id).then(data => {
+        setReviews(data);
+        setIsLoadingReviews(false);
+        setHasFetchedReviews(true);
+      });
+    }
+  }, [isOpen, hasFetchedReviews, vendor.id]);
+
   const getImageUrl = (imageId: string | null) => {
     if (!imageId) return 'https://via.placeholder.com/400x400?text=No+Image';
     // If it's already a full URL, return as is
@@ -70,7 +89,7 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
         )}
 
         <div className="flex flex-col sm:flex-row gap-3 mt-4">
-          <Dialog>
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger className="flex-1 w-full inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 border border-zinc-300 dark:border-zinc-700 bg-background shadow-sm hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">
               View Profile
             </DialogTrigger>
@@ -194,6 +213,34 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
                   </div>
                 </div>
 
+                {/* Reviews Section */}
+                <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 p-6 rounded-lg mt-10">
+                  <div className="flex items-center gap-2 text-zinc-500 font-bold tracking-wider text-sm mb-4 uppercase">
+                    <Star className="w-4 h-4 text-amber-500 fill-amber-500" /> Client Reviews
+                  </div>
+                  
+                  {isLoadingReviews ? (
+                    <div className="flex justify-center items-center py-8">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500"></div>
+                    </div>
+                  ) : reviews.length > 0 ? (
+                    <div className="space-y-6">
+                      {reviews.map((review) => (
+                        <div key={review.id} className="border-b border-amber-100 dark:border-amber-900/30 last:border-0 pb-6 last:pb-0">
+
+                          <p className="text-zinc-700 dark:text-zinc-300 italic mb-3">"{review.review_text}"</p>
+                          <div className="flex flex-col">
+                            <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-100">{review.reviewer_name}</span>
+                            <span className="text-xs text-zinc-500 dark:text-zinc-400">{format(new Date(review.review_date), 'MMMM yyyy')}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 italic">No reviews yet.</p>
+                  )}
+                </div>
+
               {/* Form Section */}
               <div className="mt-10 border border-amber-200 bg-[#fdfaf6] dark:bg-amber-950/20 rounded-xl p-6">
                 <div className="flex items-center gap-2 mb-6 text-amber-600 dark:text-amber-500 font-bold tracking-wider text-sm">
@@ -263,7 +310,7 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
 
                   <button 
                     type="submit" 
-                    disabled={isSubmitting || (submitResult && submitResult.success)}
+                    disabled={isSubmitting || !!(submitResult && submitResult.success)}
                     className="w-full flex items-center justify-center gap-2 bg-[#0A101D] hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 h-12 rounded-md font-bold tracking-wider text-sm mt-4 transition-colors disabled:opacity-50"
                   >
                     <Send className="w-4 h-4" /> 
