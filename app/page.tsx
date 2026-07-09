@@ -79,12 +79,25 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           .select('vendor_id, start_date, end_date')
           .in('vendor_id', vendorIds);
 
-        if (ranges && !rangesError) {
-          vendors = vendors.map(v => ({
-            ...v,
-            availabilityRanges: ranges.filter(r => r.vendor_id === v.id)
-          }));
+        const { data: reviewsData, error: reviewsError } = await supabase
+          .from('vendor_reviews')
+          .select('*')
+          .in('vendor_id', vendorIds);
+
+        if (reviewsError) {
+          console.error("Error fetching vendor reviews:", reviewsError);
         }
+
+        vendors = vendors.map(v => {
+          const vRanges = ranges && !rangesError ? ranges.filter(r => r.vendor_id === v.id) : [];
+          const vReviews = reviewsData && !reviewsError ? reviewsData.filter(r => r.vendor_id === v.id) : [];
+
+          return {
+            ...v,
+            availabilityRanges: vRanges,
+            review_count: vReviews.length
+          };
+        });
       }
     }
   }
@@ -179,23 +192,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             </div>
           ) : (
             <>
-              <div className="vendors-hd in">
-                <div className="vhd-left">
-                  <div className="vhd-count" id="v-count">Showing {vendors.length} of {totalProfessionals || 542} professionals</div>
-                  <div className="vhd-title">Available <em>professionals</em></div>
-                </div>
-                <div className="vhd-sort">
-                  <label>Sort by</label>
-                  <select>
-                    <option>Highest rated</option>
-                    <option>Lowest price</option>
-                    <option>Most reviewed</option>
-                    <option>Recently added</option>
-                  </select>
-                </div>
-              </div>
-
-              <VendorGrid vendors={vendors} cloudflareAccountHash={cloudflareAccountHash} />
+              <VendorGrid vendors={vendors} cloudflareAccountHash={cloudflareAccountHash} totalProfessionals={totalProfessionals || 542} />
             </>
           )}
         </div>

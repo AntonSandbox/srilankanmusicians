@@ -22,7 +22,7 @@ export interface Vendor {
   availabilityRanges?: { start_date: string; end_date: string }[];
   years_of_experience?: number;
   review_count?: number;
-  average_rating?: number;
+  created_at?: string;
 }
 
 interface VendorCardProps {
@@ -82,8 +82,7 @@ export function VendorCard({ vendor, cloudflareAccountHash }: VendorCardProps) {
               {vendor.years_of_experience && <span className="vc-m"><i className="fas fa-star"></i>{vendor.years_of_experience} yrs exp.</span>}
             </div>
             <div className="vc-stars">
-              <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
-              <span className="vc-rc">5.0 &nbsp;({vendor.review_count || 0} reviews)</span>
+              <span className="vc-rc">{vendor.review_count || 0} {(vendor.review_count === 1) ? 'review' : 'reviews'}</span>
             </div>
             <div className="vc-skills">
               {vendor.languages?.map(lang => (
