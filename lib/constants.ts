@@ -38,63 +38,14 @@ export const OCCASIONS = [
 
 export const SERVICES = [
   {
-    group: 'Hosting & Speaking',
+    group: 'Professionals',
     items: [
-      'MC / Emcee / Compere',
-      'Keynote Speaker',
-      'Motivational Speaker',
-      'Auctioneer',
-      'Panel Moderator',
-    ],
-  },
-  {
-    group: 'Music & Performance',
-    items: [
-      'Live Band',
+      'Emcees/ MC/ Compere',
+      'MUA/ Make-up Artist',
+      'Band',
       'DJ',
-      'Solo Musician',
-      'Singer / Vocalist',
-      'Dancers / Dance Troupe',
-      'Magician',
-      'Comedian',
-    ],
-  },
-  {
-    group: 'Photography & Film',
-    items: [
-      'Wedding Photographer',
-      'Event Photographer',
-      'Videographer',
-      'Drone Operator',
-      'Photo Booth Provider',
-    ],
-  },
-  {
-    group: 'Beauty & Styling',
-    items: [
-      'Bridal Makeup Artist',
-      'Hair Stylist',
-      'Fashion Stylist',
-      'Henna / Mehndi Artist',
-    ],
-  },
-  {
-    group: 'Planning & Design',
-    items: [
-      'Event Planner',
-      'Wedding Coordinator',
-      'Decorator',
-      'Florist',
-      'Lighting / Sound Technician',
-    ],
-  },
-  {
-    group: 'Corporate Specialists',
-    items: [
-      'Corporate Event Planner',
-      'Team Building Facilitator',
-      'Brand Ambassador',
-      'Corporate Caterer',
+      'Photographer',
+      'Cake Artist'
     ],
   },
 ];

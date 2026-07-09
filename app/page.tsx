@@ -149,12 +149,12 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         <div className="container">
           <div className="cats-scroll in">
             <button className="cat-pill on"><span className="cp-icon">✦</span><span className="cp-name">All talent</span><span className="cp-count">542</span></button>
-            <button className="cat-pill"><span className="cp-icon">🎤</span><span className="cp-name">MC / Compere</span><span className="cp-count">48</span></button>
-            <button className="cat-pill"><span className="cp-icon">📷</span><span className="cp-name">Photographer</span><span className="cp-count">72</span></button>
-            <button className="cat-pill"><span className="cp-icon">🎵</span><span className="cp-name">Live Band</span><span className="cp-count">34</span></button>
+            <button className="cat-pill"><span className="cp-icon">🎤</span><span className="cp-name">Emcees/ MC/ Compere</span><span className="cp-count">48</span></button>
+            <button className="cat-pill"><span className="cp-icon">💄</span><span className="cp-name">MUA/ Make-up Artist</span><span className="cp-count">61</span></button>
+            <button className="cat-pill"><span className="cp-icon">🎵</span><span className="cp-name">Band</span><span className="cp-count">34</span></button>
             <button className="cat-pill"><span className="cp-icon">🎧</span><span className="cp-name">DJ</span><span className="cp-count">27</span></button>
-            <button className="cat-pill"><span className="cp-icon">💄</span><span className="cp-name">Makeup Artist</span><span className="cp-count">61</span></button>
-            <button className="cat-pill"><span className="cp-icon">🎬</span><span className="cp-name">Videographer</span><span className="cp-count">29</span></button>
+            <button className="cat-pill"><span className="cp-icon">📷</span><span className="cp-name">Photographer</span><span className="cp-count">72</span></button>
+            <button className="cat-pill"><span className="cp-icon">🎂</span><span className="cp-name">Cake Artist</span><span className="cp-count">14</span></button>
           </div>
         </div>
       </div>
@@ -241,26 +241,16 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           </div>
           <table className="rates-table in">
             <thead>
-              <tr>
-                <th>Talent Category</th>
-                <th>Entry Level</th>
-                <th>Mid Range</th>
-                <th>Premium</th>
-                <th>Notes</th>
-              </tr>
+              <tr><th>Service</th><th>Entry Level</th><th>Experienced</th><th>Premium / Award-Winning</th><th>Notes</th></tr>
             </thead>
             <tbody>
-              <tr><td className="rates-cat">MC / Emcee / Compere</td><td>LKR 20,000</td><td>LKR 45,000&ndash;80,000</td><td>LKR 100,000+</td><td>Bilingual / trilingual = higher rate</td></tr>
-              <tr><td className="rates-cat">Photographer (half day)</td><td>LKR 25,000</td><td>LKR 65,000&ndash;100,000</td><td>LKR 150,000+</td><td>Full day &amp; drone packages available</td></tr>
-              <tr><td className="rates-cat">Videographer</td><td>LKR 30,000</td><td>LKR 75,000&ndash;120,000</td><td>LKR 200,000+</td><td>Cinematic / drone = premium</td></tr>
-              <tr><td className="rates-cat">Live Band (5&ndash;7 piece)</td><td>LKR 60,000</td><td>LKR 100,000&ndash;180,000</td><td>LKR 250,000+</td><td>Includes 3&ndash;4 hour set</td></tr>
-              <tr><td className="rates-cat">DJ</td><td>LKR 20,000</td><td>LKR 40,000&ndash;75,000</td><td>LKR 100,000+</td><td>Equipment rental may be separate</td></tr>
-              <tr><td className="rates-cat">Makeup Artist (MUA)</td><td>LKR 10,000</td><td>LKR 25,000&ndash;50,000</td><td>LKR 80,000+</td><td>Bridal / airbrush = premium</td></tr>
-              <tr><td className="rates-cat">Event / Wedding Planner</td><td>LKR 50,000</td><td>LKR 100,000&ndash;200,000</td><td>LKR 350,000+</td><td>Full planning vs day-of coordination</td></tr>
-              <tr><td className="rates-cat">Keynote Speaker</td><td>LKR 50,000</td><td>LKR 150,000&ndash;300,000</td><td>LKR 500,000+</td><td>International experience = higher</td></tr>
-              <tr><td className="rates-cat">Solo Vocalist</td><td>LKR 15,000</td><td>LKR 35,000&ndash;70,000</td><td>LKR 120,000+</td><td>Ceremony &amp; reception rates differ</td></tr>
-              <tr><td className="rates-cat">Florist / Decorator</td><td>LKR 30,000</td><td>LKR 80,000&ndash;200,000</td><td>LKR 400,000+</td><td>Depends heavily on flowers &amp; venue size</td></tr>
-              <tr><td className="rates-cat">Cake Designer</td><td>LKR 8,000</td><td>LKR 25,000&ndash;60,000</td><td>LKR 100,000+</td><td>Tiered / sculpted cakes = premium</td></tr>
+              <tr><td className="rates-cat">Emcees/ MC/ Compere</td><td>LKR 15,000</td><td>LKR 35,000&ndash;60,000</td><td>LKR 100,000+</td><td>Bilingual usually higher</td></tr>
+              <tr><td className="rates-cat">Photographer</td><td>LKR 25,000</td><td>LKR 50,000&ndash;120,000</td><td>LKR 250,000+</td><td>Per day rate</td></tr>
+              <tr><td className="rates-cat">Band</td><td>LKR 40,000</td><td>LKR 80,000&ndash;150,000</td><td>LKR 300,000+</td><td>Depends on line-up</td></tr>
+              <tr><td className="rates-cat">DJ</td><td>LKR 15,000</td><td>LKR 30,000&ndash;75,000</td><td>LKR 150,000+</td><td>Setup included usually</td></tr>
+              <tr><td className="rates-cat">MUA/ Make-up Artist</td><td>LKR 10,000</td><td>LKR 25,000&ndash;50,000</td><td>LKR 80,000+</td><td>Bridal / airbrush = premium</td></tr>
+
+              <tr><td className="rates-cat">Cake Artist</td><td>LKR 8,000</td><td>LKR 25,000&ndash;60,000</td><td>LKR 100,000+</td><td>Tiered / sculpted cakes = premium</td></tr>
             </tbody>
           </table>
         </div>
@@ -321,11 +311,12 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             <div className="fc">
               <h4>Find Talent</h4>
               <ul>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>MC / Compere</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Emcees/ MC/ Compere</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>MUA/ Make-up Artist</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Band</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>DJ</a></li>
                 <li><a href="#"><i className="fas fa-chevron-right"></i>Photographer</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Live Band / DJ</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Makeup Artist</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Videographer</a></li>
+                <li><a href="#"><i className="fas fa-chevron-right"></i>Cake Artist</a></li>
               </ul>
             </div>
             <div className="fc">
