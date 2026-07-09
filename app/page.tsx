@@ -92,7 +92,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   const cloudflareAccountHash = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
 
   return (
-    <>
+    <main className="portal-page">
       {/* NAV */}
       <nav>
         <div className="container nav-in">
@@ -345,6 +345,6 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           </div>
         </div>
       </footer>
-    </>
+    </main>
   );
 }

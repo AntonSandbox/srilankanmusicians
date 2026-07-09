@@ -11,19 +11,23 @@
   --sh-lg:0 12px 48px rgba(15,23,42,.22);
   --ease:cubic-bezier(.4,0,.2,1);
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);
-  overflow-x:hidden;-webkit-font-smoothing:antialiased;}
-a{text-decoration:none;color:inherit;}
-button{cursor:pointer;font-family:'DM Sans',sans-serif;border:none;outline:none;}
+html { scroll-behavior: smooth; }
+.portal-page {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.portal-page a { text-decoration: none; color: inherit; }
+.portal-page button { cursor: pointer; font-family: 'DM Sans', sans-serif; border: none; outline: none; }
 
 /* ── LAYOUT ──────────────────────────────────────────── */
 .container{max-width:1200px;margin:0 auto;padding:0 24px;}
 .section{padding:72px 0;}
 
 /* ── NAV ─────────────────────────────────────────────── */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;
+.portal-page nav{position:fixed;top:0;left:0;right:0;z-index:100;
   background:rgba(15,23,42,.97);backdrop-filter:blur(14px);
   border-bottom:1px solid rgba(232,150,12,.1);}
 .nav-in{display:flex;align-items:center;justify-content:space-between;
@@ -398,7 +402,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;
 .oc-talents{font-size:11px;color:var(--pale);line-height:1.6;}
 
 /* ── FOOTER ───────────────────────────────────────────── */
-footer{background:var(--slate);padding:48px 0 20px;}
+.portal-page footer{background:var(--slate);padding:48px 0 20px;}
 .ft{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;
   gap:32px;margin-bottom:36px;}
 .fb-desc{font-size:12px;color:rgba(255,255,255,.25);line-height:1.9;
@@ -433,9 +437,9 @@ footer{background:var(--slate);padding:48px 0 20px;}
   font-weight:300;max-width:520px;}
 
 /* ── FADE ANIM ──────────────────────────────────────── */
-.fa{opacity:0;transform:translateY(14px);
+.fade-anim{opacity:0;transform:translateY(14px);
   transition:opacity .5s var(--ease),transform .5s var(--ease);}
-.fa.in{opacity:1;transform:none;}
+.fade-anim.in{opacity:1;transform:none;}
 
 /* ── RESPONSIVE ──────────────────────────────────────── */
 @media(max-width:960px){
