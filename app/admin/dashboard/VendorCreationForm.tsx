@@ -282,7 +282,19 @@ export function VendorCreationForm() {
         </div>
       </div>
 
-      <div className="pt-4">
+      <div className="pt-4 space-y-4">
+        {successMsg && (
+          <div className="p-3 bg-green-50 text-green-700 border border-green-200 rounded-md text-sm">
+            {successMsg}
+          </div>
+        )}
+
+        {errorMsg && (
+          <div className="p-3 bg-red-50 text-red-700 border border-red-200 rounded-md text-sm">
+            {errorMsg}
+          </div>
+        )}
+
         <Button type="submit" disabled={isPending} className="w-full bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A] font-bold text-[14.5px] py-6 rounded-md">
           {isPending ? (
             <>
