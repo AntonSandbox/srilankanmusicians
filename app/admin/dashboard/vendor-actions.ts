@@ -96,16 +96,14 @@ export async function createVendorAction(formData: FormData) {
     const { data: linkData, error: linkError } = await supabaseAdmin.auth.admin.generateLink({
       type: 'recovery',
       email: login_email,
-      options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/setup-password`,
-      },
     });
 
     if (linkError) {
       throw new Error(`Failed to generate setup link: ${linkError.message}`);
     }
 
-    const actionLink = linkData.properties.action_link;
+    const hashedToken = linkData.properties.hashed_token;
+    const actionLink = `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/setup-password?token_hash=${hashedToken}&type=recovery`;
 
     // 3. Upsert into the vendors table to handle re-runs smoothly
     const { error: dbError } = await supabaseAdmin.from('vendors').upsert({

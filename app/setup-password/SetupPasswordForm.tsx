@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Loader2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
 
+import { type EmailOtpType } from '@supabase/supabase-js';
+
 export function SetupPasswordForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -18,25 +20,8 @@ export function SetupPasswordForm() {
   const supabase = createClient();
 
   useEffect(() => {
-    // Manually parse the hash to guarantee the session is established securely
-    const hash = window.location.hash;
-    if (hash && hash.includes('access_token')) {
-      const params = new URLSearchParams(hash.substring(1));
-      const access_token = params.get('access_token');
-      const refresh_token = params.get('refresh_token');
-      
-      if (access_token && refresh_token) {
-        supabase.auth.setSession({
-          access_token,
-          refresh_token
-        }).then(({ error }) => {
-          if (error) console.error('Error setting session:', error);
-        });
-      }
-    } else {
-      // Fallback to force the browser client to check
-      supabase.auth.getSession();
-    }
+    // Check if there is a session already
+    supabase.auth.getSession();
   }, [supabase.auth]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -57,8 +42,32 @@ export function SetupPasswordForm() {
     setIsLoading(true);
 
     try {
-      // Because the user arrived with an access_token in the URL hash,
-      // they are authenticated for this action.
+      // Extract token_hash and type from URL parameters
+      const params = new URLSearchParams(window.location.search);
+      const token_hash = params.get('token_hash');
+      const type = params.get('type') as EmailOtpType;
+
+      if (token_hash && type) {
+        // Exchange the token hash for a session
+        const { error: verifyError } = await supabase.auth.verifyOtp({
+          token_hash,
+          type,
+        });
+
+        if (verifyError) {
+          throw new Error(`Link is invalid or has expired: ${verifyError.message}`);
+        }
+        
+        // Remove token_hash from URL so it's not reused
+        window.history.replaceState({}, document.title, window.location.pathname);
+      } else {
+        // Fallback: check if the user is already authenticated (e.g. from a hash or previous session)
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) {
+          throw new Error('Authentication required. Please use the link sent to your email.');
+        }
+      }
+
       const { error } = await supabase.auth.updateUser({ password });
 
       if (error) {
