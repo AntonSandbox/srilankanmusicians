@@ -112,8 +112,14 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         <div className="wrap">
           <nav>
             <a href="/" className="logo">Sri Lankan <span>Event Portal</span></a>
-            <a href="#explore" className="nav-cta">Become a vendor</a>
+            <div className='flex gap-5'>
+              <a href="#explore" className="nav-cta">Become a vendor</a>
+              <a href="/vendor/login" className="nav-cta">Vendor Login</a>
+            </div>
+
+
           </nav>
+
         </div>
       </header>
 
@@ -165,74 +171,74 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
       <section className="profiles" id="profiles">
         <div className="wrap">
-              <div className="section-eyebrow">Browse talent</div>
-              <h2>Every category, ready to book.</h2>
+          <div className="section-eyebrow">Browse talent</div>
+          <h2>Every category, ready to book.</h2>
 
-              <div className="category-block">
-                <div className="category-head"><h3>Emcees &amp; Comperes</h3><a className="view-more" href="https://srilankanmc.com">View all Emcees &amp; Comperes →</a></div>
-                <div className="profile-grid">
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">RJ</div><h4>R. Jayawardena</h4><p>Colombo · 6 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">NF</div><h4>N. Fernando</h4><p>Kandy · 4 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SW</div><h4>S. Wickramasinghe</h4><p>Galle · 8 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DP</div><h4>D. Perera</h4><p>Negombo · 3 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">AR</div><h4>A. Rajapaksa</h4><p>Colombo · 10 yrs</p></div>
-                </div>
-              </div>
+          <div className="category-block">
+            <div className="category-head"><h3>Emcees &amp; Comperes</h3><a className="view-more" href="https://srilankanmc.com">View all Emcees &amp; Comperes →</a></div>
+            <div className="profile-grid">
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">RJ</div><h4>R. Jayawardena</h4><p>Colombo · 6 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">NF</div><h4>N. Fernando</h4><p>Kandy · 4 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SW</div><h4>S. Wickramasinghe</h4><p>Galle · 8 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DP</div><h4>D. Perera</h4><p>Negombo · 3 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">AR</div><h4>A. Rajapaksa</h4><p>Colombo · 10 yrs</p></div>
+            </div>
+          </div>
 
-              <div className="category-block">
-                <div className="category-head"><h3>Bands</h3><a className="view-more" href="https://srilankanband.com">View all Bands →</a></div>
-                <div className="profile-grid">
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">EC</div><h4>Echo Collective</h4><p>Colombo · 6 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CS</div><h4>The Cinnamon Sound</h4><p>Kandy · 9 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">IR</div><h4>Island Rhythm Band</h4><p>Galle · 5 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">VN</div><h4>Velvet Note</h4><p>Negombo · 3 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SS</div><h4>Southern Strings</h4><p>Matara · 7 yrs</p></div>
-                </div>
-              </div>
+          <div className="category-block">
+            <div className="category-head"><h3>Bands</h3><a className="view-more" href="https://srilankanband.com">View all Bands →</a></div>
+            <div className="profile-grid">
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">EC</div><h4>Echo Collective</h4><p>Colombo · 6 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CS</div><h4>The Cinnamon Sound</h4><p>Kandy · 9 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">IR</div><h4>Island Rhythm Band</h4><p>Galle · 5 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">VN</div><h4>Velvet Note</h4><p>Negombo · 3 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SS</div><h4>Southern Strings</h4><p>Matara · 7 yrs</p></div>
+            </div>
+          </div>
 
-              <div className="category-block">
-                <div className="category-head"><h3>DJs</h3><a className="view-more" href="https://srilankandj.com">View all DJs →</a></div>
-                <div className="profile-grid">
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DK</div><h4>DJ Kavi</h4><p>Colombo · 5 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DN</div><h4>DJ Nethmi</h4><p>Kandy · 4 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DR</div><h4>DJ Rashen</h4><p>Galle · 6 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DI</div><h4>DJ Imesha</h4><p>Negombo · 3 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DT</div><h4>DJ Tharu</h4><p>Colombo · 8 yrs</p></div>
-                </div>
-              </div>
+          <div className="category-block">
+            <div className="category-head"><h3>DJs</h3><a className="view-more" href="https://srilankandj.com">View all DJs →</a></div>
+            <div className="profile-grid">
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DK</div><h4>DJ Kavi</h4><p>Colombo · 5 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DN</div><h4>DJ Nethmi</h4><p>Kandy · 4 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DR</div><h4>DJ Rashen</h4><p>Galle · 6 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DI</div><h4>DJ Imesha</h4><p>Negombo · 3 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DT</div><h4>DJ Tharu</h4><p>Colombo · 8 yrs</p></div>
+            </div>
+          </div>
 
-              <div className="category-block">
-                <div className="category-head"><h3>Makeup Artists</h3><a className="view-more" href="https://srilankanmua.com">View all Makeup Artists →</a></div>
-                <div className="profile-grid">
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">MS</div><h4>M. Silva</h4><p>Colombo · 7 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">TG</div><h4>T. Gunasekara</h4><p>Kandy · 5 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">PD</div><h4>P. Dias</h4><p>Galle · 4 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">KA</div><h4>K. Abeywardena</h4><p>Negombo · 6 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">RS</div><h4>R. Senanayake</h4><p>Colombo · 9 yrs</p></div>
-                </div>
-              </div>
+          <div className="category-block">
+            <div className="category-head"><h3>Makeup Artists</h3><a className="view-more" href="https://srilankanmua.com">View all Makeup Artists →</a></div>
+            <div className="profile-grid">
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">MS</div><h4>M. Silva</h4><p>Colombo · 7 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">TG</div><h4>T. Gunasekara</h4><p>Kandy · 5 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">PD</div><h4>P. Dias</h4><p>Galle · 4 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">KA</div><h4>K. Abeywardena</h4><p>Negombo · 6 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">RS</div><h4>R. Senanayake</h4><p>Colombo · 9 yrs</p></div>
+            </div>
+          </div>
 
-              <div className="category-block">
-                <div className="category-head"><h3>Cake Artists</h3><a className="view-more" href="https://srilankancakeartist.com">View all Cake Artists →</a></div>
-                <div className="profile-grid">
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SL</div><h4>Sweet Layers by Amaya</h4><p>Colombo · 6 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">KC</div><h4>Kandy Cake House</h4><p>Kandy · 8 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SS</div><h4>Sugar &amp; Spice Studio</h4><p>Galle · 4 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CA</div><h4>The Cake Atelier</h4><p>Negombo · 5 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">BB</div><h4>Blossom Bakes</h4><p>Colombo · 3 yrs</p></div>
-                </div>
-              </div>
+          <div className="category-block">
+            <div className="category-head"><h3>Cake Artists</h3><a className="view-more" href="https://srilankancakeartist.com">View all Cake Artists →</a></div>
+            <div className="profile-grid">
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SL</div><h4>Sweet Layers by Amaya</h4><p>Colombo · 6 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">KC</div><h4>Kandy Cake House</h4><p>Kandy · 8 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SS</div><h4>Sugar &amp; Spice Studio</h4><p>Galle · 4 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CA</div><h4>The Cake Atelier</h4><p>Negombo · 5 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">BB</div><h4>Blossom Bakes</h4><p>Colombo · 3 yrs</p></div>
+            </div>
+          </div>
 
-              <div className="category-block">
-                <div className="category-head"><h3>Photographers</h3><a className="view-more" href="https://srilankanphotographer.com">View all Photographers →</a></div>
-                <div className="profile-grid">
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">JR</div><h4>J. Ranasinghe</h4><p>Colombo · 7 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">LW</div><h4>L. Wijesuriya</h4><p>Kandy · 5 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">HF</div><h4>H. Fonseka</h4><p>Galle · 6 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CB</div><h4>C. Bandara</h4><p>Negombo · 4 yrs</p></div>
-                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">TW</div><h4>T. Weerasinghe</h4><p>Colombo · 9 yrs</p></div>
-                </div>
-              </div>
+          <div className="category-block">
+            <div className="category-head"><h3>Photographers</h3><a className="view-more" href="https://srilankanphotographer.com">View all Photographers →</a></div>
+            <div className="profile-grid">
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">JR</div><h4>J. Ranasinghe</h4><p>Colombo · 7 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">LW</div><h4>L. Wijesuriya</h4><p>Kandy · 5 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">HF</div><h4>H. Fonseka</h4><p>Galle · 6 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CB</div><h4>C. Bandara</h4><p>Negombo · 4 yrs</p></div>
+              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">TW</div><h4>T. Weerasinghe</h4><p>Colombo · 9 yrs</p></div>
+            </div>
+          </div>
 
         </div>
       </section>
@@ -323,16 +329,16 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           </div>
           <div className="foot-socials">
             <a href="https://instagram.com" aria-label="Instagram">
-              <svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3.05.01 4.12.06 1.07.05 1.8.22 2.44.47.66.26 1.22.6 1.77 1.16.55.55.9 1.11 1.16 1.77.25.63.42 1.37.47 2.44.05 1.07.06 1.42.06 4.12s-.01 3.05-.06 4.12c-.05 1.07-.22 1.8-.47 2.44a4.9 4.9 0 01-1.16 1.77 4.9 4.9 0 01-1.77 1.16c-.63.25-1.37.42-2.44.47-1.07.05-1.42.06-4.12.06s-3.05-.01-4.12-.06c-1.07-.05-1.8-.22-2.44-.47a4.9 4.9 0 01-1.77-1.16 4.9 4.9 0 01-1.16-1.77c-.25-.63-.42-1.37-.47-2.44C2.01 15.05 2 14.7 2 12s.01-3.05.06-4.12c.05-1.07.22-1.8.47-2.44.26-.66.6-1.22 1.16-1.77a4.9 4.9 0 011.77-1.16c.63-.25 1.37-.42 2.44-.47C8.95 2.01 9.3 2 12 2zm0 3.6A6.4 6.4 0 1012 18.4 6.4 6.4 0 0012 5.6zm0 10.57a4.17 4.17 0 110-8.34 4.17 4.17 0 010 8.34zm6.65-10.82a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3.05.01 4.12.06 1.07.05 1.8.22 2.44.47.66.26 1.22.6 1.77 1.16.55.55.9 1.11 1.16 1.77.25.63.42 1.37.47 2.44.05 1.07.06 1.42.06 4.12s-.01 3.05-.06 4.12c-.05 1.07-.22 1.8-.47 2.44a4.9 4.9 0 01-1.16 1.77 4.9 4.9 0 01-1.77 1.16c-.63.25-1.37.42-2.44.47-1.07.05-1.42.06-4.12.06s-3.05-.01-4.12-.06c-1.07-.05-1.8-.22-2.44-.47a4.9 4.9 0 01-1.77-1.16 4.9 4.9 0 01-1.16-1.77c-.25-.63-.42-1.37-.47-2.44C2.01 15.05 2 14.7 2 12s.01-3.05.06-4.12c.05-1.07.22-1.8.47-2.44.26-.66.6-1.22 1.16-1.77a4.9 4.9 0 011.77-1.16c.63-.25 1.37-.42 2.44-.47C8.95 2.01 9.3 2 12 2zm0 3.6A6.4 6.4 0 1012 18.4 6.4 6.4 0 0012 5.6zm0 10.57a4.17 4.17 0 110-8.34 4.17 4.17 0 010 8.34zm6.65-10.82a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /></svg>
             </a>
             <a href="https://facebook.com" aria-label="Facebook">
-              <svg viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.55-1.5H17V3.7c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.3H8.1V13h2.7v8h2.7z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.55-1.5H17V3.7c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.3H8.1V13h2.7v8h2.7z" /></svg>
             </a>
             <a href="https://linkedin.com" aria-label="LinkedIn">
-              <svg viewBox="0 0 24 24"><path d="M6.94 5a2 2 0 11-4-.02 2 2 0 014 .02zM3.3 8.75h3.6V21H3.3V8.75zm6.3 0h3.45v1.68h.05c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.33 2.4 4.33 5.53V21h-3.6v-6.2c0-1.48-.03-3.38-2.06-3.38-2.07 0-2.39 1.6-2.39 3.27V21H9.6V8.75z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M6.94 5a2 2 0 11-4-.02 2 2 0 014 .02zM3.3 8.75h3.6V21H3.3V8.75zm6.3 0h3.45v1.68h.05c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.33 2.4 4.33 5.53V21h-3.6v-6.2c0-1.48-.03-3.38-2.06-3.38-2.07 0-2.39 1.6-2.39 3.27V21H9.6V8.75z" /></svg>
             </a>
             <a href="https://tiktok.com" aria-label="TikTok">
-              <svg viewBox="0 0 24 24"><path d="M16.6 3c.3 1.9 1.6 3.3 3.5 3.5v2.6c-1.3 0-2.5-.4-3.5-1.1v6.4a5.6 5.6 0 11-5.6-5.6c.2 0 .4 0 .6.03v2.7a2.9 2.9 0 102.4 2.87V3h2.6z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M16.6 3c.3 1.9 1.6 3.3 3.5 3.5v2.6c-1.3 0-2.5-.4-3.5-1.1v6.4a5.6 5.6 0 11-5.6-5.6c.2 0 .4 0 .6.03v2.7a2.9 2.9 0 102.4 2.87V3h2.6z" /></svg>
             </a>
           </div>
         </div>

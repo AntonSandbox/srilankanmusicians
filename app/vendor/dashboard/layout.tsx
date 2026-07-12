@@ -24,11 +24,19 @@ export default async function VendorDashboardLayout({ children }: { children: Re
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
+    <div className="min-h-screen flex flex-col" style={{ 
+      backgroundColor: '#F8F6F1', 
+      color: '#0F172A',
+      fontFamily: '"Work Sans", sans-serif'
+    }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Work+Sans:wght@400;500;600;700&display=swap');
+        .vendor-heading { font-family: 'Fraunces', serif; }
+      `}} />
+      <header className="px-6 py-4 flex justify-between items-center sticky top-0 z-10 shadow-sm" style={{ backgroundColor: '#EFEAE0', borderBottom: '1px solid rgba(15,23,42,0.12)' }}>
         <div>
-          <h1 className="text-xl font-bold text-gray-900">Vendor Portal</h1>
-          <p className="text-sm text-gray-500">Welcome back, {vendorData.name}</p>
+          <h1 className="text-2xl font-medium vendor-heading" style={{ color: '#0F172A' }}>Vendor Portal</h1>
+          <p className="text-sm font-medium mt-1" style={{ color: '#1B2740' }}>Welcome back, {vendorData.name}</p>
         </div>
         <form action={async () => {
           'use server';
@@ -36,7 +44,7 @@ export default async function VendorDashboardLayout({ children }: { children: Re
           await supabaseAuth.auth.signOut();
           redirect('/vendor/login');
         }}>
-          <Button variant="ghost" type="submit" size="sm">
+          <Button variant="ghost" type="submit" size="sm" className="hover:bg-[rgba(15,23,42,0.08)] font-semibold text-[#0F172A]">
             <LogOut className="w-4 h-4 mr-2" />
             Sign Out
           </Button>

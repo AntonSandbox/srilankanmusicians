@@ -1,37 +1,14 @@
 export const OCCASIONS = [
   {
-    group: 'Life Celebrations',
+    group: 'Occasions',
     items: [
       'Wedding',
-      'Birthday Party',
-      'Anniversary',
+      'Homecoming',
+      'Corporate event',
+      'Birthday',
       'Engagement',
-      'Baby Shower',
-      'Bridal Shower',
-      'Graduation Party',
-    ],
-  },
-  {
-    group: 'Corporate & Professional',
-    items: [
-      'Conference',
-      'Seminar',
-      'Product Launch',
-      'Company Party',
-      'Networking Event',
-      'Award Ceremony',
-      'Trade Show',
-    ],
-  },
-  {
-    group: 'Arts & Entertainment',
-    items: [
-      'Concert',
-      'Theater Production',
-      'Art Exhibition',
-      'Festival',
-      'Fashion Show',
-      'Comedy Show',
+      'Anniversary',
+      'Other'
     ],
   },
 ];
@@ -53,27 +30,7 @@ export const SERVICES = [
 export const LOCATIONS = [
   {
     group: 'Sri Lanka',
-    items: ['Colombo', 'Kandy', 'Galle', 'Negombo', 'Kurunegala', 'Nuwara Eliya'],
-  },
-  {
-    group: 'Australia',
-    items: ['Sydney', 'Melbourne', 'Brisbane', 'Perth', 'Adelaide'],
-  },
-  {
-    group: 'United Kingdom',
-    items: ['London', 'Manchester', 'Birmingham', 'Edinburgh', 'Glasgow'],
-  },
-  {
-    group: 'UAE',
-    items: ['Dubai', 'Abu Dhabi', 'Sharjah'],
-  },
-  {
-    group: 'Canada',
-    items: ['Toronto', 'Vancouver', 'Montreal', 'Calgary', 'Ottawa'],
-  },
-  {
-    group: 'Other',
-    items: ['Other / Destination'],
+    items: ['Colombo', 'Kandy', 'Galle', 'Negombo', 'Jaffna', 'Kurunegala', 'Other'],
   },
 ];
 
