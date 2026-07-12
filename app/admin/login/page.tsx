@@ -4,9 +4,9 @@ import { useActionState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { loginAction } from './actions';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Loader2 } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const [state, formAction, isPending] = useActionState(loginAction, { success: false, error: '' });
@@ -19,48 +19,67 @@ export default function AdminLoginPage() {
   }, [state.success, router]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-zinc-50 p-4 dark:bg-zinc-900">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-          <CardDescription>
-            Enter your credentials to access the admin dashboard
-          </CardDescription>
-        </CardHeader>
-        <form action={formAction}>
-          <CardContent className="space-y-4">
+    <main className="min-h-screen flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#F8F6F1', color: '#0F172A', fontFamily: '"Work Sans", sans-serif' }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Work+Sans:wght@400;500;600;700&display=swap');
+        .brand-heading { font-family: 'Fraunces', serif; }
+      `}} />
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <h2 className="mt-6 text-center text-3xl font-medium brand-heading" style={{ color: '#0F172A' }}>
+          Admin Portal
+        </h2>
+        <p className="mt-2 text-center text-sm" style={{ color: '#1B2740' }}>
+          Enter your credentials to access the admin dashboard
+        </p>
+      </div>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="py-8 px-4 shadow-lg sm:rounded-lg sm:px-10 border" style={{ backgroundColor: '#fff', borderColor: 'rgba(15,23,42,0.12)' }}>
+          <form action={formAction} className="space-y-6">
             {state.error && (
-              <div className="rounded-md bg-red-50 p-3 text-sm text-red-500 dark:bg-red-900/30 dark:text-red-400">
+              <div className="p-3 bg-red-50 text-red-700 border border-red-200 rounded-md text-sm">
                 {state.error}
               </div>
             )}
+            
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
+              <Label htmlFor="username" style={{ color: '#0F172A', fontWeight: 600, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.03em' }}>Username</Label>
+              <Input 
+                id="username" 
                 name="username"
-                type="text"
+                type="text" 
+                required 
                 placeholder="admin"
-                required
+                disabled={isPending}
+                className="border-[rgba(15,23,42,0.12)] focus-visible:ring-[#B8730A]"
               />
             </div>
+
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
+              <Label htmlFor="password" style={{ color: '#0F172A', fontWeight: 600, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.03em' }}>Password</Label>
+              <Input 
+                id="password" 
                 name="password"
-                type="password"
-                required
+                type="password" 
+                required 
+                disabled={isPending}
+                className="border-[rgba(15,23,42,0.12)] focus-visible:ring-[#B8730A]"
               />
             </div>
-          </CardContent>
-          <CardFooter>
-            <Button type="submit" className="w-full" disabled={isPending}>
-              {isPending ? 'Signing in...' : 'Sign In'}
+
+            <Button type="submit" className="w-full text-[#0F172A] font-bold hover:bg-[#F5A929] transition-colors" style={{ backgroundColor: '#E8960C' }} disabled={isPending}>
+              {isPending ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
             </Button>
-          </CardFooter>
-        </form>
-      </Card>
+          </form>
+        </div>
+      </div>
     </main>
   );
 }

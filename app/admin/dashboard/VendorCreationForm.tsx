@@ -76,10 +76,10 @@ export function VendorCreationForm() {
   };
 
   return (
-    <form onSubmit={onSubmit} className="space-y-6 max-w-2xl bg-white p-6 rounded-lg shadow-sm border">
-      <div className="space-y-2">
-        <h2 className="text-2xl font-semibold tracking-tight">Create New Vendor</h2>
-        <p className="text-sm text-muted-foreground">Fill in the details to register a new vendor and send them an onboarding invite.</p>
+    <form onSubmit={onSubmit} className="bg-white p-8 rounded-lg shadow-[0_12px_30px_rgba(15,23,42,0.08)] border border-[rgba(15,23,42,0.12)] space-y-8 max-w-4xl mx-auto">
+      <div className="space-y-2 mb-6">
+        <h2 className="text-2xl font-medium admin-heading" style={{ color: '#0F172A' }}>Register New Vendor</h2>
+        <p className="text-sm" style={{ color: '#1B2740' }}>Fill in the details to register a new vendor and send them an onboarding invite.</p>
       </div>
 
       {successMsg && (
@@ -94,192 +94,206 @@ export function VendorCreationForm() {
         </div>
       )}
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">Vendor Name</Label>
-          <Input id="name" name="name" required placeholder="Acme Events" />
-        </div>
+      <div>
+        <h3 className="text-lg font-semibold text-[#0F172A] mb-4 border-b border-[rgba(15,23,42,0.12)] pb-2">Basic Details</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2 md:col-span-2">
+            <Label htmlFor="name">Vendor Name</Label>
+            <Input id="name" name="name" required placeholder="Acme Events" />
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="category">Category</Label>
-          <Select value={category} onValueChange={(val) => setCategory(val || '')} required>
-            <SelectTrigger>
-              <SelectValue placeholder="Select category" />
-            </SelectTrigger>
-            <SelectContent>
-              {SERVICES.map((serviceGroup) => (
-                <SelectGroup key={serviceGroup.group}>
-                  <SelectLabel>{serviceGroup.group}</SelectLabel>
-                  {serviceGroup.items.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
-          <Select value={location} onValueChange={(val) => setLocation(val || '')} required>
-            <SelectTrigger>
-              <SelectValue placeholder="Select location" />
-            </SelectTrigger>
-            <SelectContent>
-              {LOCATIONS.map((locationGroup) => (
-                <SelectGroup key={locationGroup.group}>
-                  <SelectLabel>{locationGroup.group}</SelectLabel>
-                  {locationGroup.items.map((item) => (
-                    <SelectItem key={item} value={item}>
-                      {item}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="budget_range">Budget Range</Label>
-          <Select value={budgetRange} onValueChange={(val) => setBudgetRange(val || '')} required>
-            <SelectTrigger>
-              <SelectValue placeholder="Select budget range" />
-            </SelectTrigger>
-            <SelectContent>
-              {BUDGET_RANGES.map((range) => (
-                <SelectItem key={range} value={range}>
-                  {range}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="contact_email">Contact Email (Public)</Label>
-          <Input id="contact_email" name="contact_email" type="email" placeholder="hello@vendor.com" />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="login_email">Login Email (Private)</Label>
-          <Input id="login_email" name="login_email" type="email" required placeholder="admin@vendor.com" />
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="video_url">Background Video URL (YouTube only)</Label>
-        <Input 
-          id="video_url" 
-          name="video_url" 
-          type="url" 
-          placeholder="https://www.youtube.com/watch?v=..." 
-          pattern="^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.*$"
-          title="Please enter a valid YouTube URL"
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label>Languages</Label>
-        <div className="flex flex-wrap gap-2">
-          {LANGUAGES.map((lang) => (
-            <button
-              key={lang}
-              type="button"
-              onClick={() => toggleLanguage(lang)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
-                languages.includes(lang)
-                  ? 'bg-primary text-primary-foreground border-primary'
-                  : 'bg-white text-foreground hover:bg-slate-100 border-input'
-              }`}
-            >
-              {lang}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label>Occasions</Label>
-        <div className="space-y-4">
-          {OCCASIONS.map((occasionGroup) => (
-            <div key={occasionGroup.group} className="space-y-2">
-              <h4 className="text-sm font-medium text-muted-foreground">{occasionGroup.group}</h4>
-              <div className="flex flex-wrap gap-2">
-                {occasionGroup.items.map((occasion) => (
-                  <button
-                    key={occasion}
-                    type="button"
-                    onClick={() => toggleOccasion(occasion)}
-                    className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors border ${
-                      occasions.includes(occasion)
-                        ? 'bg-primary text-primary-foreground border-primary'
-                        : 'bg-white text-foreground hover:bg-slate-100 border-input'
-                    }`}
-                  >
-                    {occasion}
-                  </button>
+          <div className="space-y-2">
+            <Label htmlFor="category">Category</Label>
+            <Select value={category} onValueChange={(val) => setCategory(val || '')} required>
+              <SelectTrigger>
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                {SERVICES.map((serviceGroup) => (
+                  <SelectGroup key={serviceGroup.group}>
+                    <SelectLabel>{serviceGroup.group}</SelectLabel>
+                    {serviceGroup.items.map((item) => (
+                      <SelectItem key={item} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
                 ))}
-              </div>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="location">Location</Label>
+            <Select value={location} onValueChange={(val) => setLocation(val || '')} required>
+              <SelectTrigger>
+                <SelectValue placeholder="Select location" />
+              </SelectTrigger>
+              <SelectContent>
+                {LOCATIONS.map((locationGroup) => (
+                  <SelectGroup key={locationGroup.group}>
+                    <SelectLabel>{locationGroup.group}</SelectLabel>
+                    {locationGroup.items.map((item) => (
+                      <SelectItem key={item} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <Label htmlFor="budget_range">Budget Range</Label>
+            <Select value={budgetRange} onValueChange={(val) => setBudgetRange(val || '')} required>
+              <SelectTrigger>
+                <SelectValue placeholder="Select budget range" />
+              </SelectTrigger>
+              <SelectContent>
+                {BUDGET_RANGES.map((range) => (
+                  <SelectItem key={range} value={range}>
+                    {range}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-[#0F172A] mb-4 border-b border-[rgba(15,23,42,0.12)] pb-2">Contact & Media</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="space-y-2">
+            <Label htmlFor="contact_email">Contact Email (Public)</Label>
+            <Input id="contact_email" name="contact_email" type="email" placeholder="hello@vendor.com" />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="login_email">Login Email (Private)</Label>
+            <Input id="login_email" name="login_email" type="email" required placeholder="admin@vendor.com" />
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <Label htmlFor="video_url">Background Video URL (YouTube only)</Label>
+            <Input 
+              id="video_url" 
+              name="video_url" 
+              type="url" 
+              placeholder="https://www.youtube.com/watch?v=..." 
+              pattern="^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.*$"
+              title="Please enter a valid YouTube URL"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-[#0F172A] mb-4 border-b border-[rgba(15,23,42,0.12)] pb-2">Specialties</h3>
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <Label>Languages</Label>
+            <div className="flex flex-wrap gap-2">
+              {LANGUAGES.map((lang) => (
+                <button
+                  key={lang}
+                  type="button"
+                  onClick={() => toggleLanguage(lang)}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors border ${
+                    languages.includes(lang)
+                      ? 'bg-[#E8960C] text-[#0F172A] border-[#E8960C]'
+                      : 'bg-[#F8F6F1] text-[#1B2740] hover:bg-[#EFEAE0] border-[rgba(15,23,42,0.12)]'
+                  }`}
+                >
+                  {lang}
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="space-y-6 pt-4 border-t">
-        <div className="space-y-2">
-          <Label>Profile Image</Label>
-          <div className="p-4 border border-dashed rounded-md bg-slate-50">
-            {profileImageId ? (
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Image uploaded: {profileImageId}</span>
-                <Button variant="ghost" size="sm" type="button" onClick={() => setProfileImageId('')}>Remove</Button>
-              </div>
-            ) : (
-              <ImageUploader onUploadComplete={(id) => setProfileImageId(id)} />
-            )}
           </div>
-        </div>
 
-        <div className="space-y-2">
-          <Label>Portfolio Images ({portfolioIds.length} / 5)</Label>
-          <div className="p-4 border border-dashed rounded-md bg-slate-50 space-y-4">
-            {portfolioIds.length > 0 && (
-              <ul className="space-y-2">
-                {portfolioIds.map((id, index) => (
-                  <li key={index} className="flex items-center justify-between text-sm bg-white p-2 border rounded-md">
-                    <span>Portfolio Item {index + 1}: {id}</span>
-                    <Button variant="ghost" size="sm" type="button" onClick={() => handleRemovePortfolioImage(id)}>Remove</Button>
-                  </li>
-                ))}
-              </ul>
-            )}
-            
-            {portfolioIds.length < 5 ? (
-              <ImageUploader onUploadComplete={handleAddPortfolioImage} />
-            ) : (
-              <p className="text-sm text-muted-foreground text-center">Maximum of 5 portfolio images reached.</p>
-            )}
+          <div className="space-y-3">
+            <Label>Occasions</Label>
+            <div className="space-y-4">
+              {OCCASIONS.map((occasionGroup) => (
+                <div key={occasionGroup.group} className="space-y-2 bg-[#F8F6F1] p-4 rounded-lg border border-[rgba(15,23,42,0.08)]">
+                  <h4 className="text-sm font-semibold text-[#1B2740] mb-2">{occasionGroup.group}</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {occasionGroup.items.map((occasion) => (
+                      <button
+                        key={occasion}
+                        type="button"
+                        onClick={() => toggleOccasion(occasion)}
+                        className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors border ${
+                          occasions.includes(occasion)
+                            ? 'bg-[#E8960C] text-[#0F172A] border-[#E8960C]'
+                            : 'bg-white text-[#1B2740] hover:bg-[#EFEAE0] border-[rgba(15,23,42,0.12)]'
+                        }`}
+                      >
+                        {occasion}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
 
-      <Button type="submit" className="w-full" disabled={isPending}>
-        {isPending ? (
-          <>
-            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            Creating Vendor...
-          </>
-        ) : (
-          'Create Vendor & Send Invite'
-        )}
-      </Button>
+      <div>
+        <h3 className="text-lg font-semibold text-[#0F172A] mb-4 border-b border-[rgba(15,23,42,0.12)] pb-2">Profile & Portfolio Images</h3>
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <Label>Profile Image</Label>
+            <div className="p-4 border border-dashed rounded-md bg-slate-50">
+              {profileImageId ? (
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Image uploaded: {profileImageId}</span>
+                  <Button variant="ghost" size="sm" type="button" onClick={() => setProfileImageId('')}>Remove</Button>
+                </div>
+              ) : (
+                <ImageUploader onUploadComplete={(id) => setProfileImageId(id)} />
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Portfolio Images ({portfolioIds.length} / 5)</Label>
+            <div className="p-4 border border-dashed rounded-md bg-slate-50 space-y-4">
+              {portfolioIds.length > 0 && (
+                <ul className="space-y-2">
+                  {portfolioIds.map((id, index) => (
+                    <li key={index} className="flex items-center justify-between text-sm bg-white p-2 border rounded-md">
+                      <span>Portfolio Item {index + 1}: {id}</span>
+                      <Button variant="ghost" size="sm" type="button" onClick={() => handleRemovePortfolioImage(id)}>Remove</Button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              
+              {portfolioIds.length < 5 ? (
+                <ImageUploader onUploadComplete={handleAddPortfolioImage} />
+              ) : (
+                <p className="text-sm text-muted-foreground text-center">Maximum of 5 portfolio images reached.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="pt-4">
+        <Button type="submit" disabled={isPending} className="w-full bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A] font-bold text-[14.5px] py-6 rounded-md">
+          {isPending ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Creating Vendor...
+            </>
+          ) : (
+            'Create Vendor & Send Invite'
+          )}
+        </Button>
+      </div>
     </form>
   );
 }
