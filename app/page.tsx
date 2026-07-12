@@ -6,6 +6,11 @@ import { VendorGrid } from '@/components/vendor-grid';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { Sparkles } from 'lucide-react';
+import { SERVICES } from '@/lib/constants';
+
+function getCategorySlug(category: string) {
+  return category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
 
 export const metadata = {
   title: 'Find Your Perfect Wedding Vendor',
@@ -106,6 +111,18 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   // Cloudflare Images uses an Account Hash for delivery, not the API Account ID
   const cloudflareAccountHash = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
 
+  const categories = SERVICES[0].items;
+  const categoryVendors = await Promise.all(
+    categories.map(async (cat) => {
+      const { data } = await supabase
+        .from('vendors')
+        .select('id, name, category, location, profile_image')
+        .eq('category', cat)
+        .limit(5);
+      return { category: cat, vendors: (data as Vendor[]) || [] };
+    })
+  );
+
   return (
     <div className="new-home">
       <header id="siteHeader">
@@ -174,71 +191,30 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           <div className="section-eyebrow">Browse talent</div>
           <h2>Every category, ready to book.</h2>
 
-          <div className="category-block">
-            <div className="category-head"><h3>Emcees &amp; Comperes</h3><a className="view-more" href="https://srilankanmc.com">View all Emcees &amp; Comperes →</a></div>
-            <div className="profile-grid">
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">RJ</div><h4>R. Jayawardena</h4><p>Colombo · 6 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">NF</div><h4>N. Fernando</h4><p>Kandy · 4 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SW</div><h4>S. Wickramasinghe</h4><p>Galle · 8 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DP</div><h4>D. Perera</h4><p>Negombo · 3 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">AR</div><h4>A. Rajapaksa</h4><p>Colombo · 10 yrs</p></div>
-            </div>
-          </div>
-
-          <div className="category-block">
-            <div className="category-head"><h3>Bands</h3><a className="view-more" href="https://srilankanband.com">View all Bands →</a></div>
-            <div className="profile-grid">
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">EC</div><h4>Echo Collective</h4><p>Colombo · 6 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CS</div><h4>The Cinnamon Sound</h4><p>Kandy · 9 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">IR</div><h4>Island Rhythm Band</h4><p>Galle · 5 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">VN</div><h4>Velvet Note</h4><p>Negombo · 3 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SS</div><h4>Southern Strings</h4><p>Matara · 7 yrs</p></div>
-            </div>
-          </div>
-
-          <div className="category-block">
-            <div className="category-head"><h3>DJs</h3><a className="view-more" href="https://srilankandj.com">View all DJs →</a></div>
-            <div className="profile-grid">
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DK</div><h4>DJ Kavi</h4><p>Colombo · 5 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DN</div><h4>DJ Nethmi</h4><p>Kandy · 4 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DR</div><h4>DJ Rashen</h4><p>Galle · 6 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DI</div><h4>DJ Imesha</h4><p>Negombo · 3 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DT</div><h4>DJ Tharu</h4><p>Colombo · 8 yrs</p></div>
-            </div>
-          </div>
-
-          <div className="category-block">
-            <div className="category-head"><h3>Makeup Artists</h3><a className="view-more" href="https://srilankanmua.com">View all Makeup Artists →</a></div>
-            <div className="profile-grid">
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">MS</div><h4>M. Silva</h4><p>Colombo · 7 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">TG</div><h4>T. Gunasekara</h4><p>Kandy · 5 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">PD</div><h4>P. Dias</h4><p>Galle · 4 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">KA</div><h4>K. Abeywardena</h4><p>Negombo · 6 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">RS</div><h4>R. Senanayake</h4><p>Colombo · 9 yrs</p></div>
-            </div>
-          </div>
-
-          <div className="category-block">
-            <div className="category-head"><h3>Cake Artists</h3><a className="view-more" href="https://srilankancakeartist.com">View all Cake Artists →</a></div>
-            <div className="profile-grid">
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SL</div><h4>Sweet Layers by Amaya</h4><p>Colombo · 6 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">KC</div><h4>Kandy Cake House</h4><p>Kandy · 8 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SS</div><h4>Sugar &amp; Spice Studio</h4><p>Galle · 4 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CA</div><h4>The Cake Atelier</h4><p>Negombo · 5 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">BB</div><h4>Blossom Bakes</h4><p>Colombo · 3 yrs</p></div>
-            </div>
-          </div>
-
-          <div className="category-block">
-            <div className="category-head"><h3>Photographers</h3><a className="view-more" href="https://srilankanphotographer.com">View all Photographers →</a></div>
-            <div className="profile-grid">
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">JR</div><h4>J. Ranasinghe</h4><p>Colombo · 7 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">LW</div><h4>L. Wijesuriya</h4><p>Kandy · 5 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">HF</div><h4>H. Fonseka</h4><p>Galle · 6 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CB</div><h4>C. Bandara</h4><p>Negombo · 4 yrs</p></div>
-              <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">TW</div><h4>T. Weerasinghe</h4><p>Colombo · 9 yrs</p></div>
-            </div>
-          </div>
+          {categoryVendors.map(({ category, vendors }) => {
+            const slug = getCategorySlug(category);
+            return (
+              <div key={category} className="category-block">
+                <div className="category-head">
+                  <h3>{category}</h3>
+                  <a className="view-more" href={`/browse/${slug}`}>View all {category} →</a>
+                </div>
+                <div className="profile-grid">
+                  {vendors.map(v => (
+                    <VendorCard 
+                      key={v.id} 
+                      vendor={v} 
+                      cloudflareAccountHash={cloudflareAccountHash} 
+                      triggerType="profile-card" 
+                    />
+                  ))}
+                  {vendors.length === 0 && (
+                    <p className="text-sm text-zinc-500 italic">No vendors found.</p>
+                  )}
+                </div>
+              </div>
+            );
+          })}
 
         </div>
       </section>

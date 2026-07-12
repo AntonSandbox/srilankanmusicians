@@ -76,8 +76,9 @@
 .new-home .view-more { font-size:13px; font-weight:600; color:var(--saffron-deep); white-space:nowrap; }
 .new-home .view-more:hover { text-decoration:underline; }
 .new-home .profile-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
-.new-home .profile-card { background:#fff; border:1px solid var(--line); border-radius:6px; padding:16px; text-align:center; }
-.new-home .profile-avatar { width:52px; height:52px; border-radius:50%; background:var(--cream-dim); margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:var(--saffron-deep); font-family:var(--font-display); font-style:italic; font-size:16px; }
+.new-home .profile-card { background:#fff; border:1px solid var(--line); border-radius:6px; padding:16px; text-align:center; aspect-ratio:1/1; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+.new-home .profile-avatar { width:52px; height:52px; border-radius:50%; background:var(--cream-dim); margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:var(--saffron-deep); font-family:var(--font-display); font-style:italic; font-size:16px; overflow:hidden; }
+.new-home .profile-avatar img { width:100%; height:100%; object-fit:cover; display:block; }
 .new-home .profile-card h4 { font-size:13.5px; font-weight:600; margin-bottom:3px; }
 .new-home .profile-card p { font-size:11.5px; color:#6a6a6a; margin-bottom:0; }
 .new-home .empty-state { grid-column:1 / -1; background:#fff; border:1px dashed var(--line); border-radius:6px; padding:32px 24px; text-align:center; }
