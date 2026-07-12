@@ -1,14 +1,15 @@
 'use client';
 
 import { useActionState } from 'react';
-import { loginVendor } from './actions';
+import { forgotPasswordAction } from './actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
-export default function VendorLoginPage() {
-  const [state, formAction, isPending] = useActionState(loginVendor, null);
+export default function ForgotPasswordPage() {
+  const [state, formAction, isPending] = useActionState(forgotPasswordAction, null);
 
   return (
     <main className="min-h-screen flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#F8F6F1', color: '#0F172A', fontFamily: '"Work Sans", sans-serif' }}>
@@ -18,10 +19,10 @@ export default function VendorLoginPage() {
       `}} />
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-medium brand-heading" style={{ color: '#0F172A' }}>
-          Vendor Portal
+          Reset Password
         </h2>
         <p className="mt-2 text-center text-sm" style={{ color: '#1B2740' }}>
-          Sign in to access your bookings and profile
+          Enter your login email address and we&apos;ll send you a link to reset your password.
         </p>
       </div>
 
@@ -34,6 +35,12 @@ export default function VendorLoginPage() {
               </div>
             )}
             
+            {state?.success && (
+              <div className="p-3 bg-green-50 text-green-700 border border-green-200 rounded-md text-sm">
+                {state.success}
+              </div>
+            )}
+            
             <div className="space-y-2">
               <Label htmlFor="email" style={{ color: '#0F172A', fontWeight: 600, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.03em' }}>Email Address</Label>
               <Input 
@@ -42,38 +49,28 @@ export default function VendorLoginPage() {
                 type="email" 
                 required 
                 placeholder="you@example.com"
-                disabled={isPending}
+                disabled={isPending || !!state?.success}
                 className="border-[rgba(15,23,42,0.12)] focus-visible:ring-[#B8730A]"
               />
             </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password" style={{ color: '#0F172A', fontWeight: 600, fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.03em' }}>Password</Label>
-                <a href="/vendor/forgot-password" style={{ color: '#B8730A', fontSize: '13px', fontWeight: 500 }} className="hover:text-[#0F172A] transition-colors">
-                  Forgot password?
-                </a>
-              </div>
-              <Input 
-                id="password" 
-                name="password"
-                type="password" 
-                required 
-                disabled={isPending}
-                className="border-[rgba(15,23,42,0.12)] focus-visible:ring-[#B8730A]"
-              />
-            </div>
-
-            <Button type="submit" className="w-full text-[#0F172A] font-bold hover:bg-[#F5A929] transition-colors" style={{ backgroundColor: '#E8960C' }} disabled={isPending}>
+            <Button type="submit" className="w-full text-[#0F172A] font-bold hover:bg-[#F5A929] transition-colors" style={{ backgroundColor: '#E8960C' }} disabled={isPending || !!state?.success}>
               {isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Signing in...
+                  Sending Link...
                 </>
               ) : (
-                'Sign In'
+                'Send Reset Link'
               )}
             </Button>
+
+            <div className="mt-6 text-center">
+              <Link href="/vendor/login" className="inline-flex items-center text-sm font-medium text-[#B8730A] hover:text-[#0F172A] transition-colors">
+                <ArrowLeft className="w-4 h-4 mr-1" />
+                Back to Login
+              </Link>
+            </div>
           </form>
         </div>
       </div>
