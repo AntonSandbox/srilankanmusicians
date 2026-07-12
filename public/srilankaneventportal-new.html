@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sri Lankan Event Portal | Find Emcees, Bands, DJs, Makeup Artists, Cake Artists & Photographers</title>
+<meta name="description" content="Search verified event talent across Sri Lanka — emcees, bands, DJs, makeup artists, cake artists and photographers — by occasion, date, location and budget.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --mid:#0F172A;
+    --mid-soft:#1B2740;
+    --cream:#F8F6F1;
+    --cream-dim:#EFEAE0;
+    --saffron:#E8960C;
+    --saffron-deep:#B8730A;
+    --line: rgba(15,23,42,0.12);
+    --font-display: 'Fraunces', serif;
+    --font-body: 'Work Sans', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{ background:var(--cream); color:var(--mid); font-family:var(--font-body); line-height:1.6; overflow-x:hidden; }
+  a{color:inherit; text-decoration:none;}
+  ::selection{ background:var(--saffron); color:var(--mid); }
+  .wrap{ max-width:1120px; margin:0 auto; padding:0 28px; }
+
+  header{ position:fixed; top:0; left:0; right:0; z-index:100; padding:18px 0; transition: padding .3s ease, box-shadow .3s ease; background:var(--cream); border-bottom:1px solid var(--line); }
+  header.scrolled{ padding:13px 0; box-shadow:0 2px 10px rgba(15,23,42,0.06); }
+  nav{ display:flex; align-items:center; justify-content:space-between; }
+  .logo{ font-family:var(--font-display); font-weight:600; font-size:19px; }
+  .logo span{ color:var(--saffron-deep); font-style:italic; font-weight:500; }
+  .nav-cta{ border:1px solid var(--mid); padding:9px 20px; border-radius:2px; font-size:13px; font-weight:600; }
+  .nav-cta:hover{ background:var(--mid); color:var(--cream); }
+
+  .hero{ position:relative; padding:150px 0 70px; background:var(--cream-dim); color:var(--mid); }
+  .hero .wrap{ max-width:880px; }
+  .eyebrow{ font-size:12.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--saffron-deep); margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .eyebrow::before{ content:''; width:24px; height:1px; background:var(--saffron-deep); display:inline-block; }
+  h1{ font-family:var(--font-display); font-weight:500; font-size:clamp(28px,4vw,40px); line-height:1.16; letter-spacing:-0.01em; margin-bottom:34px; max-width:680px; }
+
+  .search-panel{ background:#fff; border:1px solid var(--line); border-radius:6px; padding:26px; box-shadow:0 12px 30px rgba(15,23,42,0.08); }
+  .search-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:16px; }
+  .field label{ font-size:11.5px; font-weight:700; letter-spacing:0.03em; color:var(--mid); margin-bottom:6px; display:block; text-transform:uppercase; }
+  .field select, .field input{ width:100%; padding:11px 12px; font-size:14px; font-family:var(--font-body); border:1px solid var(--line); border-radius:3px; background:#fff; color:var(--mid); }
+  .field select:focus, .field input:focus{ outline:none; border-color:var(--saffron-deep); }
+  .search-btn{ width:100%; background:var(--saffron); color:var(--mid); border:none; padding:15px 24px; font-size:14.5px; font-weight:700; border-radius:3px; cursor:pointer; transition:background .2s ease; }
+  .search-btn:hover{ background:#F5A929; }
+  .search-note{ display:none; margin-top:16px; font-size:13px; color:var(--mid-soft); background:var(--cream-dim); border:1px solid var(--line); padding:12px 16px; border-radius:4px; }
+  .search-note.show{ display:block; }
+
+  .mentors{ padding:90px 0 100px; }
+  .section-eyebrow{ font-size:12.5px; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--saffron-deep); margin-bottom:14px; }
+  .mentors h2{ font-family:var(--font-display); font-weight:500; font-size:clamp(26px,3.2vw,34px); margin-bottom:44px; max-width:620px; }
+
+  .mentor-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  .mentor-card{ background:#fff; border:1px solid var(--line); border-radius:6px; overflow:hidden; }
+  .video-box{ position:relative; aspect-ratio:16/10; background:var(--mid); display:flex; align-items:center; justify-content:center; }
+  .play-btn{ width:50px; height:50px; border-radius:50%; background:var(--saffron); display:flex; align-items:center; justify-content:center; cursor:pointer; }
+  .play-btn::after{ content:''; width:0; height:0; border-top:9px solid transparent; border-bottom:9px solid transparent; border-left:15px solid var(--mid); margin-left:4px; }
+  .video-caption{ position:absolute; bottom:0; left:0; right:0; padding:12px 14px; background:linear-gradient(transparent, rgba(15,23,42,0.85)); color:var(--cream); font-size:11.5px; font-weight:600; letter-spacing:0.02em; text-transform:uppercase; }
+  .mentor-body{ padding:18px 20px 20px; }
+  .mentor-cat{ font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--saffron-deep); margin-bottom:6px; }
+  .mentor-name{ font-family:var(--font-display); font-size:18px; font-weight:500; margin-bottom:0; }
+
+  .promise{ background:var(--cream-dim); padding:70px 0; }
+  .promise .wrap{ max-width:680px; text-align:center; }
+  .promise h2{ font-family:var(--font-display); font-weight:500; font-size:clamp(24px,3vw,32px); margin-bottom:30px; }
+  .promise h2 em{ font-style:italic; color:var(--saffron-deep); }
+  .benefits-list{ text-align:left; max-width:520px; margin:0 auto; list-style:none; }
+  .benefits-list li{ display:flex; gap:12px; font-size:14.5px; color:#2b2b2b; padding:10px 0; border-bottom:1px solid var(--line); }
+  .benefits-list li:last-child{ border-bottom:none; }
+  .benefits-list .check{ color:var(--saffron-deep); font-weight:700; flex-shrink:0; }
+
+  .profiles{ padding:90px 0 40px; }
+  .profiles h2{ font-family:var(--font-display); font-weight:500; font-size:clamp(26px,3.2vw,34px); margin-bottom:44px; max-width:620px; }
+  .category-block{ margin-bottom:64px; }
+  .category-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:20px; padding-bottom:14px; border-bottom:1px solid var(--line); }
+  .category-head h3{ font-family:var(--font-display); font-weight:500; font-size:21px; }
+  .view-more{ font-size:13px; font-weight:600; color:var(--saffron-deep); white-space:nowrap; }
+  .view-more:hover{ text-decoration:underline; }
+  .profile-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:16px; }
+  .profile-card{ background:#fff; border:1px solid var(--line); border-radius:6px; padding:16px; text-align:center; }
+  .profile-avatar{ width:52px; height:52px; border-radius:50%; background:var(--cream-dim); margin:0 auto 10px; display:flex; align-items:center; justify-content:center; color:var(--saffron-deep); font-family:var(--font-display); font-style:italic; font-size:16px; }
+  .profile-card h4{ font-size:13.5px; font-weight:600; margin-bottom:3px; }
+  .profile-card p{ font-size:11.5px; color:#6a6a6a; }
+  .empty-state{ grid-column:1 / -1; background:#fff; border:1px dashed var(--line); border-radius:6px; padding:32px 24px; text-align:center; }
+  .empty-state p{ font-size:14px; color:#3a3a3a; margin-bottom:14px; }
+  .sample-tag{ font-size:9.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--saffron-deep); background:var(--cream-dim); display:inline-block; padding:2px 8px; border-radius:10px; margin-bottom:8px; }
+  .empty-cta{ font-size:13.5px; font-weight:600; color:var(--mid); border:1px solid var(--mid); padding:9px 18px; border-radius:2px; display:inline-block; }
+  .empty-cta:hover{ background:var(--mid); color:var(--cream); }
+
+  .explore{ background:var(--cream-dim); padding:90px 0 100px; }
+  .explore h2{ font-family:var(--font-display); font-weight:500; font-size:clamp(26px,3.2vw,34px); margin-bottom:44px; max-width:620px; }
+  .explore-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
+  .explore-card{ background:var(--cream-dim); padding:28px 24px; transition:background .2s ease; }
+  .explore-card:hover{ background:#fff; }
+  .explore-card .tag{ font-size:10.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--saffron-deep); margin-bottom:10px; }
+  .explore-card h3{ font-family:var(--font-display); font-weight:500; font-size:18px; margin-bottom:8px; }
+  .explore-card p{ font-size:13px; color:#3a3a3a; margin-bottom:16px; }
+  .explore-card .link-arrow{ font-size:13px; font-weight:600; color:var(--mid); display:inline-flex; align-items:center; gap:6px; }
+  .explore-card:hover .link-arrow{ color:var(--saffron-deep); }
+
+  footer{ background:var(--mid); color:rgba(248,246,241,0.7); padding:40px 0; font-size:12.5px; }
+  footer .wrap{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .foot-socials{ display:flex; gap:16px; align-items:center; }
+  .foot-socials a{ width:32px; height:32px; border:1px solid rgba(248,246,241,0.25); border-radius:50%; display:flex; align-items:center; justify-content:center; transition: border-color .2s ease, background .2s ease; }
+  .foot-socials a:hover{ border-color:var(--saffron); background:rgba(232,150,12,0.14); }
+  .foot-socials svg{ width:15px; height:15px; fill:rgba(248,246,241,0.85); }
+  .foot-socials a:hover svg{ fill:var(--saffron); }
+
+  @media (max-width: 900px){
+    .search-grid{ grid-template-columns:repeat(2,1fr); }
+    .mentor-grid{ grid-template-columns:repeat(2,1fr); }
+    .explore-grid{ grid-template-columns:repeat(2,1fr); }
+    .profile-grid{ grid-template-columns:repeat(3,1fr); }
+  }
+  @media (max-width: 560px){
+    .search-grid{ grid-template-columns:1fr; }
+    .mentor-grid{ grid-template-columns:1fr; }
+    .explore-grid{ grid-template-columns:1fr; }
+    .profile-grid{ grid-template-columns:repeat(2,1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="wrap">
+    <nav>
+      <a href="#" class="logo">Sri Lankan <span>Event Portal</span></a>
+      <a href="#explore" class="nav-cta">Become a vendor</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Sri Lanka's Event Talent, All in One Place</div>
+    <h1>Search Talent for your Event</h1>
+
+    <div class="search-panel">
+      <div class="search-grid">
+        <div class="field">
+          <label for="occasion">What is your occasion</label>
+          <select id="occasion">
+            <option value="">Select occasion</option>
+            <option>Wedding</option>
+            <option>Homecoming</option>
+            <option>Corporate event</option>
+            <option>Birthday</option>
+            <option>Engagement</option>
+            <option>Anniversary</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="eventdate">Event date</label>
+          <input type="date" id="eventdate">
+        </div>
+        <div class="field">
+          <label for="talenttype">Talent type</label>
+          <select id="talenttype">
+            <option value="">Select talent type</option>
+            <option>Emcee / Compere</option>
+            <option>Band</option>
+            <option>DJ</option>
+            <option>Makeup Artist</option>
+            <option>Cake Artist</option>
+            <option>Photographer</option>
+          </select>
+        </div>
+      </div>
+      <div class="search-grid" style="grid-template-columns:1fr 1fr; margin-bottom:22px;">
+        <div class="field">
+          <label for="location">Location</label>
+          <select id="location">
+            <option value="">Select location</option>
+            <option>Colombo</option>
+            <option>Kandy</option>
+            <option>Galle</option>
+            <option>Negombo</option>
+            <option>Jaffna</option>
+            <option>Kurunegala</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="budget">Budget range</label>
+          <select id="budget">
+            <option value="">Select budget range</option>
+            <option>Under LKR 25,000</option>
+            <option>LKR 25,000 – 50,000</option>
+            <option>LKR 50,000 – 100,000</option>
+            <option>LKR 100,000 – 200,000</option>
+            <option>Above LKR 200,000</option>
+          </select>
+        </div>
+      </div>
+      <button class="search-btn" id="searchBtn">Find Available Talent</button>
+      <div class="search-note" id="searchNote">We're onboarding our first talent across every category now — profiles will start appearing here shortly. Browse by category below, or share your event details on WhatsApp in the meantime.</div>
+    </div>
+  </div>
+</section>
+
+<section class="promise">
+  <div class="wrap">
+    <h2>Free to search. <em>Vendors you can trust.</em></h2>
+    <ul class="benefits-list">
+      <li><span class="check">✓</span> No charge to you, ever — searching, browsing and checking availability is completely free</li>
+      <li><span class="check">✓</span> Every vendor on this platform is screened before being listed</li>
+      <li><span class="check">✓</span> Once you find someone available, you'll speak with them directly to confirm details, pricing and next steps</li>
+      <li><span class="check">✓</span> We handle the discovery — you handle the conversation</li>
+    </ul>
+  </div>
+</section>
+
+<section class="profiles" id="profiles">
+  <div class="wrap">
+    <div class="section-eyebrow">Browse talent</div>
+    <h2>Every category, ready to book.</h2>
+
+    <div class="category-block">
+      <div class="category-head"><h3>Emcees &amp; Comperes</h3><a class="view-more" href="https://srilankanmc.com">View all Emcees &amp; Comperes →</a></div>
+      <div class="profile-grid">
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">RJ</div><h4>R. Jayawardena</h4><p>Colombo · 6 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">NF</div><h4>N. Fernando</h4><p>Kandy · 4 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">SW</div><h4>S. Wickramasinghe</h4><p>Galle · 8 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">DP</div><h4>D. Perera</h4><p>Negombo · 3 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">AR</div><h4>A. Rajapaksa</h4><p>Colombo · 10 yrs</p></div>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head"><h3>Bands</h3><a class="view-more" href="https://srilankanband.com">View all Bands →</a></div>
+      <div class="profile-grid">
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">EC</div><h4>Echo Collective</h4><p>Colombo · 6 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">CS</div><h4>The Cinnamon Sound</h4><p>Kandy · 9 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">IR</div><h4>Island Rhythm Band</h4><p>Galle · 5 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">VN</div><h4>Velvet Note</h4><p>Negombo · 3 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">SS</div><h4>Southern Strings</h4><p>Matara · 7 yrs</p></div>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head"><h3>DJs</h3><a class="view-more" href="https://srilankandj.com">View all DJs →</a></div>
+      <div class="profile-grid">
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">DK</div><h4>DJ Kavi</h4><p>Colombo · 5 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">DN</div><h4>DJ Nethmi</h4><p>Kandy · 4 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">DR</div><h4>DJ Rashen</h4><p>Galle · 6 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">DI</div><h4>DJ Imesha</h4><p>Negombo · 3 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">DT</div><h4>DJ Tharu</h4><p>Colombo · 8 yrs</p></div>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head"><h3>Makeup Artists</h3><a class="view-more" href="https://srilankanmua.com">View all Makeup Artists →</a></div>
+      <div class="profile-grid">
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">MS</div><h4>M. Silva</h4><p>Colombo · 7 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">TG</div><h4>T. Gunasekara</h4><p>Kandy · 5 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">PD</div><h4>P. Dias</h4><p>Galle · 4 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">KA</div><h4>K. Abeywardena</h4><p>Negombo · 6 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">RS</div><h4>R. Senanayake</h4><p>Colombo · 9 yrs</p></div>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head"><h3>Cake Artists</h3><a class="view-more" href="https://srilankancakeartist.com">View all Cake Artists →</a></div>
+      <div class="profile-grid">
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">SL</div><h4>Sweet Layers by Amaya</h4><p>Colombo · 6 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">KC</div><h4>Kandy Cake House</h4><p>Kandy · 8 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">SS</div><h4>Sugar &amp; Spice Studio</h4><p>Galle · 4 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">CA</div><h4>The Cake Atelier</h4><p>Negombo · 5 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">BB</div><h4>Blossom Bakes</h4><p>Colombo · 3 yrs</p></div>
+      </div>
+    </div>
+
+    <div class="category-block">
+      <div class="category-head"><h3>Photographers</h3><a class="view-more" href="https://srilankanphotographer.com">View all Photographers →</a></div>
+      <div class="profile-grid">
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">JR</div><h4>J. Ranasinghe</h4><p>Colombo · 7 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">LW</div><h4>L. Wijesuriya</h4><p>Kandy · 5 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">HF</div><h4>H. Fonseka</h4><p>Galle · 6 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">CB</div><h4>C. Bandara</h4><p>Negombo · 4 yrs</p></div>
+        <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">TW</div><h4>T. Weerasinghe</h4><p>Colombo · 9 yrs</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="explore" id="explore">
+  <div class="wrap">
+    <div class="section-eyebrow">Explore by talent</div>
+    <h2>Every category has its own home — and its own community.</h2>
+    <div class="explore-grid">
+      <a class="explore-card" href="https://srilankanmc.com">
+        <div class="tag">Emcees &amp; Comperes</div>
+        <h3>Book an Emcee or Compere in Sri Lanka</h3>
+        <p>Search and book verified emcees and comperes for any occasion.</p>
+        <span class="link-arrow">Visit Sri Lankan Emcee →</span>
+      </a>
+      <a class="explore-card" href="https://srilankanband.com">
+        <div class="tag">Bands</div>
+        <h3>Book a Live Band in Sri Lanka</h3>
+        <p>Search and book live bands for weddings, corporate events and celebrations.</p>
+        <span class="link-arrow">Visit Sri Lankan Band →</span>
+      </a>
+      <a class="explore-card" href="https://srilankandj.com">
+        <div class="tag">DJs</div>
+        <h3>Book a DJ in Sri Lanka</h3>
+        <p>Search and book DJs for any event, from intimate gatherings to large celebrations.</p>
+        <span class="link-arrow">Visit Sri Lankan DJ →</span>
+      </a>
+      <a class="explore-card" href="https://srilankanmua.com">
+        <div class="tag">Makeup Artists</div>
+        <h3>Book a Makeup Artist in Sri Lanka</h3>
+        <p>Search and book bridal and event makeup artists across the island.</p>
+        <span class="link-arrow">Visit Sri Lankan MUA →</span>
+      </a>
+      <a class="explore-card" href="https://srilankancakeartist.com">
+        <div class="tag">Cake Artists</div>
+        <h3>Book a Cake Artist in Sri Lanka</h3>
+        <p>Search and book cake artists for weddings and celebrations of any size.</p>
+        <span class="link-arrow">Visit Sri Lankan Cake Artist →</span>
+      </a>
+      <a class="explore-card" href="https://srilankanphotographer.com">
+        <div class="tag">Photographers</div>
+        <h3>Book a Photographer in Sri Lanka</h3>
+        <p>Search and book event and wedding photographers, local and diaspora-friendly.</p>
+        <span class="link-arrow">Visit Sri Lankan Photographer →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="mentors">
+  <div class="wrap">
+    <div class="section-eyebrow">Ambassadors</div>
+    <h2>Hear from Our Mentors</h2>
+    <div class="mentor-grid">
+      <div class="mentor-card">
+        <div class="video-box"><div class="play-btn" role="button" aria-label="Play Emcee mentor video"></div><div class="video-caption">Emcee / Compere</div></div>
+        <div class="mentor-body"><div class="mentor-cat">Emcees &amp; Comperes</div><div class="mentor-name">Vijaya Corea</div></div>
+      </div>
+      <div class="mentor-card">
+        <div class="video-box"><div class="play-btn" role="button" aria-label="Play Band mentor video"></div><div class="video-caption">Band</div></div>
+        <div class="mentor-body"><div class="mentor-cat">Bands</div><div class="mentor-name">Ambassador to be announced</div></div>
+      </div>
+      <div class="mentor-card">
+        <div class="video-box"><div class="play-btn" role="button" aria-label="Play DJ mentor video"></div><div class="video-caption">DJ</div></div>
+        <div class="mentor-body"><div class="mentor-cat">DJs</div><div class="mentor-name">Ambassador to be announced</div></div>
+      </div>
+      <div class="mentor-card">
+        <div class="video-box"><div class="play-btn" role="button" aria-label="Play Makeup Artist mentor video"></div><div class="video-caption">Makeup Artist</div></div>
+        <div class="mentor-body"><div class="mentor-cat">Makeup Artists</div><div class="mentor-name">Ambassador to be announced</div></div>
+      </div>
+      <div class="mentor-card">
+        <div class="video-box"><div class="play-btn" role="button" aria-label="Play Cake Artist mentor video"></div><div class="video-caption">Cake Artist</div></div>
+        <div class="mentor-body"><div class="mentor-cat">Cake Artists</div><div class="mentor-name">Ambassador to be announced</div></div>
+      </div>
+      <div class="mentor-card">
+        <div class="video-box"><div class="play-btn" role="button" aria-label="Play Photographer mentor video"></div><div class="video-caption">Photographer</div></div>
+        <div class="mentor-body"><div class="mentor-cat">Photographers</div><div class="mentor-name">Ambassador to be announced</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div style="display:flex; gap:20px; align-items:center; flex-wrap:wrap;">
+      <span>Powered by MentSpire</span>
+      <span style="border-left:1px solid rgba(248,246,241,0.25); padding-left:20px;">Also part of <a href="https://lankanweddingportal.com">Sri Lankan Wedding Portal</a></span>
+    </div>
+    <div class="foot-socials">
+      <a href="https://instagram.com" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3.05.01 4.12.06 1.07.05 1.8.22 2.44.47.66.26 1.22.6 1.77 1.16.55.55.9 1.11 1.16 1.77.25.63.42 1.37.47 2.44.05 1.07.06 1.42.06 4.12s-.01 3.05-.06 4.12c-.05 1.07-.22 1.8-.47 2.44a4.9 4.9 0 01-1.16 1.77 4.9 4.9 0 01-1.77 1.16c-.63.25-1.37.42-2.44.47-1.07.05-1.42.06-4.12.06s-3.05-.01-4.12-.06c-1.07-.05-1.8-.22-2.44-.47a4.9 4.9 0 01-1.77-1.16 4.9 4.9 0 01-1.16-1.77c-.25-.63-.42-1.37-.47-2.44C2.01 15.05 2 14.7 2 12s.01-3.05.06-4.12c.05-1.07.22-1.8.47-2.44.26-.66.6-1.22 1.16-1.77a4.9 4.9 0 011.77-1.16c.63-.25 1.37-.42 2.44-.47C8.95 2.01 9.3 2 12 2zm0 3.6A6.4 6.4 0 1012 18.4 6.4 6.4 0 0012 5.6zm0 10.57a4.17 4.17 0 110-8.34 4.17 4.17 0 010 8.34zm6.65-10.82a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
+      </a>
+      <a href="https://facebook.com" aria-label="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.55-1.5H17V3.7c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.3H8.1V13h2.7v8h2.7z"/></svg>
+      </a>
+      <a href="https://linkedin.com" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M6.94 5a2 2 0 11-4-.02 2 2 0 014 .02zM3.3 8.75h3.6V21H3.3V8.75zm6.3 0h3.45v1.68h.05c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.33 2.4 4.33 5.53V21h-3.6v-6.2c0-1.48-.03-3.38-2.06-3.38-2.07 0-2.39 1.6-2.39 3.27V21H9.6V8.75z"/></svg>
+      </a>
+      <a href="https://tiktok.com" aria-label="TikTok">
+        <svg viewBox="0 0 24 24"><path d="M16.6 3c.3 1.9 1.6 3.3 3.5 3.5v2.6c-1.3 0-2.5-.4-3.5-1.1v6.4a5.6 5.6 0 11-5.6-5.6c.2 0 .4 0 .6.03v2.7a2.9 2.9 0 102.4 2.87V3h2.6z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 40));
+
+  document.getElementById('searchBtn').addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('searchNote').classList.add('show');
+  });
+</script>
+
+</body>
+</html>

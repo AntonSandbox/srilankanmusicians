@@ -77,110 +77,79 @@ export function SearchForm() {
   };
 
   return (
-    <div className="search-engine mt-12 mx-auto text-left rounded-lg overflow-visible">
+    <div className="search-panel">
       <form onSubmit={handleSearch}>
-        <div className="se-head">
-          <span className="se-title"><i className="fas fa-search" style={{marginRight:'7px',color:'var(--saffron)'}}></i>Search available talent</span>
-          <span className="se-avail">Search our verified professionals</span>
-        </div>
-        <div className="se-row se-r1">
-          <div className="sf">
-            <label htmlFor="s-occasion">What is your occasion?</label>
-            <div style={{position:'relative'}}>
-              <i className="fas fa-calendar-star sf-ico"></i>
-              <select id="s-occasion" value={occasion} onChange={(e) => setOccasion(e.target.value)}>
-                <option value="none">All Occasions</option>
-                {OCCASIONS.map((group) => (
-                  <optgroup key={group.group} label={group.group}>
-                    {group.items.map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-            </div>
+        <div className="search-grid">
+          <div className="field">
+            <label htmlFor="s-occasion">What is your occasion</label>
+            <select id="s-occasion" value={occasion} onChange={(e) => setOccasion(e.target.value)}>
+              <option value="none">All Occasions</option>
+              {OCCASIONS.map((group) => (
+                <optgroup key={group.group} label={group.group}>
+                  {group.items.map((item) => (
+                    <option key={item} value={item}>{item}</option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
           </div>
-          <div className="sf">
-            <label htmlFor="s-talent">Talent / Service needed</label>
-            <div style={{position:'relative'}}>
-              <i className="fas fa-user-tie sf-ico"></i>
-              <select id="s-talent" value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="none">All Services</option>
-                {SERVICES.map((group) => (
-                  <optgroup key={group.group} label={group.group}>
-                    {group.items.map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="sf">
+          <div className="field">
             <label htmlFor="s-date">Event date</label>
-            <div style={{position:'relative'}}>
-              <i className="fas fa-calendar-alt sf-ico"></i>
-              <input 
-                type="date" 
-                id="s-date" 
-                style={{paddingLeft:'36px'}} 
-                value={date ? format(date, 'yyyy-MM-dd') : ''}
-                onChange={(e) => setDate(e.target.value ? new Date(e.target.value) : undefined)}
-              />
-            </div>
+            <input 
+              type="date" 
+              id="s-date" 
+              value={date ? format(date, 'yyyy-MM-dd') : ''}
+              onChange={(e) => setDate(e.target.value ? new Date(e.target.value) : undefined)}
+            />
+          </div>
+          <div className="field">
+            <label htmlFor="s-talent">Talent type</label>
+            <select id="s-talent" value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option value="none">All Services</option>
+              {SERVICES.map((group) => (
+                <optgroup key={group.group} label={group.group}>
+                  {group.items.map((item) => (
+                    <option key={item} value={item}>{item}</option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
           </div>
         </div>
-        <div className="se-row se-r2">
-          <div className="sf">
+        <div className="search-grid" style={{ marginBottom: '22px' }}>
+          <div className="field">
             <label htmlFor="s-loc">Location</label>
-            <div style={{position:'relative'}}>
-              <i className="fas fa-map-marker-alt sf-ico"></i>
-              <select id="s-loc" value={location} onChange={(e) => setLocation(e.target.value)}>
-                <option value="none">All Locations</option>
-                {LOCATIONS.map((group) => (
-                  <optgroup key={group.group} label={group.group}>
-                    {group.items.map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </optgroup>
-                ))}
-              </select>
-            </div>
+            <select id="s-loc" value={location} onChange={(e) => setLocation(e.target.value)}>
+              <option value="none">All Locations</option>
+              {LOCATIONS.map((group) => (
+                <optgroup key={group.group} label={group.group}>
+                  {group.items.map((item) => (
+                    <option key={item} value={item}>{item}</option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
           </div>
-          <div className="sf">
+          <div className="field">
             <label htmlFor="s-lang">Language</label>
-            <div style={{position:'relative'}}>
-              <i className="fas fa-language sf-ico"></i>
-              <select id="s-lang" value={languages[0] || 'none'} onChange={(e) => setLanguages(e.target.value === 'none' ? [] : [e.target.value])}>
-                <option value="none">Preferred language</option>
-                {LANGUAGES.map(lang => (
-                  <option key={lang} value={lang}>{lang}</option>
-                ))}
-              </select>
-            </div>
+            <select id="s-lang" value={languages[0] || 'none'} onChange={(e) => setLanguages(e.target.value === 'none' ? [] : [e.target.value])}>
+              <option value="none">Preferred language</option>
+              {LANGUAGES.map(lang => (
+                <option key={lang} value={lang}>{lang}</option>
+              ))}
+            </select>
           </div>
-          <div className="sf">
+          <div className="field">
             <label htmlFor="s-budget">Budget range</label>
-            <div style={{position:'relative'}}>
-              <i className="fas fa-coins sf-ico"></i>
-              <select id="s-budget" value={budget} onChange={(e) => setBudget(e.target.value)}>
-                <option value="none">Any Budget</option>
-                {BUDGET_RANGES.map(range => (
-                  <option key={range} value={range}>{range}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="sf" style={{display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-            <label style={{color:'transparent',userSelect:'none'}}>.</label>
-            <div className="se-actions">
-              <button type="submit" className="se-btn">
-                <i className="fas fa-search"></i> Find Available Talent
-              </button>
-            </div>
+            <select id="s-budget" value={budget} onChange={(e) => setBudget(e.target.value)}>
+              <option value="none">Any Budget</option>
+              {BUDGET_RANGES.map(range => (
+                <option key={range} value={range}>{range}</option>
+              ))}
+            </select>
           </div>
         </div>
-        <p className="se-hint">Only professionals available on your date are shown &nbsp;&middot;&nbsp; <strong>Free to search and enquire</strong></p>
+        <button type="submit" className="search-btn">Find Available Talent</button>
       </form>
     </div>
   );

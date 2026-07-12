@@ -1,3 +1,4 @@
+import './home-new.css';
 import { Suspense } from 'react';
 import { SearchForm } from '@/components/search-form';
 import { VendorCard, Vendor } from '@/components/vendor-card';
@@ -106,223 +107,236 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   const cloudflareAccountHash = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
 
   return (
-    <main className="portal-page">
-      {/* NAV */}
-      <nav>
-        <div className="container nav-in">
-          <a href="/" className="nav-logo">
-            <div className="nl-sq"><span>S</span></div>
-            <div className="nl-text">
-              <span className="nl-name">Sri Lankan Event Portal</span>
-              <span className="nl-sub">Find &middot; Check &middot; Book</span>
-            </div>
-          </a>
-          <div className="nav-links">
-            <a href="#vendors" className="nav-a">Find Talent</a>
-            <a href="#occasions" className="nav-a">Occasions</a>
-            <a href="#rates" className="nav-a">Rate Guide</a>
-            <a href="#how-it-works" className="nav-a">How It Works</a>
-            <a href="#faq" className="nav-a">FAQ</a>
-          </div>
-          <a href="#book-direct" className="nav-cta">Tentative Booking</a>
-          <button className="nav-burger" aria-label="Open menu"><span></span><span></span><span></span></button>
+    <div className="new-home">
+      <header id="siteHeader">
+        <div className="wrap">
+          <nav>
+            <a href="/" className="logo">Sri Lankan <span>Event Portal</span></a>
+            <a href="#explore" className="nav-cta">Become a vendor</a>
+          </nav>
         </div>
-      </nav>
+      </header>
 
-      {/* HERO */}
       <section className="hero">
-        <div className="hero-bg"></div>
-        <div className="container hero-content">
-          <div className="hero-kicker"><span className="hero-kicker-dot"></span>Sri Lanka &amp; worldwide diaspora</div>
-          <h1 className="hero-h1">Every event deserves<br />the right <em>talent.</em></h1>
-          <p className="hero-desc">Find verified Sri Lankan event professionals for weddings, birthdays, corporate events, conferences and exhibitions. Check real availability. Request a tentative booking — confirmed with a personalised quote within 24 hours.</p>
+        <div className="wrap">
+          <div className="eyebrow">Sri Lanka's Event Talent, All in One Place</div>
+          <h1>Search Talent for your Event</h1>
 
-          <Suspense fallback={<div className="h-32 bg-white/50 rounded-2xl animate-pulse w-full max-w-5xl mx-auto"></div>}>
+          <Suspense fallback={<div style={{ height: '300px', background: 'var(--cream)', borderRadius: '6px' }}></div>}>
             <SearchForm />
           </Suspense>
         </div>
       </section>
 
-      {/* TRUST BAR */}
-      <div className="trust-bar">
-        <div className="container trust-bar-in">
-          <div className="tb-item"><i className="fas fa-shield-check" style={{ color: 'var(--saffron)' }}></i><span><strong>Personally verified</strong> professionals only</span></div>
-          <div className="tb-sep"></div>
-          <div className="tb-item"><i className="fas fa-clock" style={{ color: 'var(--saffron)' }}></i><span>Booking confirmed with quote within <strong>24 hours</strong></span></div>
-          <div className="tb-sep"></div>
-          <div className="tb-item"><i className="fas fa-calendar-check" style={{ color: 'var(--saffron)' }}></i><span><strong>Live availability</strong> &mdash; only available dates shown</span></div>
-          <div className="tb-sep"></div>
-          <div className="tb-item"><i className="fas fa-globe-asia" style={{ color: 'var(--saffron)' }}></i><span>Sri Lanka &amp; <strong>15+ countries</strong> worldwide</span></div>
-          <div className="tb-sep"></div>
-          <div className="tb-item"><i className="fas fa-gift" style={{ color: 'var(--saffron)' }}></i><span><strong>Free</strong> to search &amp; make tentative bookings</span></div>
-        </div>
-      </div>
-
-      {/* CATEGORY STRIP
-      <div className="cats" id="vendors">
-        <div className="container">
-          <div className="cats-scroll in">
-            <button className="cat-pill on"><span className="cp-icon">✦</span><span className="cp-name">All talent</span><span className="cp-count">542</span></button>
-            <button className="cat-pill"><span className="cp-icon">🎤</span><span className="cp-name">Emcees/ MC/ Compere</span><span className="cp-count">48</span></button>
-            <button className="cat-pill"><span className="cp-icon">💄</span><span className="cp-name">MUA/ Make-up Artist</span><span className="cp-count">61</span></button>
-            <button className="cat-pill"><span className="cp-icon">🎵</span><span className="cp-name">Band</span><span className="cp-count">34</span></button>
-            <button className="cat-pill"><span className="cp-icon">🎧</span><span className="cp-name">DJ</span><span className="cp-count">27</span></button>
-            <button className="cat-pill"><span className="cp-icon">📷</span><span className="cp-name">Photographer</span><span className="cp-count">72</span></button>
-            <button className="cat-pill"><span className="cp-icon">🎂</span><span className="cp-name">Cake Artist</span><span className="cp-count">14</span></button>
+      {hasSearchParams && (
+        <section className="search-results" style={{ padding: '60px 0 20px', background: 'var(--cream)' }}>
+          <div className="wrap">
+            {fetchError ? (
+              <div className="text-center py-12 text-red-500 bg-red-50 rounded-2xl">
+                <p>Oops! Something went wrong while searching. Please try again.</p>
+              </div>
+            ) : vendors.length === 0 ? (
+              <div className="empty-state">
+                <p>No vendors found matching your criteria.</p>
+                <a href="/" className="empty-cta">Clear Filters</a>
+              </div>
+            ) : (
+              <>
+                <div className="section-eyebrow" style={{ marginBottom: '8px' }}>Search Results</div>
+                <h2 style={{ marginBottom: '32px' }}>Available Talent for Your Event</h2>
+                <VendorGrid vendors={vendors} cloudflareAccountHash={cloudflareAccountHash} totalProfessionals={totalProfessionals || 542} />
+              </>
+            )}
           </div>
-        </div>
-      </div> */}
+        </section>
+      )}
 
-      {/* VENDORS GRID */}
-      <div className="vendors">
-        <div className="container">
-          {!hasSearchParams ? (
-            <div className="text-center py-24 bg-white rounded-3xl border border-zinc-200 shadow-sm" style={{ borderColor: 'var(--sand2)', background: 'var(--paper)' }}>
-              <h2 className="text-2xl font-bold mb-2 font-['Cormorant',serif]" style={{ color: 'var(--ink)' }}>Start Your Search</h2>
-              <p style={{ color: 'var(--mist)' }}>Use the filters above to find available vendors.</p>
-            </div>
-          ) : fetchError ? (
-            <div className="text-center py-12 text-red-500 bg-red-50 rounded-2xl">
-              <p>Oops! Something went wrong while searching. Please try again.</p>
-            </div>
-          ) : vendors.length === 0 ? (
-            <div className="text-center py-24 rounded-3xl border shadow-sm" style={{ borderColor: 'var(--sand2)', background: 'var(--paper)' }}>
-              <h2 className="text-2xl font-bold mb-2 font-['Cormorant',serif]" style={{ color: 'var(--ink)' }}>No Vendors Found</h2>
-              <p style={{ color: 'var(--mist)' }}>Try adjusting your filters to find more results.</p>
-            </div>
-          ) : (
-            <>
-              <VendorGrid vendors={vendors} cloudflareAccountHash={cloudflareAccountHash} totalProfessionals={totalProfessionals || 542} />
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* OCCASIONS */}
-      <section className="occ-sec" id="occasions">
-        <div className="container">
-          <span className="sec-eye in">Every occasion</span>
-          <h2 className="sec-h2 in">The right talent for <em>every event</em></h2>
-          <div className="occ-grid">
-            <div className="occ-card in"><div className="oc-icon">💍</div><div className="oc-name">Wedding</div><div className="oc-talents">MC · Photographer · Band · MUA · Planner · Florist · Cake</div></div>
-            <div className="occ-card in"><div className="oc-icon">🎂</div><div className="oc-name">Birthday Party</div><div className="oc-talents">MC · DJ · Photographer · Cake · Decorator</div></div>
-            <div className="occ-card in"><div className="oc-icon">💼</div><div className="oc-name">Corporate Event</div><div className="oc-talents">MC · Speaker · Photographer · Videographer · Band</div></div>
-            <div className="occ-card in"><div className="oc-icon">🎙️</div><div className="oc-name">Conference</div><div className="oc-talents">MC · Speaker · Moderator · Translator · Photographer</div></div>
-            <div className="occ-card in"><div className="oc-icon">🖼️</div><div className="oc-name">Exhibition</div><div className="oc-talents">MC · Promoter · Photographer · Videographer</div></div>
-            <div className="occ-card in"><div className="oc-icon">🎵</div><div className="oc-name">Concert &amp; Show</div><div className="oc-talents">Band · DJ · Vocalist · Dancers · Photographer</div></div>
-            <div className="occ-card in"><div className="oc-icon">🏆</div><div className="oc-name">Awards Ceremony</div><div className="oc-talents">MC · Photographer · Videographer · Band · Décor</div></div>
-            <div className="occ-card in"><div className="oc-icon">💐</div><div className="oc-name">Engagement Party</div><div className="oc-talents">MC · Photographer · Cake · Florist · DJ</div></div>
-          </div>
+      <section className="promise">
+        <div className="wrap">
+          <h2>Free to search. <em>Vendors you can trust.</em></h2>
+          <ul className="benefits-list">
+            <li><span className="check">✓</span> No charge to you, ever — searching, browsing and checking availability is completely free</li>
+            <li><span className="check">✓</span> Every vendor on this platform is screened before being listed</li>
+            <li><span className="check">✓</span> Once you find someone available, you'll speak with them directly to confirm details, pricing and next steps</li>
+            <li><span className="check">✓</span> We handle the discovery — you handle the conversation</li>
+          </ul>
         </div>
       </section>
 
-      {/* RATE GUIDE */}
-      <section className="rates-sec" id="rates">
-        <div className="container">
-          <span className="sec-eye in">Transparent pricing</span>
-          <h2 className="sec-h2 in">Sri Lankan event talent <em>rate guide</em></h2>
-          <p className="sec-p in" style={{ marginBottom: '24px' }}>Typical rate ranges across Sri Lanka. Actual quotes depend on experience level, event duration, location and specific requirements. All quotes are personalised and provided within 24 hours of a tentative booking request.</p>
-          <div className="rates-note in">
-            <i className="fas fa-info-circle"></i>
-            <span>These are <strong>market ranges</strong> — not fixed prices. Entry-level professionals start at the low end; award-winning or internationally experienced professionals command the high end. Overseas events (Australia, UK, UAE) will attract travel and accommodation costs in addition. Final pricing is always confirmed directly with the professional.</span>
-          </div>
-          <table className="rates-table in">
-            <thead>
-              <tr><th>Service</th><th>Entry Level</th><th>Experienced</th><th>Premium / Award-Winning</th><th>Notes</th></tr>
-            </thead>
-            <tbody>
-              <tr><td className="rates-cat">Emcees/ MC/ Compere</td><td>LKR 15,000</td><td>LKR 35,000&ndash;60,000</td><td>LKR 100,000+</td><td>Bilingual usually higher</td></tr>
-              <tr><td className="rates-cat">Photographer</td><td>LKR 25,000</td><td>LKR 50,000&ndash;120,000</td><td>LKR 250,000+</td><td>Per day rate</td></tr>
-              <tr><td className="rates-cat">Band</td><td>LKR 40,000</td><td>LKR 80,000&ndash;150,000</td><td>LKR 300,000+</td><td>Depends on line-up</td></tr>
-              <tr><td className="rates-cat">DJ</td><td>LKR 15,000</td><td>LKR 30,000&ndash;75,000</td><td>LKR 150,000+</td><td>Setup included usually</td></tr>
-              <tr><td className="rates-cat">MUA/ Make-up Artist</td><td>LKR 10,000</td><td>LKR 25,000&ndash;50,000</td><td>LKR 80,000+</td><td>Bridal / airbrush = premium</td></tr>
+      <section className="profiles" id="profiles">
+        <div className="wrap">
+              <div className="section-eyebrow">Browse talent</div>
+              <h2>Every category, ready to book.</h2>
 
-              <tr><td className="rates-cat">Cake Artist</td><td>LKR 8,000</td><td>LKR 25,000&ndash;60,000</td><td>LKR 100,000+</td><td>Tiered / sculpted cakes = premium</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      {/* WHY VERIFIED */}
-      <section className="why-sec">
-        <div className="container">
-          <span className="sec-eye in">Why this portal</span>
-          <h2 className="sec-h2 in">What makes every professional here <em>different</em></h2>
-          <div className="why-grid">
-            <div className="why-card in"><div className="wc-icon"><i className="fas fa-shield-check"></i></div><div className="wc-t">Personally verified</div><p className="wc-d">Every professional is reviewed before listing — experience checked, references confirmed. You will never see an unchecked self-registration on this platform.</p></div>
-            <div className="why-card in"><div className="wc-icon"><i className="fas fa-calendar-check"></i></div><div className="wc-t">Live availability</div><p className="wc-d">Each professional manages a live calendar. Search results show only those genuinely available on your date — no wasted time chasing unavailable vendors.</p></div>
-            <div className="why-card in"><div className="wc-icon"><i className="fas fa-file-invoice"></i></div><div className="wc-t">Quote within 24 hours</div><p className="wc-d">Every tentative booking triggers a personalised quote from the professional — based on your specific event, date and requirements. Not a generic rate card.</p></div>
-            <div className="why-card in"><div className="wc-icon"><i className="fas fa-globe-asia"></i></div><div className="wc-t">Sri Lankans worldwide</div><p className="wc-d">Verified Sri Lankan professionals in Australia, UK, UAE, Canada and beyond. Diaspora weddings and overseas corporate events are equally served.</p></div>
-            <div className="why-card in"><div className="wc-icon"><i className="fas fa-star"></i></div><div className="wc-t">Real reviews only</div><p className="wc-d">Reviews come from verified event organisers who actually used the professional. No anonymous ratings, no inflated scores — only authentic feedback.</p></div>
-            <div className="why-card in"><div className="wc-icon"><i className="fas fa-gift"></i></div><div className="wc-t">Free for organisers</div><p className="wc-d">Search, browse, compare and request tentative bookings completely free. You only deal directly with the professional — no commission, no booking fees.</p></div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="faq-sec" id="faq">
-        <div className="container">
-          <span className="sec-eye in">Common questions</span>
-          <h2 className="sec-h2 in" style={{ textAlign: 'center' }}>Everything you need <em>to know</em></h2>
-          <div className="faq-list">
-            <div className="faq-item in">
-              <button className="faq-q">What is a "tentative booking" and is it binding? <i className="fas fa-plus"></i></button>
-              <div className="faq-a" style={{ maxHeight: '1000px' }}><div className="faq-a-in">A tentative booking is a reservation of interest — not a contract. When you click "Book Tentatively" and fill in the form, your details go directly to the professional via a verified secure link. The professional responds within 24 hours with a personalised quote and confirms their availability. You then decide whether to proceed. No money changes hands until you actively confirm the booking directly with the professional.</div></div>
-            </div>
-            {/* other faqs can be populated here later or left as is for now */}
-          </div>
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer>
-        <div className="container">
-          <div className="ft">
-            <div>
-              <div className="nav-logo" style={{ marginBottom: '14px' }}>
-                <div className="nl-sq"><span>S</span></div>
-                <div className="nl-text">
-                  <span className="nl-name">Sri Lankan Event Portal</span>
-                  <span className="nl-sub">Find &middot; Check &middot; Book</span>
+              <div className="category-block">
+                <div className="category-head"><h3>Emcees &amp; Comperes</h3><a className="view-more" href="https://srilankanmc.com">View all Emcees &amp; Comperes →</a></div>
+                <div className="profile-grid">
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">RJ</div><h4>R. Jayawardena</h4><p>Colombo · 6 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">NF</div><h4>N. Fernando</h4><p>Kandy · 4 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SW</div><h4>S. Wickramasinghe</h4><p>Galle · 8 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DP</div><h4>D. Perera</h4><p>Negombo · 3 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">AR</div><h4>A. Rajapaksa</h4><p>Colombo · 10 yrs</p></div>
                 </div>
               </div>
-              <p className="fb-desc">Sri Lanka's first verified all-event talent platform. From weddings in Colombo to conferences in Dubai — find the right professional, check availability, and book tentatively. Free for event organisers.</p>
-              <div className="fb-soc">
-                <a href="#" title="Instagram"><i className="fab fa-instagram"></i></a>
-                <a href="#" title="Facebook"><i className="fab fa-facebook-f"></i></a>
-                <a href="#" title="LinkedIn"><i className="fab fa-linkedin-in"></i></a>
-                <a href="#" title="YouTube"><i className="fab fa-youtube"></i></a>
-                <a href="#" title="WhatsApp"><i className="fab fa-whatsapp"></i></a>
+
+              <div className="category-block">
+                <div className="category-head"><h3>Bands</h3><a className="view-more" href="https://srilankanband.com">View all Bands →</a></div>
+                <div className="profile-grid">
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">EC</div><h4>Echo Collective</h4><p>Colombo · 6 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CS</div><h4>The Cinnamon Sound</h4><p>Kandy · 9 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">IR</div><h4>Island Rhythm Band</h4><p>Galle · 5 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">VN</div><h4>Velvet Note</h4><p>Negombo · 3 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SS</div><h4>Southern Strings</h4><p>Matara · 7 yrs</p></div>
+                </div>
               </div>
+
+              <div className="category-block">
+                <div className="category-head"><h3>DJs</h3><a className="view-more" href="https://srilankandj.com">View all DJs →</a></div>
+                <div className="profile-grid">
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DK</div><h4>DJ Kavi</h4><p>Colombo · 5 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DN</div><h4>DJ Nethmi</h4><p>Kandy · 4 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DR</div><h4>DJ Rashen</h4><p>Galle · 6 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DI</div><h4>DJ Imesha</h4><p>Negombo · 3 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">DT</div><h4>DJ Tharu</h4><p>Colombo · 8 yrs</p></div>
+                </div>
+              </div>
+
+              <div className="category-block">
+                <div className="category-head"><h3>Makeup Artists</h3><a className="view-more" href="https://srilankanmua.com">View all Makeup Artists →</a></div>
+                <div className="profile-grid">
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">MS</div><h4>M. Silva</h4><p>Colombo · 7 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">TG</div><h4>T. Gunasekara</h4><p>Kandy · 5 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">PD</div><h4>P. Dias</h4><p>Galle · 4 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">KA</div><h4>K. Abeywardena</h4><p>Negombo · 6 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">RS</div><h4>R. Senanayake</h4><p>Colombo · 9 yrs</p></div>
+                </div>
+              </div>
+
+              <div className="category-block">
+                <div className="category-head"><h3>Cake Artists</h3><a className="view-more" href="https://srilankancakeartist.com">View all Cake Artists →</a></div>
+                <div className="profile-grid">
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SL</div><h4>Sweet Layers by Amaya</h4><p>Colombo · 6 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">KC</div><h4>Kandy Cake House</h4><p>Kandy · 8 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">SS</div><h4>Sugar &amp; Spice Studio</h4><p>Galle · 4 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CA</div><h4>The Cake Atelier</h4><p>Negombo · 5 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">BB</div><h4>Blossom Bakes</h4><p>Colombo · 3 yrs</p></div>
+                </div>
+              </div>
+
+              <div className="category-block">
+                <div className="category-head"><h3>Photographers</h3><a className="view-more" href="https://srilankanphotographer.com">View all Photographers →</a></div>
+                <div className="profile-grid">
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">JR</div><h4>J. Ranasinghe</h4><p>Colombo · 7 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">LW</div><h4>L. Wijesuriya</h4><p>Kandy · 5 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">HF</div><h4>H. Fonseka</h4><p>Galle · 6 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">CB</div><h4>C. Bandara</h4><p>Negombo · 4 yrs</p></div>
+                  <div className="profile-card"><div className="sample-tag">Sample</div><div className="profile-avatar">TW</div><h4>T. Weerasinghe</h4><p>Colombo · 9 yrs</p></div>
+                </div>
+              </div>
+
+        </div>
+      </section>
+
+      <section className="explore" id="explore">
+        <div className="wrap">
+          <div className="section-eyebrow">Explore by talent</div>
+          <h2>Every category has its own home — and its own community.</h2>
+          <div className="explore-grid">
+            <a className="explore-card" href="https://srilankanmc.com">
+              <div className="tag">Emcees &amp; Comperes</div>
+              <h3>Book an Emcee or Compere in Sri Lanka</h3>
+              <p>Search and book verified emcees and comperes for any occasion.</p>
+              <span className="link-arrow">Visit Sri Lankan Emcee →</span>
+            </a>
+            <a className="explore-card" href="https://srilankanband.com">
+              <div className="tag">Bands</div>
+              <h3>Book a Live Band in Sri Lanka</h3>
+              <p>Search and book live bands for weddings, corporate events and celebrations.</p>
+              <span className="link-arrow">Visit Sri Lankan Band →</span>
+            </a>
+            <a className="explore-card" href="https://srilankandj.com">
+              <div className="tag">DJs</div>
+              <h3>Book a DJ in Sri Lanka</h3>
+              <p>Search and book DJs for any event, from intimate gatherings to large celebrations.</p>
+              <span className="link-arrow">Visit Sri Lankan DJ →</span>
+            </a>
+            <a className="explore-card" href="https://srilankanmua.com">
+              <div className="tag">Makeup Artists</div>
+              <h3>Book a Makeup Artist in Sri Lanka</h3>
+              <p>Search and book bridal and event makeup artists across the island.</p>
+              <span className="link-arrow">Visit Sri Lankan MUA →</span>
+            </a>
+            <a className="explore-card" href="https://srilankancakeartist.com">
+              <div className="tag">Cake Artists</div>
+              <h3>Book a Cake Artist in Sri Lanka</h3>
+              <p>Search and book cake artists for weddings and celebrations of any size.</p>
+              <span className="link-arrow">Visit Sri Lankan Cake Artist →</span>
+            </a>
+            <a className="explore-card" href="https://srilankanphotographer.com">
+              <div className="tag">Photographers</div>
+              <h3>Book a Photographer in Sri Lanka</h3>
+              <p>Search and book event and wedding photographers, local and diaspora-friendly.</p>
+              <span className="link-arrow">Visit Sri Lankan Photographer →</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="mentors">
+        <div className="wrap">
+          <div className="section-eyebrow">Ambassadors</div>
+          <h2>Hear from Our Mentors</h2>
+          <div className="mentor-grid">
+            <div className="mentor-card">
+              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Emcee mentor video"></div><div className="video-caption">Emcee / Compere</div></div>
+              <div className="mentor-body"><div className="mentor-cat">Emcees &amp; Comperes</div><div className="mentor-name">Vijaya Corea</div></div>
             </div>
-            <div className="fc">
-              <h4>Find Talent</h4>
-              <ul>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Emcees/ MC/ Compere</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>MUA/ Make-up Artist</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Band</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>DJ</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Photographer</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Cake Artist</a></li>
-              </ul>
+            <div className="mentor-card">
+              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Band mentor video"></div><div className="video-caption">Band</div></div>
+              <div className="mentor-body"><div className="mentor-cat">Bands</div><div className="mentor-name">Ambassador to be announced</div></div>
             </div>
-            <div className="fc">
-              <h4>Also in the Network</h4>
-              <ul>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Lankan Wedding MC</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Lankan Wedding MUA</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Wedding Photographer</a></li>
-                <li><a href="#"><i className="fas fa-chevron-right"></i>Wedding Band</a></li>
-              </ul>
+            <div className="mentor-card">
+              <div className="video-box"><div className="play-btn" role="button" aria-label="Play DJ mentor video"></div><div className="video-caption">DJ</div></div>
+              <div className="mentor-body"><div className="mentor-cat">DJs</div><div className="mentor-name">Ambassador to be announced</div></div>
+            </div>
+            <div className="mentor-card">
+              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Makeup Artist mentor video"></div><div className="video-caption">Makeup Artist</div></div>
+              <div className="mentor-body"><div className="mentor-cat">Makeup Artists</div><div className="mentor-name">Ambassador to be announced</div></div>
+            </div>
+            <div className="mentor-card">
+              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Cake Artist mentor video"></div><div className="video-caption">Cake Artist</div></div>
+              <div className="mentor-body"><div className="mentor-cat">Cake Artists</div><div className="mentor-name">Ambassador to be announced</div></div>
+            </div>
+            <div className="mentor-card">
+              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Photographer mentor video"></div><div className="video-caption">Photographer</div></div>
+              <div className="mentor-body"><div className="mentor-cat">Photographers</div><div className="mentor-name">Ambassador to be announced</div></div>
             </div>
           </div>
-          <hr className="f-div" />
-          <div className="f-bot">
-            <p className="f-copy">&copy; 2025 Sri Lankan Event Portal &middot; All rights reserved</p>
-            <div className="f-links"><a href="#">Privacy Policy</a><a href="#">Terms of Use</a><a href="#">Sitemap</a></div>
+        </div>
+      </section>
+
+      <footer>
+        <div className="wrap">
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <span>Powered by MentSpire</span>
+            <span style={{ borderLeft: '1px solid rgba(248,246,241,0.25)', paddingLeft: '20px' }}>Also part of <a href="https://lankanweddingportal.com">Sri Lankan Wedding Portal</a></span>
+          </div>
+          <div className="foot-socials">
+            <a href="https://instagram.com" aria-label="Instagram">
+              <svg viewBox="0 0 24 24"><path d="M12 2c2.7 0 3.05.01 4.12.06 1.07.05 1.8.22 2.44.47.66.26 1.22.6 1.77 1.16.55.55.9 1.11 1.16 1.77.25.63.42 1.37.47 2.44.05 1.07.06 1.42.06 4.12s-.01 3.05-.06 4.12c-.05 1.07-.22 1.8-.47 2.44a4.9 4.9 0 01-1.16 1.77 4.9 4.9 0 01-1.77 1.16c-.63.25-1.37.42-2.44.47-1.07.05-1.42.06-4.12.06s-3.05-.01-4.12-.06c-1.07-.05-1.8-.22-2.44-.47a4.9 4.9 0 01-1.77-1.16 4.9 4.9 0 01-1.16-1.77c-.25-.63-.42-1.37-.47-2.44C2.01 15.05 2 14.7 2 12s.01-3.05.06-4.12c.05-1.07.22-1.8.47-2.44.26-.66.6-1.22 1.16-1.77a4.9 4.9 0 011.77-1.16c.63-.25 1.37-.42 2.44-.47C8.95 2.01 9.3 2 12 2zm0 3.6A6.4 6.4 0 1012 18.4 6.4 6.4 0 0012 5.6zm0 10.57a4.17 4.17 0 110-8.34 4.17 4.17 0 010 8.34zm6.65-10.82a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/></svg>
+            </a>
+            <a href="https://facebook.com" aria-label="Facebook">
+              <svg viewBox="0 0 24 24"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.55-1.5H17V3.7c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.3H8.1V13h2.7v8h2.7z"/></svg>
+            </a>
+            <a href="https://linkedin.com" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24"><path d="M6.94 5a2 2 0 11-4-.02 2 2 0 014 .02zM3.3 8.75h3.6V21H3.3V8.75zm6.3 0h3.45v1.68h.05c.48-.9 1.66-1.85 3.42-1.85 3.66 0 4.33 2.4 4.33 5.53V21h-3.6v-6.2c0-1.48-.03-3.38-2.06-3.38-2.07 0-2.39 1.6-2.39 3.27V21H9.6V8.75z"/></svg>
+            </a>
+            <a href="https://tiktok.com" aria-label="TikTok">
+              <svg viewBox="0 0 24 24"><path d="M16.6 3c.3 1.9 1.6 3.3 3.5 3.5v2.6c-1.3 0-2.5-.4-3.5-1.1v6.4a5.6 5.6 0 11-5.6-5.6c.2 0 .4 0 .6.03v2.7a2.9 2.9 0 102.4 2.87V3h2.6z"/></svg>
+            </a>
           </div>
         </div>
       </footer>
-    </main>
+    </div>
   );
 }
