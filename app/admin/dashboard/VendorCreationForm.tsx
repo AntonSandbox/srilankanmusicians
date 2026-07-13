@@ -21,6 +21,7 @@ export function VendorCreationForm() {
   const [budgetRange, setBudgetRange] = useState('');
   const [languages, setLanguages] = useState<string[]>([]);
   const [occasions, setOccasions] = useState<string[]>([]);
+  const [bio, setBio] = useState('');
   
   const [profileImageId, setProfileImageId] = useState<string>('');
   const [portfolioIds, setPortfolioIds] = useState<string[]>([]);
@@ -60,6 +61,7 @@ export function VendorCreationForm() {
     formData.set('languages', JSON.stringify(languages));
     formData.set('occasions', JSON.stringify(occasions));
     formData.set('portfolio', JSON.stringify(portfolioIds));
+    formData.set('bio', bio);
     if (profileImageId) {
       formData.set('profile_image', profileImageId);
     }
@@ -100,6 +102,19 @@ export function VendorCreationForm() {
           <div className="space-y-2 md:col-span-2">
             <Label htmlFor="name">Vendor Name</Label>
             <Input id="name" name="name" required placeholder="Acme Events" />
+          </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <Label htmlFor="bio">Vendor Bio / Description</Label>
+            <textarea
+              id="bio"
+              name="bio"
+              value={bio}
+              onChange={(e) => setBio(e.target.value)}
+              rows={4}
+              placeholder="Passionate professional ready to make your event unforgettable."
+              className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
           </div>
 
           <div className="space-y-2">

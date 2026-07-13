@@ -15,6 +15,7 @@ CREATE TABLE vendors (
     schedule_url TEXT,
     profile_image TEXT,
     portfolio TEXT[] DEFAULT '{}',
+    bio TEXT DEFAULT 'Passionate professional ready to make your event unforgettable.',
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

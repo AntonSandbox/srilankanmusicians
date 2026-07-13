@@ -26,6 +26,7 @@ export async function createVendorAction(formData: FormData) {
   const profile_image = formData.get('profile_image') as string;
   const budget_range = formData.get('budget_range') as string;
   const video_url = formData.get('video_url') as string;
+  const bio = formData.get('bio') as string;
 
   const languagesRaw = formData.get('languages') as string;
   const occasionsRaw = formData.get('occasions') as string;
@@ -118,6 +119,7 @@ export async function createVendorAction(formData: FormData) {
       profile_image,
       portfolio,
       video_url,
+      bio,
     });
 
     if (dbError) {

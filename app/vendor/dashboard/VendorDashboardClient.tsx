@@ -47,6 +47,7 @@ export function VendorDashboardClient({ vendor, availableRanges, initialReviews 
   const [category, setCategory] = useState(vendor.category || '');
   const [location, setLocation] = useState(vendor.location || '');
   const [budgetRange, setBudgetRange] = useState(vendor.budget_range || '');
+  const [bio, setBio] = useState(vendor.bio || '');
   const [languages, setLanguages] = useState<string[]>(vendor.languages || []);
   const [occasions, setOccasions] = useState<string[]>(vendor.occasions || []);
 
@@ -62,6 +63,7 @@ export function VendorDashboardClient({ vendor, availableRanges, initialReviews 
     formData.set('category', category);
     formData.set('location', location);
     formData.set('budget_range', budgetRange);
+    formData.set('bio', bio);
     formData.set('languages', JSON.stringify(languages));
     formData.set('occasions', JSON.stringify(occasions));
     profileAction(formData);
@@ -160,6 +162,18 @@ export function VendorDashboardClient({ vendor, availableRanges, initialReviews 
               <div>
                 <h3 className="text-lg font-semibold text-[#0F172A] mb-4 border-b border-[rgba(15,23,42,0.12)] pb-2">Basic Details</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2 md:col-span-2">
+                    <Label htmlFor="bio">Vendor Bio / Description</Label>
+                    <textarea
+                      id="bio"
+                      name="bio"
+                      value={bio}
+                      onChange={(e) => setBio(e.target.value)}
+                      rows={4}
+                      placeholder="Passionate professional ready to make your event unforgettable."
+                      className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                  </div>
                   <div className="space-y-2">
                     <Label htmlFor="category">Category</Label>
                     <Select value={category} onValueChange={(val) => setCategory(val || '')}>

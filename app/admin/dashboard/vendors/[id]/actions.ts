@@ -16,6 +16,7 @@ export async function adminUpdateVendorProfile(vendorId: string, prevState: unkn
   const contact_email = formData.get('contact_email') as string;
   const schedule_url = formData.get('schedule_url') as string;
   const video_url = formData.get('video_url') as string;
+  const bio = formData.get('bio') as string;
   const languagesRaw = formData.get('languages') as string;
   const occasionsRaw = formData.get('occasions') as string;
 
@@ -36,7 +37,8 @@ export async function adminUpdateVendorProfile(vendorId: string, prevState: unkn
       languages,
       contact_email,
       schedule_url,
-      video_url
+      video_url,
+      bio
     })
     .eq('id', vendorId);
 

@@ -24,6 +24,7 @@ export interface Vendor {
   review_count?: number;
   created_at?: string;
   video_url?: string | null;
+  bio?: string | null;
 }
 
 interface VendorCardProps {
@@ -239,6 +240,11 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               <h1 className="text-4xl sm:text-5xl font-bold font-serif text-zinc-900 dark:text-zinc-50">
                 {popupVendor.name}
               </h1>
+              {popupVendor.bio && (
+                <p className="mt-6 text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-3xl">
+                  {popupVendor.bio}
+                </p>
+              )}
             </div>
 
             <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 p-6 rounded-lg grid grid-cols-2 md:grid-cols-3 gap-6">
