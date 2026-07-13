@@ -27,7 +27,7 @@ export default async function BrowseCategoryPage(props: { params: Promise<{ cate
           <nav>
             <a href="/" className="logo">Sri Lankan <span>Event Portal</span></a>
             <div className='flex gap-5'>
-              <a href="/#explore" className="nav-cta">Become a vendor</a>
+              <a href="/become-vendor" className="nav-cta">Become a vendor</a>
               <a href="/vendor/login" className="nav-cta">Vendor Login</a>
             </div>
           </nav>
