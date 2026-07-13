@@ -82,8 +82,7 @@ export default function BecomeVendorPage() {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                    style={{ focusRingColor: 'var(--saffron)' }}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#E8960C] focus:border-transparent transition-all"
                     placeholder="Enter your full name"
                   />
                 </div>

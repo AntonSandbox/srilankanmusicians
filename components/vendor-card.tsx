@@ -81,7 +81,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
   return (
     <>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
+        <DialogTrigger render={<div className="contents" />}>
           {triggerType === 'profile-card' ? (
             <div className="profile-card cursor-pointer">
               <div className="profile-avatar">
