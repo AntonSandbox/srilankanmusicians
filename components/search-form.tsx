@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { CalendarIcon, Search } from 'lucide-react';
+import { CalendarIcon, Search, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -24,6 +24,7 @@ import { OCCASIONS, SERVICES, LOCATIONS, LANGUAGES, BUDGET_RANGES } from '@/lib/
 export function SearchForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const [occasion, setOccasion] = useState(searchParams.get('occasion') || '');
   const [category, setCategory] = useState(searchParams.get('category') || '');
@@ -73,7 +74,9 @@ export function SearchForm() {
     if (budget && budget !== 'none') params.set('budget', budget);
     else params.delete('budget');
 
-    router.push(`/?${params.toString()}`);
+    startTransition(() => {
+      router.push(`/?${params.toString()}`);
+    });
   };
 
   return (
@@ -149,7 +152,16 @@ export function SearchForm() {
             </select>
           </div>
         </div>
-        <button type="submit" className="search-btn">Find Available Talent</button>
+        <button type="submit" disabled={isPending} className="search-btn flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+          {isPending ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              Searching...
+            </>
+          ) : (
+            'Find Available Talent'
+          )}
+        </button>
       </form>
     </div>
   );

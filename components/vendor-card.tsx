@@ -39,6 +39,20 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{ success: boolean; error?: string; message?: string } | null>(null);
 
+  const [bookingForm, setBookingForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    occasion: 'Wedding',
+    location: '',
+    requirements: ''
+  });
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    setBookingForm({ ...bookingForm, [e.target.name]: e.target.value });
+  };
+
+
   const [isOpen, setIsOpen] = useState(false);
   const [reviews, setReviews] = useState<any[]>([]);
   const [isLoadingReviews, setIsLoadingReviews] = useState(false);
@@ -51,6 +65,15 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
 
   const [selectedBookingDate, setSelectedBookingDate] = useState<Date | undefined>();
   const [selectedBookingSlot, setSelectedBookingSlot] = useState<'morning' | 'afternoon' | null>(null);
+
+  const isFormValid =
+    bookingForm.name.trim() !== '' &&
+    bookingForm.email.trim() !== '' &&
+    bookingForm.phone.trim() !== '' &&
+    bookingForm.occasion.trim() !== '' &&
+    bookingForm.location.trim() !== '' &&
+    selectedBookingDate !== undefined &&
+    selectedBookingSlot !== null;
 
   useEffect(() => {
     if (isOpen && !hasFetchedReviews) {
@@ -438,6 +461,12 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                 formData.append('vendorName', popupVendor.name);
                 formData.append('date', format(selectedBookingDate, 'yyyy-MM-dd'));
                 formData.append('slot', selectedBookingSlot);
+                formData.append('name', bookingForm.name);
+                formData.append('email', bookingForm.email);
+                formData.append('phone', bookingForm.phone);
+                formData.append('occasion', bookingForm.occasion);
+                formData.append('location', bookingForm.location);
+                formData.append('requirements', bookingForm.requirements);
 
                 const result = await sendTentativeBookingRequest(null, formData);
                 setSubmitResult(result);
@@ -446,19 +475,19 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Your Full Name</label>
-                    <input name="name" required placeholder="Full name" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
+                    <input name="name" value={bookingForm.name} onChange={handleFormChange} required placeholder="Full name" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
                   </div>
                   <div className="space-y-1">
                     <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Email Address</label>
-                    <input name="email" type="email" required placeholder="you@email.com" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
+                    <input name="email" type="email" value={bookingForm.email} onChange={handleFormChange} required placeholder="you@email.com" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
                   </div>
                   <div className="space-y-1">
                     <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">WhatsApp / Mobile</label>
-                    <input name="phone" required placeholder="+94 77 000 0000" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
+                    <input name="phone" value={bookingForm.phone} onChange={handleFormChange} required placeholder="+94 77 000 0000" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
                   </div>
                   <div className="space-y-1">
                     <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Occasion Type</label>
-                    <select name="occasion" required className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50">
+                    <select name="occasion" value={bookingForm.occasion} onChange={handleFormChange} required className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50">
                       <option value="Wedding">Wedding</option>
                       <option value="Corporate Event">Corporate Event</option>
                       <option value="Birthday Party">Birthday Party</option>
@@ -468,7 +497,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                   </div>
                   <div className="space-y-1 md:col-span-2">
                     <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Event Location</label>
-                    <input name="location" required placeholder="City or venue name" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
+                    <input name="location" value={bookingForm.location} onChange={handleFormChange} required placeholder="City or venue name" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
                   </div>
                 </div>
 
@@ -553,7 +582,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
 
                 <div className="space-y-1 pt-2">
                   <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Special Requirements or Questions</label>
-                  <textarea name="requirements" rows={3} placeholder="Guest count, specific language requirements, any special requests..." className="w-full flex rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"></textarea>
+                  <textarea name="requirements" value={bookingForm.requirements} onChange={handleFormChange} rows={3} placeholder="Guest count, specific language requirements, any special requests..." className="w-full flex rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"></textarea>
                 </div>
 
                 <div className="bg-white dark:bg-zinc-900/50 rounded-lg p-4 flex gap-3 text-sm text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-800 mt-6">
@@ -565,11 +594,31 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
 
                 <button
                   type="submit"
-                  disabled={isSubmitting || !!(submitResult && submitResult.success)}
-                  className="w-full flex items-center justify-center gap-2 bg-[#0A101D] hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 h-12 rounded-md font-bold tracking-wider text-sm mt-4 transition-colors disabled:opacity-50"
+                  disabled={!isFormValid || isSubmitting || !!(submitResult && submitResult.success)}
+                  className={`w-full flex items-center justify-center gap-2 h-12 rounded-md font-bold tracking-wider text-sm mt-4 transition-colors ${
+                    submitResult?.success 
+                      ? 'bg-green-600 text-white hover:bg-green-700' 
+                      : !isFormValid
+                        ? 'bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600 cursor-not-allowed'
+                        : 'bg-[#0A101D] hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200'
+                  }`}
                 >
-                  <Send className="w-4 h-4" />
-                  {isSubmitting ? 'SENDING...' : 'SEND TENTATIVE BOOKING REQUEST'}
+                  {isSubmitting ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white dark:border-zinc-900"></div>
+                      SENDING...
+                    </>
+                  ) : submitResult?.success ? (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
+                      REQUEST SENT
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      SEND TENTATIVE BOOKING REQUEST
+                    </>
+                  )}
                 </button>
 
                 <div className="flex flex-wrap justify-center items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400 mt-4">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useActionState } from 'react';
+import { useState, useActionState, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -47,6 +47,27 @@ export function VendorDashboardClient({ vendor, availableSlots, initialReviews }
   const [profileState, profileAction, isProfilePending] = useActionState(updateVendorProfile, null);
   const [reviewState, reviewAction, isReviewPending] = useActionState(addVendorReview, null);
 
+  const [profileSuccess, setProfileSuccess] = useState(false);
+  const [reviewSuccess, setReviewSuccess] = useState(false);
+  const [slotSuccess, setSlotSuccess] = useState(false);
+
+
+  useEffect(() => {
+    if (profileState?.success) {
+      setProfileSuccess(true);
+      const t = setTimeout(() => setProfileSuccess(false), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [profileState?.success]);
+
+  useEffect(() => {
+    if (reviewState?.success) {
+      setReviewSuccess(true);
+      const t = setTimeout(() => setReviewSuccess(false), 3000);
+      return () => clearTimeout(t);
+    }
+  }, [reviewState?.success]);
+
   const [category, setCategory] = useState(vendor.category || '');
   const [location, setLocation] = useState(vendor.location || '');
   const [budgetRange, setBudgetRange] = useState(vendor.budget_range || '');
@@ -92,6 +113,10 @@ export function VendorDashboardClient({ vendor, availableSlots, initialReviews }
       setSelectedDate(undefined);
       setSlotMorning(false);
       setSlotAfternoon(false);
+      
+      setSlotSuccess(true);
+      setTimeout(() => setSlotSuccess(false), 3000);
+      
       router.refresh();
     }
   };
@@ -317,9 +342,14 @@ export function VendorDashboardClient({ vendor, availableSlots, initialReviews }
               </div>
 
               <div className="pt-4">
-                <Button type="submit" disabled={isProfilePending} className="w-full bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A] font-bold text-[14.5px] py-6 rounded-md">
-                  {isProfilePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Save Profile Changes
+                <Button type="submit" disabled={isProfilePending || profileSuccess} className={`w-full font-bold text-[14.5px] py-6 rounded-md transition-colors ${profileSuccess ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A]'}`}>
+                  {isProfilePending ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> SAVING...</>
+                  ) : profileSuccess ? (
+                    <><svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg> SAVED SUCCESSFULLY</>
+                  ) : (
+                    <>Save Profile Changes</>
+                  )}
                 </Button>
               </div>
             </form>
@@ -380,11 +410,16 @@ export function VendorDashboardClient({ vendor, availableSlots, initialReviews }
 
               <Button
                 onClick={handleSaveSlot}
-                disabled={isSubmittingSlot || !selectedDate || (!slotMorning && !slotAfternoon)}
-                className="w-full bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A] font-bold py-6 rounded-md"
+                disabled={isSubmittingSlot || !selectedDate || (!slotMorning && !slotAfternoon) || slotSuccess}
+                className={`w-full font-bold py-6 rounded-md transition-colors ${slotSuccess ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A]'}`}
               >
-                {isSubmittingSlot ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                Save Availability
+                {isSubmittingSlot ? (
+                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> SAVING...</>
+                ) : slotSuccess ? (
+                  <><svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg> SLOT SAVED</>
+                ) : (
+                  <>Save Availability</>
+                )}
               </Button>
             </div>
 
@@ -467,9 +502,14 @@ export function VendorDashboardClient({ vendor, availableSlots, initialReviews }
                   />
                 </div>
 
-                <Button type="submit" disabled={isReviewPending} className="w-full bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A] font-bold py-6 rounded-md mt-2">
-                  {isReviewPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Submit Review
+                <Button type="submit" disabled={isReviewPending || reviewSuccess} className={`w-full font-bold py-6 rounded-md mt-2 transition-colors ${reviewSuccess ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A]'}`}>
+                  {isReviewPending ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> SUBMITTING...</>
+                  ) : reviewSuccess ? (
+                    <><svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg> REVIEW SUBMITTED</>
+                  ) : (
+                    <>Submit Review</>
+                  )}
                 </Button>
               </form>
             </div>

@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { SearchForm } from '@/components/search-form';
 import { VendorCard, Vendor } from '@/components/vendor-card';
 import { VendorGrid } from '@/components/vendor-grid';
+import { SearchResultsList, VendorGridSkeleton } from '@/components/search-results-list';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { Sparkles } from 'lucide-react';
@@ -37,8 +38,10 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
   const hasSearchParams = category || location || (languages && languages.length > 0) || date || occasion || budget;
 
-  let vendors: Vendor[] = [];
-  let fetchError = null;
+  // The search fetching has been moved to SearchResultsList
+
+  // Cloudflare Images uses an Account Hash for delivery, not the API Account ID
+  const cloudflareAccountHash = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
 
   const cookieStore = await cookies();
   const supabase = createServerClient(
@@ -57,59 +60,6 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   const { count: totalProfessionals } = await supabase
     .from('vendors')
     .select('*', { count: 'exact', head: true });
-
-  if (hasSearchParams) {
-
-    const args = {
-      p_category: category || null,
-      p_location: location || null,
-      p_languages: languages || null,
-      p_date: date || null,
-      p_occasion: occasion || null,
-      p_budget: budget || null
-    };
-
-    const { data, error } = await supabase.rpc('search_available_vendors', args);
-
-    if (error) {
-      console.error('Error fetching vendors:', error);
-      fetchError = error;
-    } else if (data) {
-      vendors = data as Vendor[];
-
-      if (vendors.length > 0) {
-        const vendorIds = vendors.map(v => v.id);
-
-        const { data: slots, error: slotsError } = await supabase
-          .from('vendor_availability_slots')
-          .select('vendor_id, date, slot_morning, slot_afternoon')
-          .in('vendor_id', vendorIds);
-
-        const { data: reviewsData, error: reviewsError } = await supabase
-          .from('vendor_reviews')
-          .select('*')
-          .in('vendor_id', vendorIds);
-
-        if (reviewsError) {
-          console.error("Error fetching vendor reviews:", reviewsError);
-        }
-
-        vendors = vendors.map(v => {
-          const vSlots = slots && !slotsError ? slots.filter(r => r.vendor_id === v.id) : [];
-          const vReviews = reviewsData && !reviewsError ? reviewsData.filter(r => r.vendor_id === v.id) : [];
-
-          return {
-            ...v,
-            availabilitySlots: vSlots,
-            review_count: vReviews.length
-          };
-        });
-      }
-    }
-  }
-
-  // Cloudflare Images uses an Account Hash for delivery, not the API Account ID
-  const cloudflareAccountHash = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
 
   const categories = SERVICES[0].items;
   const categoryVendors = await Promise.all(
@@ -154,22 +104,9 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       {hasSearchParams && (
         <section className="search-results" style={{ padding: '60px 0 20px', background: 'var(--cream)' }}>
           <div className="wrap">
-            {fetchError ? (
-              <div className="text-center py-12 text-red-500 bg-red-50 rounded-2xl">
-                <p>Oops! Something went wrong while searching. Please try again.</p>
-              </div>
-            ) : vendors.length === 0 ? (
-              <div className="empty-state">
-                <p>No vendors found matching your criteria.</p>
-                <a href="/" className="empty-cta">Clear Filters</a>
-              </div>
-            ) : (
-              <>
-                <div className="section-eyebrow" style={{ marginBottom: '8px' }}>Search Results</div>
-                <h2 style={{ marginBottom: '32px' }}>Available Talent for Your Event</h2>
-                <VendorGrid vendors={vendors} cloudflareAccountHash={cloudflareAccountHash} totalProfessionals={totalProfessionals || 542} />
-              </>
-            )}
+            <Suspense key={JSON.stringify(searchParams)} fallback={<VendorGridSkeleton />}>
+              <SearchResultsList searchParams={searchParams} cloudflareAccountHash={cloudflareAccountHash} totalProfessionals={totalProfessionals || 542} />
+            </Suspense>
           </div>
         </section>
       )}
