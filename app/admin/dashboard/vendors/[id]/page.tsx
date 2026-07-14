@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { AdminEditVendorClient } from './AdminEditVendorClient';
-import { AvailableRange, VendorReview } from '@/app/vendor/dashboard/VendorDashboardClient';
+import { AvailableSlot, VendorReview } from '@/app/vendor/dashboard/VendorDashboardClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,12 +27,12 @@ export default async function AdminEditVendorPage({ params }: { params: Promise<
     );
   }
 
-  // 2. Fetch available ranges
-  const { data: availableRanges, error: rangesError } = await supabaseAdmin
-    .from('vendor_available_ranges')
+  // 2. Fetch available slots
+  const { data: availableSlots, error: slotsError } = await supabaseAdmin
+    .from('vendor_availability_slots')
     .select('*')
     .eq('vendor_id', id)
-    .order('start_date', { ascending: true });
+    .order('date', { ascending: true });
 
   // 3. Fetch initial reviews
   const { data: reviews, error: reviewsError } = await supabaseAdmin
@@ -41,15 +41,15 @@ export default async function AdminEditVendorPage({ params }: { params: Promise<
     .eq('vendor_id', id)
     .order('review_date', { ascending: false });
 
-  if (rangesError || reviewsError) {
-    console.error('Error fetching vendor extra data:', { rangesError, reviewsError });
+  if (slotsError || reviewsError) {
+    console.error('Error fetching vendor extra data:', { slotsError, reviewsError });
   }
 
   return (
     <div className="space-y-6">
       <AdminEditVendorClient 
         vendor={vendor}
-        availableRanges={(availableRanges as AvailableRange[]) || []}
+        availableSlots={(availableSlots as AvailableSlot[]) || []}
         initialReviews={(reviews as VendorReview[]) || []}
       />
     </div>

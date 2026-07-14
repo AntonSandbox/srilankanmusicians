@@ -19,12 +19,15 @@ CREATE TABLE vendors (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Vendor Available Ranges (Replaced blocked dates)
-CREATE TABLE vendor_available_ranges (
+
+
+-- Vendor Availability Slots (New specific date/slot based availability)
+CREATE TABLE vendor_availability_slots (
     id BIGSERIAL PRIMARY KEY,
     vendor_id UUID NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
-    start_date DATE NOT NULL,
-    end_date DATE NOT NULL
+    date DATE NOT NULL,
+    slot_morning BOOLEAN NOT NULL DEFAULT false,
+    slot_afternoon BOOLEAN NOT NULL DEFAULT false
 );
 
 -- Vendor Reviews Table
@@ -49,8 +52,11 @@ CREATE INDEX idx_vendors_category_location ON vendors (category, location);
 CREATE INDEX idx_vendors_languages ON vendors USING gin (languages);
 CREATE INDEX idx_vendors_occasions ON vendors USING gin (occasions);
 
--- Composite index for fast date range scanning
-CREATE INDEX idx_vendor_ranges_composite ON vendor_available_ranges (vendor_id, start_date, end_date);
+
+
+-- Indexes for fast date slot checking
+CREATE INDEX idx_vendor_slots_vendor_id ON vendor_availability_slots(vendor_id);
+CREATE INDEX idx_vendor_slots_date ON vendor_availability_slots(date);
 
 -- Index for fast review fetching when opening a profile
 CREATE INDEX idx_vendor_reviews_vendor_id ON vendor_reviews (vendor_id);
@@ -69,10 +75,11 @@ ALTER TABLE vendor_reviews ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read access for vendors" ON vendors FOR SELECT USING (true);
 CREATE POLICY "Vendors can update their own profile" ON vendors FOR UPDATE USING (auth.uid() = id);
 
--- Available Ranges Policies
--- Public can read to allow search filtering. Vendors have full control over their own ranges.
-CREATE POLICY "Public read access for ranges" ON vendor_available_ranges FOR SELECT USING (true);
-CREATE POLICY "Vendors can manage their own ranges" ON vendor_available_ranges FOR ALL USING (auth.uid() = vendor_id);
+
+
+ALTER TABLE vendor_availability_slots ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public read access for slots" ON vendor_availability_slots FOR SELECT USING (true);
+CREATE POLICY "Vendors can manage their own slots" ON vendor_availability_slots FOR ALL USING (auth.uid() = vendor_id);
 
 -- Reviews Policies
 -- Public can read to view on the dialog popup. Vendors can manage their own reviews.
@@ -109,14 +116,14 @@ BEGIN
     -- Languages: Uses the @> containment operator to ensure the vendor speaks ALL the requested languages
     AND (p_languages IS NULL OR v.languages @> p_languages)
     
-    -- 3. Date Range Availability Check
-    -- If a date is provided, ensure there is AT LEAST ONE row in their available_ranges table that encapsulates the date
+    -- 3. Date Slots Availability Check
+    -- Ensures there is a row in the vendor_availability_slots table for that exact date with at least one slot open.
     AND (p_date IS NULL OR EXISTS (
-      SELECT 1 
-      FROM vendor_available_ranges ar 
-      WHERE ar.vendor_id = v.id 
-        AND p_date >= ar.start_date 
-        AND p_date <= ar.end_date
+      SELECT 1
+      FROM vendor_availability_slots vas
+      WHERE vas.vendor_id = v.id
+        AND vas.date = p_date
+        AND (vas.slot_morning = true OR vas.slot_afternoon = true)
     ));
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

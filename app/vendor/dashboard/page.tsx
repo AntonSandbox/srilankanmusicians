@@ -21,11 +21,11 @@ export default async function VendorDashboardPage() {
     .eq('id', user.id)
     .single();
 
-  const { data: availableRangesData } = await supabase
-    .from('vendor_available_ranges')
-    .select('id, start_date, end_date')
+  const { data: availableSlotsData } = await supabase
+    .from('vendor_availability_slots')
+    .select('id, date, slot_morning, slot_afternoon')
     .eq('vendor_id', user.id)
-    .order('start_date', { ascending: true });
+    .order('date', { ascending: true });
 
   const { data: reviewsData } = await supabase
     .from('vendor_reviews')
@@ -36,7 +36,7 @@ export default async function VendorDashboardPage() {
   return (
     <VendorDashboardClient 
       vendor={vendorData as Vendor} 
-      availableRanges={availableRangesData || []} 
+      availableSlots={availableSlotsData || []} 
       initialReviews={reviewsData || []}
     />
   );

@@ -12,6 +12,7 @@ export async function sendTentativeBookingRequest(prevState: any, formData: Form
     const email = formData.get('email') as string;
     const phone = formData.get('phone') as string;
     const date = formData.get('date') as string;
+    const slot = formData.get('slot') as string;
     const occasion = formData.get('occasion') as string;
     const location = formData.get('location') as string;
     const requirements = formData.get('requirements') as string;
@@ -45,6 +46,7 @@ export async function sendTentativeBookingRequest(prevState: any, formData: Form
         <h3 style="border-bottom: 1px solid #eee; padding-bottom: 8px;">Event Details</h3>
         <ul style="list-style: none; padding: 0;">
           <li style="margin-bottom: 8px;"><strong>Date:</strong> ${date}</li>
+          <li style="margin-bottom: 8px;"><strong>Slot:</strong> ${slot ? (slot === 'morning' ? 'Morning (9:00 AM - 12:00 PM)' : 'Afternoon (12:00 PM - 5:00 PM)') : 'Not specified'}</li>
           <li style="margin-bottom: 8px;"><strong>Occasion:</strong> ${occasion}</li>
           <li style="margin-bottom: 8px;"><strong>Location:</strong> ${location || 'Not provided'}</li>
         </ul>

@@ -49,35 +49,64 @@ export async function updateVendorProfile(prevState: any, formData: FormData) {
   return { success: 'Profile updated successfully' };
 }
 
-export async function addAvailableRange(from: Date, to: Date) {
+export async function saveAvailabilitySlot(date: Date, slot_morning: boolean, slot_afternoon: boolean) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) return { error: 'Unauthorized' };
 
-  const start_date = format(from, 'yyyy-MM-dd');
-  const end_date = format(to, 'yyyy-MM-dd');
+  const formattedDate = format(date, 'yyyy-MM-dd');
 
-  const { error } = await supabase
-    .from('vendor_available_ranges')
-    .insert({
-      vendor_id: user.id,
-      start_date,
-      end_date
-    });
-    
-  if (error) return { error: error.message };
+  // Check if slot exists
+  const { data: existingSlot } = await supabase
+    .from('vendor_availability_slots')
+    .select('id')
+    .eq('vendor_id', user.id)
+    .eq('date', formattedDate)
+    .single();
+
+  if (existingSlot) {
+    if (!slot_morning && !slot_afternoon) {
+      // If both false, delete the slot
+      const { error } = await supabase
+        .from('vendor_availability_slots')
+        .delete()
+        .eq('id', existingSlot.id);
+      if (error) return { error: error.message };
+    } else {
+      // Update
+      const { error } = await supabase
+        .from('vendor_availability_slots')
+        .update({ slot_morning, slot_afternoon })
+        .eq('id', existingSlot.id);
+      if (error) return { error: error.message };
+    }
+  } else {
+    if (slot_morning || slot_afternoon) {
+      // Insert
+      const { error } = await supabase
+        .from('vendor_availability_slots')
+        .insert({
+          vendor_id: user.id,
+          date: formattedDate,
+          slot_morning,
+          slot_afternoon
+        });
+      if (error) return { error: error.message };
+    }
+  }
+  
   return { success: true };
 }
 
-export async function deleteAvailableRange(id: string) {
+export async function deleteAvailabilitySlot(id: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) return { error: 'Unauthorized' };
 
   const { error } = await supabase
-    .from('vendor_available_ranges')
+    .from('vendor_availability_slots')
     .delete()
     .eq('id', id)
     .eq('vendor_id', user.id);

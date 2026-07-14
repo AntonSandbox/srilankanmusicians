@@ -38,11 +38,11 @@ export async function getVendorsByCategory(category: string, page: number, limit
 
 export async function getFullVendorDetails(vendorId: string) {
   const supabase = await createClient();
-  const [{ data: vendor }, { data: ranges }] = await Promise.all([
+  const [{ data: vendor }, { data: slots }] = await Promise.all([
     supabase.from('vendors').select('*').eq('id', vendorId).single(),
-    supabase.from('vendor_available_ranges').select('start_date, end_date').eq('vendor_id', vendorId)
+    supabase.from('vendor_availability_slots').select('date, slot_morning, slot_afternoon').eq('vendor_id', vendorId)
   ]);
   
   if (!vendor) return null;
-  return { ...vendor, availabilityRanges: ranges || [] };
+  return { ...vendor, availabilitySlots: slots || [] };
 }

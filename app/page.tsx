@@ -80,9 +80,9 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       if (vendors.length > 0) {
         const vendorIds = vendors.map(v => v.id);
 
-        const { data: ranges, error: rangesError } = await supabase
-          .from('vendor_available_ranges')
-          .select('vendor_id, start_date, end_date')
+        const { data: slots, error: slotsError } = await supabase
+          .from('vendor_availability_slots')
+          .select('vendor_id, date, slot_morning, slot_afternoon')
           .in('vendor_id', vendorIds);
 
         const { data: reviewsData, error: reviewsError } = await supabase
@@ -95,12 +95,12 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         }
 
         vendors = vendors.map(v => {
-          const vRanges = ranges && !rangesError ? ranges.filter(r => r.vendor_id === v.id) : [];
+          const vSlots = slots && !slotsError ? slots.filter(r => r.vendor_id === v.id) : [];
           const vReviews = reviewsData && !reviewsError ? reviewsData.filter(r => r.vendor_id === v.id) : [];
 
           return {
             ...v,
-            availabilityRanges: vRanges,
+            availabilitySlots: vSlots,
             review_count: vReviews.length
           };
         });

@@ -50,26 +50,55 @@ export async function adminUpdateVendorProfile(vendorId: string, prevState: unkn
   return { success: 'Profile updated successfully' };
 }
 
-export async function adminAddAvailableRange(vendorId: string, from: Date, to: Date) {
-  const start_date = format(from, 'yyyy-MM-dd');
-  const end_date = format(to, 'yyyy-MM-dd');
+export async function adminSaveAvailabilitySlot(vendorId: string, date: Date, slot_morning: boolean, slot_afternoon: boolean) {
+  const formattedDate = format(date, 'yyyy-MM-dd');
 
-  const { error } = await supabaseAdmin
-    .from('vendor_available_ranges')
-    .insert({
-      vendor_id: vendorId,
-      start_date,
-      end_date
-    });
-    
-  if (error) return { error: error.message };
+  // Check if slot exists
+  const { data: existingSlot } = await supabaseAdmin
+    .from('vendor_availability_slots')
+    .select('id')
+    .eq('vendor_id', vendorId)
+    .eq('date', formattedDate)
+    .single();
+
+  if (existingSlot) {
+    if (!slot_morning && !slot_afternoon) {
+      // If both false, delete the slot
+      const { error } = await supabaseAdmin
+        .from('vendor_availability_slots')
+        .delete()
+        .eq('id', existingSlot.id);
+      if (error) return { error: error.message };
+    } else {
+      // Update
+      const { error } = await supabaseAdmin
+        .from('vendor_availability_slots')
+        .update({ slot_morning, slot_afternoon })
+        .eq('id', existingSlot.id);
+      if (error) return { error: error.message };
+    }
+  } else {
+    if (slot_morning || slot_afternoon) {
+      // Insert
+      const { error } = await supabaseAdmin
+        .from('vendor_availability_slots')
+        .insert({
+          vendor_id: vendorId,
+          date: formattedDate,
+          slot_morning,
+          slot_afternoon
+        });
+      if (error) return { error: error.message };
+    }
+  }
+
   revalidatePath(`/admin/dashboard/vendors/${vendorId}`);
   return { success: true };
 }
 
-export async function adminDeleteAvailableRange(id: string) {
+export async function adminDeleteAvailabilitySlot(id: string) {
   const { error } = await supabaseAdmin
-    .from('vendor_available_ranges')
+    .from('vendor_availability_slots')
     .delete()
     .eq('id', id);
 

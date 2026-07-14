@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Calendar, Globe2, MapPin, Clock, Send, Info, Lock, X, Star } from 'lucide-react';
+
+import { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { sendTentativeBookingRequest } from '@/app/actions/booking';
 import { getVendorReviews, getFullVendorDetails } from '@/app/actions/vendors';
 import { format } from 'date-fns';
+import { Calendar as UICalendar } from '@/components/ui/calendar';
 
 export interface Vendor {
   id: string;
@@ -19,7 +21,7 @@ export interface Vendor {
   schedule_url: string | null;
   profile_image: string | null;
   portfolio: string[];
-  availabilityRanges?: { start_date: string; end_date: string }[];
+  availabilitySlots?: { date: string; slot_morning: boolean; slot_afternoon: boolean }[];
   years_of_experience?: number;
   review_count?: number;
   created_at?: string;
@@ -46,6 +48,9 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
   const [displayVendor, setDisplayVendor] = useState<Vendor>(vendor);
   const [hasFetchedFullProfile, setHasFetchedFullProfile] = useState(false);
   const [isLoadingFull, setIsLoadingFull] = useState(false);
+
+  const [selectedBookingDate, setSelectedBookingDate] = useState<Date | undefined>();
+  const [selectedBookingSlot, setSelectedBookingSlot] = useState<'morning' | 'afternoon' | null>(null);
 
   useEffect(() => {
     if (isOpen && !hasFetchedReviews) {
@@ -77,6 +82,30 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
   };
 
   const popupVendor = triggerType === 'profile-card' ? displayVendor : vendor;
+
+  // Helpers for calendar
+  const availableDates = popupVendor.availabilitySlots?.map(slot => {
+    const [sy, sm, sd] = slot.date.split('-').map(Number);
+    return new Date(sy, sm - 1, sd);
+  }) || [];
+
+  const modifiers = {
+    available: availableDates,
+    unavailable: (date: Date) => {
+      // mark as unavailable if it's not in the available array
+      return !availableDates.some(availDate => availDate.getTime() === date.getTime());
+    }
+  };
+
+  const modifiersClassNames = {
+    available: "bg-green-100 text-green-800 hover:bg-green-200 hover:text-green-900 dark:bg-green-900/50 dark:text-green-300 font-medium",
+    unavailable: "bg-red-50 text-red-300 hover:bg-red-50 hover:text-red-300 dark:bg-red-950/20 dark:text-red-900 line-through opacity-60"
+  };
+
+  const selectedDateStr = selectedBookingDate ? format(selectedBookingDate, 'yyyy-MM-dd') : null;
+  const availableSlotsForSelectedDate = selectedDateStr 
+    ? popupVendor.availabilitySlots?.find(s => s.date === selectedDateStr) 
+    : null;
 
   return (
     <>
@@ -333,17 +362,11 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                   date.setDate(date.getDate() + i + 1);
                   const day = date.getDate();
 
-                  const isAvailable = popupVendor.availabilityRanges?.some(range => {
-                    if (!range.start_date || !range.end_date) return false;
-                    const [sy, sm, sd] = range.start_date.split('-').map(Number);
-                    const start = new Date(sy, sm - 1, sd);
-
-                    const [ey, em, ed] = range.end_date.split('-').map(Number);
-                    const end = new Date(ey, em - 1, ed);
-
+                  const isAvailable = popupVendor.availabilitySlots?.some(slot => {
+                    const [sy, sm, sd] = slot.date.split('-').map(Number);
+                    const sDate = new Date(sy, sm - 1, sd);
                     const checkDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
-                    return checkDate >= start && checkDate <= end;
+                    return checkDate.getTime() === sDate.getTime() && (slot.slot_morning || slot.slot_afternoon);
                   }) ?? false;
 
                   return (
@@ -400,10 +423,22 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               ) : null}
 
               <form action={async (formData) => {
+                if (!selectedBookingDate) {
+                  setSubmitResult({ success: false, error: 'Please select an event date.' });
+                  return;
+                }
+                if (!selectedBookingSlot) {
+                  setSubmitResult({ success: false, error: 'Please select a time slot.' });
+                  return;
+                }
+
                 setIsSubmitting(true);
                 setSubmitResult(null);
                 formData.append('vendorEmail', popupVendor.contact_email || '');
                 formData.append('vendorName', popupVendor.name);
+                formData.append('date', format(selectedBookingDate, 'yyyy-MM-dd'));
+                formData.append('slot', selectedBookingSlot);
+
                 const result = await sendTentativeBookingRequest(null, formData);
                 setSubmitResult(result);
                 setIsSubmitting(false);
@@ -422,10 +457,6 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                     <input name="phone" required placeholder="+94 77 000 0000" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Event Date</label>
-                    <input name="date" type="date" required className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
-                  </div>
-                  <div className="space-y-1">
                     <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Occasion Type</label>
                     <select name="occasion" required className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50">
                       <option value="Wedding">Wedding</option>
@@ -435,13 +466,92 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                       <option value="Other">Other</option>
                     </select>
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-1 md:col-span-2">
                     <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Event Location</label>
                     <input name="location" required placeholder="City or venue name" className="w-full flex h-10 rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50" />
                   </div>
                 </div>
 
-                <div className="space-y-1">
+                <div className="space-y-3 pt-2">
+                  <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Event Date</label>
+                  <div className="flex flex-col lg:flex-row gap-6">
+                    <div className="shrink-0">
+                      <UICalendar
+                        mode="single"
+                        selected={selectedBookingDate}
+                        onSelect={(d) => {
+                          setSelectedBookingDate(d);
+                          setSelectedBookingSlot(null); // reset slot
+                        }}
+                        disabled={(date) => {
+                          const today = new Date();
+                          today.setHours(0,0,0,0);
+                          if (date < today) return true;
+                          return modifiers.unavailable(date);
+                        }}
+                        modifiers={modifiers}
+                        modifiersClassNames={modifiersClassNames}
+                        className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-md shadow-sm p-3 w-fit"
+                      />
+                    </div>
+                    
+                    <div className="flex-1">
+                      {selectedBookingDate ? (
+                        availableSlotsForSelectedDate ? (
+                          <div className="space-y-3">
+                            <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300 block mb-2">
+                              Available Slots for {format(selectedBookingDate, 'MMMM do, yyyy')}
+                            </label>
+                            
+                            {availableSlotsForSelectedDate.slot_morning && (
+                              <label className={`flex items-center gap-3 p-4 border rounded-md cursor-pointer transition-colors ${selectedBookingSlot === 'morning' ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/30' : 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/50'}`}>
+                                <input 
+                                  type="radio" 
+                                  name="slot_selection" 
+                                  value="morning" 
+                                  checked={selectedBookingSlot === 'morning'}
+                                  onChange={() => setSelectedBookingSlot('morning')}
+                                  className="w-4 h-4 text-amber-600 focus:ring-amber-500" 
+                                />
+                                <div>
+                                  <div className="font-semibold text-zinc-900 dark:text-zinc-100">Morning Slot</div>
+                                  <div className="text-sm text-zinc-500">9:00 AM - 12:00 PM</div>
+                                </div>
+                              </label>
+                            )}
+                            
+                            {availableSlotsForSelectedDate.slot_afternoon && (
+                              <label className={`flex items-center gap-3 p-4 border rounded-md cursor-pointer transition-colors ${selectedBookingSlot === 'afternoon' ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/30' : 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/50'}`}>
+                                <input 
+                                  type="radio" 
+                                  name="slot_selection" 
+                                  value="afternoon" 
+                                  checked={selectedBookingSlot === 'afternoon'}
+                                  onChange={() => setSelectedBookingSlot('afternoon')}
+                                  className="w-4 h-4 text-amber-600 focus:ring-amber-500" 
+                                />
+                                <div>
+                                  <div className="font-semibold text-zinc-900 dark:text-zinc-100">Afternoon Slot</div>
+                                  <div className="text-sm text-zinc-500">12:00 PM - 5:00 PM</div>
+                                </div>
+                              </label>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="p-4 bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400 rounded-md border border-red-100 dark:border-red-900/50">
+                            The vendor is not available on {format(selectedBookingDate, 'MMMM do, yyyy')}. Please select a date marked in green.
+                          </div>
+                        )
+                      ) : (
+                        <div className="p-4 bg-zinc-50 text-zinc-500 dark:bg-zinc-900/50 dark:text-zinc-400 rounded-md border border-zinc-100 dark:border-zinc-800 h-full flex items-center justify-center text-center">
+                          Select a highlighted date from the calendar to view available time slots.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-1 pt-2">
                   <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Special Requirements or Questions</label>
                   <textarea name="requirements" rows={3} placeholder="Guest count, specific language requirements, any special requests..." className="w-full flex rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50"></textarea>
                 </div>
