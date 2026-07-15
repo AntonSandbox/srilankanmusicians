@@ -59,10 +59,25 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
   const [hasFetchedReviews, setHasFetchedReviews] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [activePortfolioIndex, setActivePortfolioIndex] = useState(0);
+  const [scrollToBooking, setScrollToBooking] = useState(false);
+
+
 
   const [displayVendor, setDisplayVendor] = useState<Vendor>(vendor);
   const [hasFetchedFullProfile, setHasFetchedFullProfile] = useState(false);
   const [isLoadingFull, setIsLoadingFull] = useState(false);
+
+  useEffect(() => {
+    if (isOpen && scrollToBooking && !isLoadingFull) {
+      const timer = setTimeout(() => {
+        const el = document.getElementById('tentative-booking-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, scrollToBooking, isLoadingFull]);
 
   const [selectedBookingDate, setSelectedBookingDate] = useState<Date | undefined>();
   const [selectedBookingSlot, setSelectedBookingSlot] = useState<'morning' | 'afternoon' | null>(null);
@@ -133,81 +148,114 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
 
   return (
     <>
+      {triggerType === 'profile-card' ? (
+        <div
+          className="profile-card cursor-pointer"
+          onClick={() => { setIsOpen(true); setScrollToBooking(false); }}
+        >
+          <div className="profile-avatar">
+            {vendor.profile_image ? (
+              <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} />
+            ) : (
+              vendor.name.charAt(0).toUpperCase()
+            )}
+          </div>
+          <h4>{vendor.name}</h4>
+          <p>{vendor.location || 'Remote'}</p>
+        </div>
+      ) : (
+        <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+          {/* Top Section */}
+          <div className="flex gap-4 items-center mb-6">
+            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 flex-shrink-0 flex items-center justify-center text-3xl font-serif text-amber-500 shadow-sm border-2 border-white dark:border-zinc-900">
+              {vendor.profile_image ? (
+                <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} className="w-full h-full object-cover" />
+              ) : (
+                vendor.name.charAt(0).toUpperCase()
+              )}
+            </div>
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-auto mt-auto">{vendor.name}</h2>
+              <div className="text-zinc-600 dark:text-zinc-400 font-medium tracking-wide text-sm">{vendor.category}</div>
+            </div>
+          </div>
+
+          {/* Attributes */}
+          <div className="flex flex-col gap-5 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Event Types */}
+              {vendor.occasions && vendor.occasions.length > 0 && (
+                <div>
+                  <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-2">Event Types</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {vendor.occasions.slice(0, 2).map(occ => (
+                      <span key={occ} className="px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded text-[11px] text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">{occ}</span>
+                    ))}
+                    {vendor.occasions.length > 2 && <span className="px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded text-[11px] text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">+{vendor.occasions.length - 2}</span>}
+                  </div>
+                </div>
+              )}
+              {/* Locations */}
+              {vendor.location && (
+                <div>
+                  <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-2">Locations Served</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    <span className="px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded text-[11px] text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">{vendor.location}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+            {/* Languages */}
+            {vendor.languages && vendor.languages.length > 0 && (
+              <div>
+                <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-2">Languages</div>
+                <div className="flex flex-wrap gap-1.5">
+                  <span className="px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded text-[11px] text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">{vendor.languages.slice(0, 2).join(' + ')}{vendor.languages.length > 2 ? ` + ${vendor.languages.length - 2} more` : ''}</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Container (forces alignment) */}
+          <div className="mt-auto flex flex-col gap-6">
+            {/* Budget Box */}
+            {vendor.budget_range ? (
+              <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 px-4 py-3 rounded-lg flex flex-col justify-center shadow-sm w-fit min-w-[160px]">
+                <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-1">Starting From</div>
+                <div className="text-xl font-mono font-bold text-zinc-900 dark:text-zinc-50">
+                  {(() => {
+                    const splitBudget = vendor.budget_range?.split(/[-–]/).map(s => s.trim());
+                    return splitBudget && splitBudget.length > 0 ? splitBudget[0] : vendor.budget_range;
+                  })()}
+                </div>
+              </div>
+            ) : (
+              <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 px-4 py-3 rounded-lg flex flex-col justify-center shadow-sm w-fit min-w-[160px] opacity-0 pointer-events-none select-none">
+                <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-1">Starting From</div>
+                <div className="text-xl font-mono font-bold text-zinc-900 dark:text-zinc-50">-</div>
+              </div>
+            )}
+
+            {/* Buttons */}
+            <div className="grid grid-cols-2 gap-3">
+              <button 
+                onClick={() => { setIsOpen(true); setScrollToBooking(false); }}
+                className="w-full py-2.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-50 rounded-lg font-medium text-sm transition-colors"
+              >
+                Click to view more
+              </button>
+              <button 
+                onClick={() => { setIsOpen(true); setScrollToBooking(true); }}
+                className="w-full py-2.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-50 rounded-lg font-medium text-sm transition-colors"
+              >
+                Book tentatively
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger render={<div className="contents" />}>
-          {triggerType === 'profile-card' ? (
-            <div className="profile-card cursor-pointer">
-              <div className="profile-avatar">
-                {vendor.profile_image ? (
-                  <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} />
-                ) : (
-                  vendor.name.charAt(0).toUpperCase()
-                )}
-              </div>
-              <h4>{vendor.name}</h4>
-              <p>{vendor.location || 'Remote'}</p>
-            </div>
-          ) : (
-            <div className="vcard in cursor-pointer">
-              <div className="vc-top">
-                <div className="vc-badges">
-                  <span className="vb vb-v">✓ Verified</span>
-                  <span className="vb vb-a">Available</span>
-                </div>
-                {vendor.portfolio && vendor.portfolio.length > 0 ? (
-                  <div className="vc-initial overflow-hidden border-0 bg-transparent">
-                    <img src={getImageUrl(vendor.portfolio[0])} alt={vendor.name} className="w-full h-full object-cover" />
-                  </div>
-                ) : (
-                  <div className="vc-initial">{vendor.name.charAt(0).toUpperCase()}</div>
-                )}
-                <div className="vc-avail-bar">
-                  <span className="vab-dot"></span>
-                  <span className="vab-txt">Next available: see profile calendar</span>
-                </div>
-              </div>
-              <div className="vc-body">
-                <div className="vc-cat">{vendor.category}</div>
-                <div className="vc-name">{vendor.name}</div>
-                <div className="vc-tagline">{vendor.occasions?.join(' · ')}</div>
-                <div className="vc-meta">
-                  <span className="vc-m"><i className="fas fa-map-marker-alt"></i>{vendor.location || 'Remote'}</span>
-                  {vendor.years_of_experience && <span className="vc-m"><i className="fas fa-star"></i>{vendor.years_of_experience} yrs exp.</span>}
-                </div>
-                <div className="vc-stars">
-                  <span className="vc-rc">{vendor.review_count || 0} {(vendor.review_count === 1) ? 'review' : 'reviews'}</span>
-                </div>
-                <div className="vc-skills">
-                  {vendor.languages?.map(lang => (
-                    <span key={lang} className="vsk vsk-hl">{lang}</span>
-                  ))}
-                  {vendor.occasions?.slice(0, 2).map(occ => (
-                    <span key={occ} className="vsk">{occ}</span>
-                  ))}
-                </div>
-                <div className="vc-foot">
-                  <div className="vc-rate">
-                    <span className="vc-rate-lbl">From</span>
-                    {(() => {
-                      const splitBudget = vendor.budget_range?.split(/[-–]/).map(s => s.trim());
-                      const isRange = splitBudget && splitBudget.length === 2;
-                      if (isRange) {
-                        return (
-                          <>
-                            <span className="vc-rate-val">{splitBudget[0]}</span>
-                            <span className="vc-rate-range">Up to {splitBudget[1]}</span>
-                          </>
-                        )
-                      }
-                      return <span className="vc-rate-val text-sm">{vendor.budget_range || 'Contact'}</span>
-                    })()}
-                  </div>
-                  <button className="vc-book">Book Tentatively</button>
-                </div>
-              </div>
-            </div>
-          )}
-        </DialogTrigger>
         <DialogContent showCloseButton={false} className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[60vw] w-full max-h-[calc(100dvh-4rem)] overflow-y-auto p-0 gap-0 border-0 bg-white dark:bg-zinc-950">
           <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-0 z-50">
             <DialogTitle className="text-xl font-bold font-serif">{popupVendor.name}</DialogTitle>
@@ -380,8 +428,8 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                           <div
                             key={idx}
                             className={`flex-shrink-0 w-24 sm:w-full aspect-[4/3] sm:aspect-video rounded-md overflow-hidden cursor-pointer shadow-sm transition-all border-2 ${activePortfolioIndex === idx
-                                ? 'border-amber-500 scale-[1.02] ring-2 ring-amber-500/20'
-                                : 'border-transparent hover:border-amber-300/50 opacity-70 hover:opacity-100'
+                              ? 'border-amber-500 scale-[1.02] ring-2 ring-amber-500/20'
+                              : 'border-transparent hover:border-amber-300/50 opacity-70 hover:opacity-100'
                               }`}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -423,7 +471,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               </div>
 
               {/* Tentative Booking Section */}
-              <div className="mt-16">
+              <div className="mt-16" id="tentative-booking-section">
                 <h2 className="text-2xl font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-6">Tentative Booking</h2>
 
                 <form action={async (formData) => {
@@ -592,10 +640,10 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                     type="submit"
                     disabled={!isFormValid || isSubmitting || !!(submitResult && submitResult.success)}
                     className={`w-full flex items-center justify-center gap-2 h-14 rounded-lg font-bold tracking-wider text-sm transition-all ${submitResult?.success
-                        ? 'bg-green-600 text-white hover:bg-green-700 shadow-md'
-                        : !isFormValid
-                          ? 'bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600 cursor-not-allowed'
-                          : 'bg-[#0A101D] hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                      ? 'bg-green-600 text-white hover:bg-green-700 shadow-md'
+                      : !isFormValid
+                        ? 'bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600 cursor-not-allowed'
+                        : 'bg-[#0A101D] hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
                       }`}
                   >
                     {isSubmitting ? (
