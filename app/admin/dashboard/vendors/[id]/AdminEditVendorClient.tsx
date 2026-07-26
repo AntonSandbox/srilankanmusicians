@@ -218,7 +218,9 @@ export function AdminEditVendorClient({ vendor, availableSlots, initialReviews }
                         <SelectValue placeholder="Select Budget Range" />
                       </SelectTrigger>
                       <SelectContent>
-                        {BUDGET_RANGES.map((range) => (
+                        {(category === 'Emcees/ MC/ Compere' || category === 'Cake Artist' 
+                          ? ['Under LKR 25,000', 'LKR 25,000 – 50,000', 'LKR 50,000 – 100,000', 'LKR 100,000 – 200,000', 'Above LKR 200,000'] 
+                          : BUDGET_RANGES).map((range) => (
                           <SelectItem key={range} value={range}>{range}</SelectItem>
                         ))}
                       </SelectContent>

@@ -42,7 +42,7 @@ export default function BecomeVendorPage() {
       <header id="siteHeader">
         <div className="wrap">
           <nav>
-            <a href="/" className="logo">Sri Lankan <span>Event Portal</span></a>
+            <a href="/" className="logo"><img src="/srilankan_event_portal.png" alt="Sri Lankan Event Portal" style={{ height: '40px', width: 'auto' }} /></a>
             <div className='flex gap-5'>
               <a href="/become-vendor" className="nav-cta">Become a vendor</a>
               <a href="/vendor/login" className="nav-cta">Vendor Login</a>
@@ -141,7 +141,7 @@ export default function BecomeVendorPage() {
       <footer>
         <div className="wrap">
           <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
-            <span>Powered by MentSpire</span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>Powered by <img src="/MentSpire_logo.svg" alt="MentSpire" style={{ height: '20px', width: 'auto' }} /></span>
             <span style={{ borderLeft: '1px solid rgba(248,246,241,0.25)', paddingLeft: '20px' }}>Also part of <a href="https://lankanweddingportal.com">Sri Lankan Wedding Portal</a></span>
           </div>
         </div>
