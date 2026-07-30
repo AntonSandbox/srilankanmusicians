@@ -21,7 +21,7 @@ export interface Vendor {
   schedule_url: string | null;
   profile_image: string | null;
   portfolio: string[];
-  availabilitySlots?: { date: string; slot_morning: boolean; slot_afternoon: boolean }[];
+  unavailableSlots?: { date: string; start_time: string; end_time: string }[];
   years_of_experience?: number;
   review_count?: number;
   created_at?: string;
@@ -67,7 +67,8 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
         requirements: ''
       });
       setSelectedBookingDate(undefined);
-      setSelectedBookingSlot(null);
+      setBookingStartTime('');
+      setBookingEndTime('');
       setSubmitResult(null);
       setIsSubmitting(false);
     }
@@ -98,7 +99,8 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
   }, [isOpen, scrollToBooking, isLoadingFull]);
 
   const [selectedBookingDate, setSelectedBookingDate] = useState<Date | undefined>();
-  const [selectedBookingSlot, setSelectedBookingSlot] = useState<'morning' | 'afternoon' | null>(null);
+  const [bookingStartTime, setBookingStartTime] = useState('');
+  const [bookingEndTime, setBookingEndTime] = useState('');
 
   const isFormValid =
     bookingForm.name.trim() !== '' &&
@@ -107,7 +109,8 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
     bookingForm.occasion.trim() !== '' &&
     bookingForm.location.trim() !== '' &&
     selectedBookingDate !== undefined &&
-    selectedBookingSlot !== null;
+    bookingStartTime !== '' &&
+    bookingEndTime !== '';
 
   useEffect(() => {
     if (isOpen && !hasFetchedReviews) {
@@ -140,29 +143,10 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
 
   const popupVendor = triggerType === 'profile-card' ? displayVendor : vendor;
 
-  // Helpers for calendar
-  const availableDates = popupVendor.availabilitySlots?.map(slot => {
-    const [sy, sm, sd] = slot.date.split('-').map(Number);
-    return new Date(sy, sm - 1, sd);
-  }) || [];
-
-  const modifiers = {
-    available: availableDates,
-    unavailable: (date: Date) => {
-      // mark as unavailable if it's not in the available array
-      return !availableDates.some(availDate => availDate.getTime() === date.getTime());
-    }
-  };
-
-  const modifiersClassNames = {
-    available: "bg-green-100 text-green-800 hover:bg-green-200 hover:text-green-900 dark:bg-green-900/50 dark:text-green-300 font-medium",
-    unavailable: "bg-red-50 text-red-300 hover:bg-red-50 hover:text-red-300 dark:bg-red-950/20 dark:text-red-900 line-through opacity-60"
-  };
-
   const selectedDateStr = selectedBookingDate ? format(selectedBookingDate, 'yyyy-MM-dd') : null;
-  const availableSlotsForSelectedDate = selectedDateStr
-    ? popupVendor.availabilitySlots?.find(s => s.date === selectedDateStr)
-    : null;
+  const unavailableSlotsForSelectedDate = selectedDateStr
+    ? popupVendor.unavailableSlots?.filter(s => s.date === selectedDateStr)
+    : [];
 
   return (
     <>
@@ -497,8 +481,8 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                     setSubmitResult({ success: false, error: 'Please select an event date.' });
                     return;
                   }
-                  if (!selectedBookingSlot) {
-                    setSubmitResult({ success: false, error: 'Please select a time slot.' });
+                  if (!bookingStartTime || !bookingEndTime) {
+                    setSubmitResult({ success: false, error: 'Please select a start and end time.' });
                     return;
                   }
 
@@ -507,7 +491,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                   formData.append('vendorEmail', popupVendor.contact_email || '');
                   formData.append('vendorName', popupVendor.name);
                   formData.append('date', format(selectedBookingDate, 'yyyy-MM-dd'));
-                  formData.append('slot', selectedBookingSlot);
+                  formData.append('slot', `${bookingStartTime} to ${bookingEndTime}`);
                   formData.append('name', bookingForm.name);
                   formData.append('email', bookingForm.email);
                   formData.append('phone', bookingForm.phone);
@@ -529,7 +513,8 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                       requirements: ''
                     });
                     setSelectedBookingDate(undefined);
-                    setSelectedBookingSlot(null);
+                    setBookingStartTime('');
+                    setBookingEndTime('');
 
                     setTimeout(() => {
                       setSubmitResult(null);
@@ -546,78 +531,78 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                           selected={selectedBookingDate}
                           onSelect={(d) => {
                             setSelectedBookingDate(d);
-                            setSelectedBookingSlot(null);
+                            setBookingStartTime('');
+                            setBookingEndTime('');
                             if (submitResult?.success) setSubmitResult(null);
                           }}
                           disabled={(date) => {
                             const today = new Date();
                             today.setHours(0, 0, 0, 0);
-                            if (date < today) return true;
-                            return modifiers.unavailable(date);
+                            return date < today;
                           }}
-                          modifiers={modifiers}
-                          modifiersClassNames={modifiersClassNames}
                           className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm p-3 w-fit"
                         />
                       </div>
 
                       <div className="flex-1 space-y-3">
                         {selectedBookingDate ? (
-                          availableSlotsForSelectedDate ? (
-                            <div className="space-y-4">
-                              <label className="text-sm font-bold text-zinc-700 dark:text-zinc-300 block">
-                                Available Slots for {format(selectedBookingDate, 'MMMM do, yyyy')}
-                              </label>
+                          <div className="space-y-4">
+                            <label className="text-sm font-bold text-zinc-700 dark:text-zinc-300 block">
+                              Availability for {format(selectedBookingDate, 'MMMM do, yyyy')}
+                            </label>
 
-                              <div className="space-y-3">
-                                {availableSlotsForSelectedDate.slot_morning && (
-                                  <label className={`flex items-center gap-4 p-5 border rounded-lg cursor-pointer transition-all ${selectedBookingSlot === 'morning' ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/30 shadow-md ring-1 ring-amber-500' : 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 bg-white dark:bg-zinc-950 shadow-sm'}`}>
-                                    <input
-                                      type="radio"
-                                      name="slot_selection"
-                                      value="morning"
-                                      checked={selectedBookingSlot === 'morning'}
-                                      onChange={() => {
-                                        setSelectedBookingSlot('morning');
-                                        if (submitResult?.success) setSubmitResult(null);
-                                      }}
-                                      className="w-5 h-5 text-amber-600 focus:ring-amber-500"
-                                    />
-                                    <div>
-                                      <div className="font-bold text-zinc-900 dark:text-zinc-100 text-lg">Morning Slot</div>
-                                      <div className="text-sm text-zinc-500 mt-1">9:00 AM - 12:00 PM</div>
-                                    </div>
-                                  </label>
-                                )}
+                            {unavailableSlotsForSelectedDate && unavailableSlotsForSelectedDate.length > 0 ? (
+                              <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 p-4 rounded-lg">
+                                <p className="text-sm text-red-800 dark:text-red-300 font-medium mb-3">
+                                  Vendor is already booked during these times:
+                                </p>
+                                <ul className="space-y-1.5 mb-4">
+                                  {unavailableSlotsForSelectedDate.map((slot, i) => (
+                                    <li key={i} className="text-xs text-red-700 dark:text-red-400 font-medium flex items-center gap-2">
+                                      <Clock className="w-3.5 h-3.5" />
+                                      {slot.start_time.substring(0, 5)} - {slot.end_time.substring(0, 5)}
+                                    </li>
+                                  ))}
+                                </ul>
+                                <p className="text-xs text-red-700 dark:text-red-400">
+                                  Please select a time range that does not overlap with the above slots.
+                                </p>
+                              </div>
+                            ) : (
+                              <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900/30 p-4 rounded-lg">
+                                <p className="text-sm text-green-800 dark:text-green-300 font-medium">
+                                  Vendor is available all day. Please select your preferred time range.
+                                </p>
+                              </div>
+                            )}
 
-                                {availableSlotsForSelectedDate.slot_afternoon && (
-                                  <label className={`flex items-center gap-4 p-5 border rounded-lg cursor-pointer transition-all ${selectedBookingSlot === 'afternoon' ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/30 shadow-md ring-1 ring-amber-500' : 'border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 bg-white dark:bg-zinc-950 shadow-sm'}`}>
-                                    <input
-                                      type="radio"
-                                      name="slot_selection"
-                                      value="afternoon"
-                                      checked={selectedBookingSlot === 'afternoon'}
-                                      onChange={() => {
-                                        setSelectedBookingSlot('afternoon');
-                                        if (submitResult?.success) setSubmitResult(null);
-                                      }}
-                                      className="w-5 h-5 text-amber-600 focus:ring-amber-500"
-                                    />
-                                    <div>
-                                      <div className="font-bold text-zinc-900 dark:text-zinc-100 text-lg">Afternoon Slot</div>
-                                      <div className="text-sm text-zinc-500 mt-1">12:00 PM - 5:00 PM</div>
-                                    </div>
-                                  </label>
-                                )}
+                            <div className="grid grid-cols-2 gap-4 mt-4">
+                              <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Start Time</label>
+                                <input
+                                  type="time"
+                                  value={bookingStartTime}
+                                  onChange={(e) => {
+                                    setBookingStartTime(e.target.value);
+                                    if (submitResult?.success) setSubmitResult(null);
+                                  }}
+                                  className="w-full h-10 rounded-md border border-zinc-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 transition-colors"
+                                />
+                              </div>
+                              <div className="space-y-1.5">
+                                <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">End Time</label>
+                                <input
+                                  type="time"
+                                  value={bookingEndTime}
+                                  onChange={(e) => {
+                                    setBookingEndTime(e.target.value);
+                                    if (submitResult?.success) setSubmitResult(null);
+                                  }}
+                                  className="w-full h-10 rounded-md border border-zinc-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 transition-colors"
+                                />
                               </div>
                             </div>
-                          ) : (
-                            <div className="p-6 bg-red-50 text-red-700 dark:bg-red-950/30 dark:text-red-400 rounded-lg border border-red-100 dark:border-red-900/50 flex flex-col items-center justify-center h-full text-center space-y-2">
-                              <X className="w-8 h-8 opacity-50" />
-                              <p>The vendor is not available on <strong>{format(selectedBookingDate, 'MMMM do, yyyy')}</strong>.</p>
-                              <p className="text-sm opacity-80">Please select a date marked in green on the calendar.</p>
-                            </div>
-                          )
+                          </div>
                         ) : (
                           <div className="p-6 bg-zinc-50 text-zinc-500 dark:bg-zinc-900/50 dark:text-zinc-400 rounded-lg border border-zinc-100 dark:border-zinc-800 h-full flex flex-col items-center justify-center text-center space-y-2">
                             <Calendar className="w-8 h-8 opacity-20" />

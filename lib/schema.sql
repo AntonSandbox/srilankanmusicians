@@ -21,13 +21,22 @@ CREATE TABLE vendors (
 
 
 
--- Vendor Availability Slots (New specific date/slot based availability)
+-- Vendor Availability Slots (Old logic - kept for backward compatibility)
 CREATE TABLE vendor_availability_slots (
     id BIGSERIAL PRIMARY KEY,
     vendor_id UUID NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
     date DATE NOT NULL,
     slot_morning BOOLEAN NOT NULL DEFAULT false,
     slot_afternoon BOOLEAN NOT NULL DEFAULT false
+);
+
+-- Vendor Unavailable Slots (New custom time slot based unavailability)
+CREATE TABLE vendor_unavailable_slots (
+    id BIGSERIAL PRIMARY KEY,
+    vendor_id UUID NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
+    date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL
 );
 
 -- Vendor Reviews Table
@@ -58,6 +67,10 @@ CREATE INDEX idx_vendors_occasions ON vendors USING gin (occasions);
 CREATE INDEX idx_vendor_slots_vendor_id ON vendor_availability_slots(vendor_id);
 CREATE INDEX idx_vendor_slots_date ON vendor_availability_slots(date);
 
+-- Indexes for fast unavailable slots checking
+CREATE INDEX idx_vendor_unavailable_slots_vendor_id ON vendor_unavailable_slots(vendor_id);
+CREATE INDEX idx_vendor_unavailable_slots_date ON vendor_unavailable_slots(date);
+
 -- Index for fast review fetching when opening a profile
 CREATE INDEX idx_vendor_reviews_vendor_id ON vendor_reviews (vendor_id);
 
@@ -80,6 +93,10 @@ CREATE POLICY "Vendors can update their own profile" ON vendors FOR UPDATE USING
 ALTER TABLE vendor_availability_slots ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read access for slots" ON vendor_availability_slots FOR SELECT USING (true);
 CREATE POLICY "Vendors can manage their own slots" ON vendor_availability_slots FOR ALL USING (auth.uid() = vendor_id);
+
+ALTER TABLE vendor_unavailable_slots ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public read access for unavailable slots" ON vendor_unavailable_slots FOR SELECT USING (true);
+CREATE POLICY "Vendors can manage their own unavailable slots" ON vendor_unavailable_slots FOR ALL USING (auth.uid() = vendor_id);
 
 -- Reviews Policies
 -- Public can read to view on the dialog popup. Vendors can manage their own reviews.
@@ -117,13 +134,16 @@ BEGIN
     AND (p_languages IS NULL OR v.languages @> p_languages)
     
     -- 3. Date Slots Availability Check
-    -- Ensures there is a row in the vendor_availability_slots table for that exact date with at least one slot open.
-    AND (p_date IS NULL OR EXISTS (
+    -- Ensures they don't have an unavailable slot that covers the entire day (00:00 to 23:59)
+    -- If they have specific slots, they are still considered available for that date in search results,
+    -- users will just have to pick a non-overlapping time slot.
+    AND (p_date IS NULL OR NOT EXISTS (
       SELECT 1
-      FROM vendor_availability_slots vas
-      WHERE vas.vendor_id = v.id
-        AND vas.date = p_date
-        AND (vas.slot_morning = true OR vas.slot_afternoon = true)
+      FROM vendor_unavailable_slots vus
+      WHERE vus.vendor_id = v.id
+        AND vus.date = p_date
+        AND vus.start_time = '00:00:00'
+        AND vus.end_time = '23:59:59'
     ));
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

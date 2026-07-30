@@ -64,8 +64,8 @@ export async function SearchResultsList({
       const vendorIds = vendors.map(v => v.id);
 
       const { data: slots, error: slotsError } = await supabase
-        .from('vendor_availability_slots')
-        .select('vendor_id, date, slot_morning, slot_afternoon')
+        .from('vendor_unavailable_slots')
+        .select('vendor_id, date, start_time, end_time')
         .in('vendor_id', vendorIds);
 
       const { data: reviewsData, error: reviewsError } = await supabase
@@ -83,7 +83,7 @@ export async function SearchResultsList({
 
         return {
           ...v,
-          availabilitySlots: vSlots,
+          unavailableSlots: vSlots,
           review_count: vReviews.length
         };
       });

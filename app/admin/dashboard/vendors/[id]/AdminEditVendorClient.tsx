@@ -1,31 +1,29 @@
 'use client';
 
-import { useState, useActionState } from 'react';
+import { useState, useActionState, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { adminUpdateVendorProfile, adminSaveAvailabilitySlot, adminDeleteAvailabilitySlot, adminAddVendorReview, adminDeleteVendorReview } from './actions';
+import { adminUpdateVendorProfile, adminAddUnavailableSlot, adminClearUnavailableSlots, adminDeleteUnavailableSlot, adminAddVendorReview, adminDeleteVendorReview } from './actions';
 import { Loader2, Trash2, Star, User, CalendarDays, MessageSquare } from 'lucide-react';
 import { Vendor } from '@/components/vendor-card';
 import { format } from 'date-fns';
 import { OCCASIONS, SERVICES, LOCATIONS, LANGUAGES, BUDGET_RANGES } from '@/lib/constants';
 import { DateRange } from 'react-day-picker';
 import { useRouter } from 'next/navigation';
-import { AvailableSlot, VendorReview } from '@/app/vendor/dashboard/VendorDashboardClient';
+import { UnavailableSlot, VendorReview } from '@/app/vendor/dashboard/VendorDashboardClient';
+import { VendorCalendar } from '@/components/vendor-calendar';
 
 interface AdminEditVendorClientProps {
   vendor: Vendor;
-  availableSlots: AvailableSlot[];
+  unavailableSlots: UnavailableSlot[];
   initialReviews: VendorReview[];
 }
 
-export function AdminEditVendorClient({ vendor, availableSlots, initialReviews }: AdminEditVendorClientProps) {
+export function AdminEditVendorClient({ vendor, unavailableSlots, initialReviews }: AdminEditVendorClientProps) {
   const router = useRouter();
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
-  const [slotMorning, setSlotMorning] = useState(false);
-  const [slotAfternoon, setSlotAfternoon] = useState(false);
   const [isSubmittingSlot, setIsSubmittingSlot] = useState(false);
   const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const [isDeletingReview, setIsDeletingReview] = useState<string | null>(null);
@@ -62,34 +60,27 @@ export function AdminEditVendorClient({ vendor, availableSlots, initialReviews }
     profileAction(formData);
   };
 
-  const handleSaveSlot = async () => {
-    if (!selectedDate) {
-      alert('Please select a date.');
-      return;
-    }
-    if (!slotMorning && !slotAfternoon) {
-      alert('Please select at least one time slot.');
-      return;
-    }
-
+  // Availability handlers for VendorCalendar
+  const handleAddSlot = async (dates: string[], start: string, end: string) => {
     setIsSubmittingSlot(true);
-    const result = await adminSaveAvailabilitySlot(vendor.id, selectedDate, slotMorning, slotAfternoon);
+    const result = await adminAddUnavailableSlot(vendor.id, dates, start, end);
     setIsSubmittingSlot(false);
+    if (result.error) alert(result.error);
+    else router.refresh();
+  };
 
-    if (result.error) {
-      alert(`Failed to save availability: ${result.error}`);
-    } else {
-      setSelectedDate(undefined);
-      setSlotMorning(false);
-      setSlotAfternoon(false);
-      router.refresh();
-    }
+  const handleClearSlots = async (dates: string[]) => {
+    setIsSubmittingSlot(true);
+    const result = await adminClearUnavailableSlots(vendor.id, dates);
+    setIsSubmittingSlot(false);
+    if (result.error) alert(result.error);
+    else router.refresh();
   };
 
   const handleDeleteSlot = async (id: string) => {
-    setIsDeleting(id);
-    const result = await adminDeleteAvailabilitySlot(id);
-    setIsDeleting(null);
+    setIsSubmittingSlot(true);
+    const result = await adminDeleteUnavailableSlot(id, vendor.id);
+    setIsSubmittingSlot(false);
 
     if (result.error) {
       alert(`Failed to delete availability: ${result.error}`);
@@ -320,102 +311,13 @@ export function AdminEditVendorClient({ vendor, availableSlots, initialReviews }
 
         {/* Availability Panel */}
         {activeTab === 'availability' && (
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <div className="lg:col-span-2 bg-white p-6 rounded-lg shadow-[0_12px_30px_rgba(15,23,42,0.08)] border border-[rgba(15,23,42,0.12)] flex flex-col items-center">
-              <h2 className="text-xl font-medium vendor-heading mb-2 w-full text-center" style={{ color: '#0F172A' }}>Add Availability</h2>
-              <p className="text-xs text-gray-500 mb-6 text-center w-full">Select a date and available time slots.</p>
-
-              <div className="w-full flex justify-center mb-6">
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(date) => {
-                    setSelectedDate(date);
-                    if (date) {
-                      const formattedDate = format(date, 'yyyy-MM-dd');
-                      const existing = availableSlots.find(s => s.date === formattedDate);
-                      if (existing) {
-                        setSlotMorning(existing.slot_morning);
-                        setSlotAfternoon(existing.slot_afternoon);
-                      } else {
-                        setSlotMorning(false);
-                        setSlotAfternoon(false);
-                      }
-                    }
-                  }}
-                  className="bg-[#F8F6F1] rounded-md border border-[rgba(15,23,42,0.08)] shadow-sm"
-                />
-              </div>
-
-              <div className="w-full space-y-4 mb-6 px-4">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="slot_morning"
-                    checked={slotMorning}
-                    onChange={(e) => setSlotMorning(e.target.checked)}
-                    className="w-4 h-4 text-[#E8960C] border-gray-300 rounded focus:ring-[#E8960C]"
-                  />
-                  <Label htmlFor="slot_morning" className="text-sm font-medium cursor-pointer">Morning Slot (9:00 AM - 12:00 PM)</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="slot_afternoon"
-                    checked={slotAfternoon}
-                    onChange={(e) => setSlotAfternoon(e.target.checked)}
-                    className="w-4 h-4 text-[#E8960C] border-gray-300 rounded focus:ring-[#E8960C]"
-                  />
-                  <Label htmlFor="slot_afternoon" className="text-sm font-medium cursor-pointer">Afternoon Slot (12:00 PM - 5:00 PM)</Label>
-                </div>
-              </div>
-
-              <Button
-                onClick={handleSaveSlot}
-                disabled={isSubmittingSlot || !selectedDate || (!slotMorning && !slotAfternoon)}
-                className="w-full bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A] font-bold py-6 rounded-md"
-              >
-                {isSubmittingSlot ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                Save Availability
-              </Button>
-            </div>
-
-            <div className="lg:col-span-3 bg-white p-8 rounded-lg shadow-[0_12px_30px_rgba(15,23,42,0.08)] border border-[rgba(15,23,42,0.12)]">
-              <h2 className="text-2xl font-medium vendor-heading mb-6" style={{ color: '#0F172A' }}>Available Dates</h2>
-              {availableSlots.length === 0 ? (
-                <div className="bg-[#F8F6F1] border border-dashed border-[rgba(15,23,42,0.2)] rounded-lg p-8 text-center">
-                  <CalendarDays className="w-8 h-8 text-[rgba(15,23,42,0.4)] mx-auto mb-3" />
-                  <p className="text-sm text-[#1B2740] font-medium">No available dates saved yet.</p>
-                  <p className="text-xs text-gray-500 mt-1">Use the calendar to add your available slots.</p>
-                </div>
-              ) : (
-                <ul className="space-y-3">
-                  {availableSlots.map(slot => (
-                    <li key={slot.id} className="flex items-center justify-between bg-[#F8F6F1] border border-[rgba(15,23,42,0.08)] p-4 rounded-lg">
-                      <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-[#0F172A]">
-                          {format(new Date(slot.date), 'MMM d, yyyy')}
-                        </span>
-                        <div className="flex gap-2 mt-1">
-                          {slot.slot_morning && <span className="text-xs bg-[#E8960C] text-[#0F172A] px-2 py-0.5 rounded-full font-medium">Morning (9am-12pm)</span>}
-                          {slot.slot_afternoon && <span className="text-xs bg-[#E8960C] text-[#0F172A] px-2 py-0.5 rounded-full font-medium">Afternoon (12pm-5pm)</span>}
-                        </div>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors"
-                        disabled={isDeleting === slot.id}
-                        onClick={() => handleDeleteSlot(slot.id)}
-                      >
-                        {isDeleting === slot.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                      </Button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
+          <VendorCalendar
+            unavailableSlots={unavailableSlots}
+            onAddSlot={handleAddSlot}
+            onClearSlots={handleClearSlots}
+            onDeleteSlot={handleDeleteSlot}
+            isSubmitting={isSubmittingSlot}
+          />
         )}
 
         {/* Reviews Panel */}

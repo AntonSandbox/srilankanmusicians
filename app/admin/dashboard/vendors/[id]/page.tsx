@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { AdminEditVendorClient } from './AdminEditVendorClient';
-import { AvailableSlot, VendorReview } from '@/app/vendor/dashboard/VendorDashboardClient';
+import { UnavailableSlot, VendorReview } from '@/app/vendor/dashboard/VendorDashboardClient';
 
 export const dynamic = 'force-dynamic';
 
@@ -27,9 +27,9 @@ export default async function AdminEditVendorPage({ params }: { params: Promise<
     );
   }
 
-  // 2. Fetch available slots
-  const { data: availableSlots, error: slotsError } = await supabaseAdmin
-    .from('vendor_availability_slots')
+  // 2. Fetch unavailable slots
+  const { data: unavailableSlots, error: slotsError } = await supabaseAdmin
+    .from('vendor_unavailable_slots')
     .select('*')
     .eq('vendor_id', id)
     .order('date', { ascending: true });
@@ -49,7 +49,7 @@ export default async function AdminEditVendorPage({ params }: { params: Promise<
     <div className="space-y-6">
       <AdminEditVendorClient 
         vendor={vendor}
-        availableSlots={(availableSlots as AvailableSlot[]) || []}
+        unavailableSlots={(unavailableSlots as UnavailableSlot[]) || []}
         initialReviews={(reviews as VendorReview[]) || []}
       />
     </div>

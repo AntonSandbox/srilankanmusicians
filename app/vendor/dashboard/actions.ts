@@ -49,64 +49,51 @@ export async function updateVendorProfile(prevState: any, formData: FormData) {
   return { success: 'Profile updated successfully' };
 }
 
-export async function saveAvailabilitySlot(date: Date, slot_morning: boolean, slot_afternoon: boolean) {
+export async function addUnavailableSlot(dates: string[], start_time: string, end_time: string) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) return { error: 'Unauthorized' };
 
-  const formattedDate = format(date, 'yyyy-MM-dd');
+  const inserts = dates.map(date => ({
+    vendor_id: user.id,
+    date,
+    start_time,
+    end_time
+  }));
 
-  // Check if slot exists
-  const { data: existingSlot } = await supabase
-    .from('vendor_availability_slots')
-    .select('id')
-    .eq('vendor_id', user.id)
-    .eq('date', formattedDate)
-    .single();
+  const { error } = await supabase
+    .from('vendor_unavailable_slots')
+    .insert(inserts);
 
-  if (existingSlot) {
-    if (!slot_morning && !slot_afternoon) {
-      // If both false, delete the slot
-      const { error } = await supabase
-        .from('vendor_availability_slots')
-        .delete()
-        .eq('id', existingSlot.id);
-      if (error) return { error: error.message };
-    } else {
-      // Update
-      const { error } = await supabase
-        .from('vendor_availability_slots')
-        .update({ slot_morning, slot_afternoon })
-        .eq('id', existingSlot.id);
-      if (error) return { error: error.message };
-    }
-  } else {
-    if (slot_morning || slot_afternoon) {
-      // Insert
-      const { error } = await supabase
-        .from('vendor_availability_slots')
-        .insert({
-          vendor_id: user.id,
-          date: formattedDate,
-          slot_morning,
-          slot_afternoon
-        });
-      if (error) return { error: error.message };
-    }
-  }
-  
+  if (error) return { error: error.message };
   return { success: true };
 }
 
-export async function deleteAvailabilitySlot(id: string) {
+export async function clearUnavailableSlots(dates: string[]) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) return { error: 'Unauthorized' };
 
   const { error } = await supabase
-    .from('vendor_availability_slots')
+    .from('vendor_unavailable_slots')
+    .delete()
+    .eq('vendor_id', user.id)
+    .in('date', dates);
+
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function deleteUnavailableSlot(id: string) {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) return { error: 'Unauthorized' };
+
+  const { error } = await supabase
+    .from('vendor_unavailable_slots')
     .delete()
     .eq('id', id)
     .eq('vendor_id', user.id);

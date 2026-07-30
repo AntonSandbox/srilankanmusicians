@@ -50,59 +50,43 @@ export async function adminUpdateVendorProfile(vendorId: string, prevState: unkn
   return { success: 'Profile updated successfully' };
 }
 
-export async function adminSaveAvailabilitySlot(vendorId: string, date: Date, slot_morning: boolean, slot_afternoon: boolean) {
-  const formattedDate = format(date, 'yyyy-MM-dd');
+export async function adminAddUnavailableSlot(vendorId: string, dates: string[], start_time: string, end_time: string) {
+  const inserts = dates.map(date => ({
+    vendor_id: vendorId,
+    date,
+    start_time,
+    end_time
+  }));
 
-  // Check if slot exists
-  const { data: existingSlot } = await supabaseAdmin
-    .from('vendor_availability_slots')
-    .select('id')
-    .eq('vendor_id', vendorId)
-    .eq('date', formattedDate)
-    .single();
+  const { error } = await supabaseAdmin
+    .from('vendor_unavailable_slots')
+    .insert(inserts);
 
-  if (existingSlot) {
-    if (!slot_morning && !slot_afternoon) {
-      // If both false, delete the slot
-      const { error } = await supabaseAdmin
-        .from('vendor_availability_slots')
-        .delete()
-        .eq('id', existingSlot.id);
-      if (error) return { error: error.message };
-    } else {
-      // Update
-      const { error } = await supabaseAdmin
-        .from('vendor_availability_slots')
-        .update({ slot_morning, slot_afternoon })
-        .eq('id', existingSlot.id);
-      if (error) return { error: error.message };
-    }
-  } else {
-    if (slot_morning || slot_afternoon) {
-      // Insert
-      const { error } = await supabaseAdmin
-        .from('vendor_availability_slots')
-        .insert({
-          vendor_id: vendorId,
-          date: formattedDate,
-          slot_morning,
-          slot_afternoon
-        });
-      if (error) return { error: error.message };
-    }
-  }
-
+  if (error) return { error: error.message };
   revalidatePath(`/admin/dashboard/vendors/${vendorId}`);
   return { success: true };
 }
 
-export async function adminDeleteAvailabilitySlot(id: string) {
+export async function adminClearUnavailableSlots(vendorId: string, dates: string[]) {
   const { error } = await supabaseAdmin
-    .from('vendor_availability_slots')
+    .from('vendor_unavailable_slots')
+    .delete()
+    .eq('vendor_id', vendorId)
+    .in('date', dates);
+
+  if (error) return { error: error.message };
+  revalidatePath(`/admin/dashboard/vendors/${vendorId}`);
+  return { success: true };
+}
+
+export async function adminDeleteUnavailableSlot(id: string, vendorId: string) {
+  const { error } = await supabaseAdmin
+    .from('vendor_unavailable_slots')
     .delete()
     .eq('id', id);
 
   if (error) return { error: error.message };
+  revalidatePath(`/admin/dashboard/vendors/${vendorId}`);
   return { success: true };
 }
 
