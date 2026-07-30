@@ -191,11 +191,13 @@
           <label for="budget">Budget range</label>
           <select id="budget">
             <option value="">Select budget range</option>
-            <option>Under LKR 25,000</option>
-            <option>LKR 25,000 – 50,000</option>
+            <option>Under LKR 20,000</option>
+            <option>LKR 20,000 – 50,000</option>
             <option>LKR 50,000 – 100,000</option>
-            <option>LKR 100,000 – 200,000</option>
-            <option>Above LKR 200,000</option>
+            <option>LKR 100,000 – 250,000</option>
+            <option>LKR 250,000 – 500,000</option>
+            <option>LKR 500,000+</option>
+            <option>Flexible — show all</option>
           </select>
         </div>
       </div>
@@ -399,6 +401,38 @@
     e.preventDefault();
     document.getElementById('searchNote').classList.add('show');
   });
+
+  const talentTypeSelect = document.getElementById('talenttype');
+  const budgetSelect = document.getElementById('budget');
+  const defaultBudgetOptions = `
+    <option value="">Select budget range</option>
+    <option>Under LKR 20,000</option>
+    <option>LKR 20,000 – 50,000</option>
+    <option>LKR 50,000 – 100,000</option>
+    <option>LKR 100,000 – 250,000</option>
+    <option>LKR 250,000 – 500,000</option>
+    <option>LKR 500,000+</option>
+    <option>Flexible — show all</option>
+  `;
+  const specialBudgetOptions = `
+    <option value="">Select budget range</option>
+    <option>Under LKR 25,000</option>
+    <option>LKR 25,000 – 50,000</option>
+    <option>LKR 50,000 – 100,000</option>
+    <option>LKR 100,000 – 200,000</option>
+    <option>Above LKR 200,000</option>
+  `;
+
+  if (talentTypeSelect && budgetSelect) {
+    talentTypeSelect.addEventListener('change', function(e) {
+      const val = e.target.value;
+      if (val === 'Emcee / Compere' || val === 'Cake Artist') {
+        budgetSelect.innerHTML = specialBudgetOptions;
+      } else {
+        budgetSelect.innerHTML = defaultBudgetOptions;
+      }
+    });
+  }
 </script>
 
 </body>

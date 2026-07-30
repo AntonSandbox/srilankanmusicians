@@ -601,6 +601,52 @@
   }
 }
 
+@media (max-width: 768px) {
+  .new-home .wrap {
+    padding: 0 12px;
+  }
+
+  .new-home nav {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .new-home nav .flex {
+    gap: 6px !important;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .new-home .logo {
+    flex-shrink: 1;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 4px;
+  }
+
+  .new-home .logo img {
+    height: auto !important;
+    max-height: 36px !important;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  
+  .new-home .nav-cta {
+    padding: 0 10px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+    height: 30px !important;
+  }
+}
+
 @media (max-width: 560px) {
   .new-home .search-grid {
     grid-template-columns: 1fr;

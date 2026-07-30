@@ -47,7 +47,12 @@ export async function createVendorAction(formData: FormData) {
   if (location && !validLocations.includes(location)) {
     return { success: false, error: `Invalid location submitted.` };
   }
-  if (budget_range && !BUDGET_RANGES.includes(budget_range)) {
+  const specialBudgetRanges = ['Under LKR 25,000', 'LKR 25,000 – 50,000', 'LKR 50,000 – 100,000', 'LKR 100,000 – 200,000', 'Above LKR 200,000'];
+  const allowedBudgetRanges = (category === 'Emcees/ MC/ Compere' || category === 'Cake Artist') 
+    ? specialBudgetRanges 
+    : BUDGET_RANGES;
+
+  if (budget_range && !allowedBudgetRanges.includes(budget_range)) {
     return { success: false, error: `Invalid budget range submitted.` };
   }
   if (video_url && !/^https?:\/\/(www\.)?(youtube\.com|youtu\.be)\/.*$/.test(video_url)) {
@@ -67,7 +72,7 @@ export async function createVendorAction(formData: FormData) {
   try {
     // 1. Try to create the user
     let userId: string;
-    
+
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: login_email,
       password: crypto.randomUUID(),
@@ -76,14 +81,7 @@ export async function createVendorAction(formData: FormData) {
 
     if (authError) {
       if (authError.message.includes('already been registered')) {
-        // If user exists, find their ID
-        const { data: existingUsers } = await supabaseAdmin.auth.admin.listUsers();
-        const existing = existingUsers.users.find(u => u.email === login_email);
-        if (existing) {
-          userId = existing.id;
-        } else {
-          throw new Error('User already registered but could not retrieve ID.');
-        }
+        throw new Error('An account with this login email already exists.');
       } else {
         throw new Error(`Failed to create user: ${authError.message}`);
       }

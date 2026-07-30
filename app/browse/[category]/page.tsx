@@ -1,6 +1,7 @@
 import { SERVICES } from '@/lib/constants';
 import { BrowseClient } from './BrowseClient';
 import '@/app/home-new.css';
+import type { Metadata } from 'next';
 
 function getCategoryFromSlug(slug: string) {
   for (const cat of SERVICES[0].items) {
@@ -8,6 +9,23 @@ function getCategoryFromSlug(slug: string) {
     if (catSlug === slug) return cat;
   }
   return null;
+}
+
+export async function generateMetadata(props: { params: Promise<{ category: string }> }): Promise<Metadata> {
+  const params = await props.params;
+  const categoryName = getCategoryFromSlug(params.category);
+  
+  if (!categoryName) return { title: 'Category Not Found' };
+  
+  return {
+    title: `Book ${categoryName} in Sri Lanka`,
+    description: `Browse and book top-rated ${categoryName} for your events in Sri Lanka. Read reviews, check availability, and contact directly.`,
+    openGraph: {
+      title: `Book ${categoryName} in Sri Lanka | Sri Lankan Event Portal`,
+      description: `Browse and book top-rated ${categoryName} for your events in Sri Lanka. Read reviews, check availability, and contact directly.`,
+      url: `/browse/${params.category}`,
+    }
+  };
 }
 
 export default async function BrowseCategoryPage(props: { params: Promise<{ category: string }> }) {

@@ -50,10 +50,28 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setBookingForm({ ...bookingForm, [e.target.name]: e.target.value });
+    if (submitResult?.success) setSubmitResult(null);
   };
 
 
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setBookingForm({
+        name: '',
+        email: '',
+        phone: '',
+        occasion: 'Wedding',
+        location: '',
+        requirements: ''
+      });
+      setSelectedBookingDate(undefined);
+      setSelectedBookingSlot(null);
+      setSubmitResult(null);
+      setIsSubmitting(false);
+    }
+  }, [isOpen]);
   const [reviews, setReviews] = useState<any[]>([]);
   const [isLoadingReviews, setIsLoadingReviews] = useState(false);
   const [hasFetchedReviews, setHasFetchedReviews] = useState(false);
@@ -153,9 +171,9 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
           className="profile-card cursor-pointer"
           onClick={() => { setIsOpen(true); setScrollToBooking(false); }}
         >
-          <div className="profile-avatar">
+          <div className="profile-avatar overflow-hidden">
             {vendor.profile_image ? (
-              <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} />
+              <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} className="w-full h-full object-cover" />
             ) : (
               vendor.name.charAt(0).toUpperCase()
             )}
@@ -237,16 +255,16 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
             )}
 
             {/* Buttons */}
-            <div className="grid grid-cols-2 gap-3">
-              <button 
+            <div className="grid grid-cols-2 gap-3 mt-1">
+              <button
                 onClick={() => { setIsOpen(true); setScrollToBooking(false); }}
-                className="w-full py-2.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-50 rounded-lg font-medium text-sm transition-colors"
+                className="w-full py-2.5 bg-[#F8F6F1] hover:bg-[#EFEAE0] text-[#1D4A34] border border-[#1D4A34]/15 rounded-[4px] font-semibold text-[13.5px] transition-colors"
               >
                 Click to view more
               </button>
-              <button 
+              <button
                 onClick={() => { setIsOpen(true); setScrollToBooking(true); }}
-                className="w-full py-2.5 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-50 rounded-lg font-medium text-sm transition-colors"
+                className="w-full py-2.5 bg-[#996515] hover:bg-[#E67E22] text-white rounded-[4px] font-semibold text-[13.5px] transition-colors shadow-sm"
               >
                 Book tentatively
               </button>
@@ -500,6 +518,23 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                   const result = await sendTentativeBookingRequest(null, formData);
                   setSubmitResult(result);
                   setIsSubmitting(false);
+
+                  if (result.success) {
+                    setBookingForm({
+                      name: '',
+                      email: '',
+                      phone: '',
+                      occasion: 'Wedding',
+                      location: '',
+                      requirements: ''
+                    });
+                    setSelectedBookingDate(undefined);
+                    setSelectedBookingSlot(null);
+
+                    setTimeout(() => {
+                      setSubmitResult(null);
+                    }, 5000);
+                  }
                 }} className="space-y-8">
 
                   <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 p-6 sm:p-8 rounded-xl shadow-sm">
@@ -512,6 +547,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                           onSelect={(d) => {
                             setSelectedBookingDate(d);
                             setSelectedBookingSlot(null);
+                            if (submitResult?.success) setSubmitResult(null);
                           }}
                           disabled={(date) => {
                             const today = new Date();
@@ -541,7 +577,10 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                                       name="slot_selection"
                                       value="morning"
                                       checked={selectedBookingSlot === 'morning'}
-                                      onChange={() => setSelectedBookingSlot('morning')}
+                                      onChange={() => {
+                                        setSelectedBookingSlot('morning');
+                                        if (submitResult?.success) setSubmitResult(null);
+                                      }}
                                       className="w-5 h-5 text-amber-600 focus:ring-amber-500"
                                     />
                                     <div>
@@ -558,7 +597,10 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                                       name="slot_selection"
                                       value="afternoon"
                                       checked={selectedBookingSlot === 'afternoon'}
-                                      onChange={() => setSelectedBookingSlot('afternoon')}
+                                      onChange={() => {
+                                        setSelectedBookingSlot('afternoon');
+                                        if (submitResult?.success) setSubmitResult(null);
+                                      }}
                                       className="w-5 h-5 text-amber-600 focus:ring-amber-500"
                                     />
                                     <div>
@@ -639,11 +681,11 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                   <button
                     type="submit"
                     disabled={!isFormValid || isSubmitting || !!(submitResult && submitResult.success)}
-                    className={`w-full flex items-center justify-center gap-2 h-14 rounded-lg font-bold tracking-wider text-sm transition-all ${submitResult?.success
-                      ? 'bg-green-600 text-white hover:bg-green-700 shadow-md'
+                    className={`w-full flex items-center justify-center gap-2 h-14 rounded-[4px] font-bold tracking-wider text-[13.5px] transition-all ${submitResult?.success
+                      ? 'bg-[#1D4A34] text-white shadow-md'
                       : !isFormValid
-                        ? 'bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600 cursor-not-allowed'
-                        : 'bg-[#0A101D] hover:bg-zinc-800 text-white dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5'
+                        ? 'bg-[#F8F6F1] text-[#1D4A34]/40 border border-[#1D4A34]/10 cursor-not-allowed'
+                        : 'bg-[#E67E22] hover:bg-[#996515] text-white shadow-lg hover:shadow-xl hover:-translate-y-0.5'
                       }`}
                   >
                     {isSubmitting ? (

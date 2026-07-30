@@ -19,9 +19,52 @@ export function SetupPasswordForm() {
   const router = useRouter();
   const supabase = createClient();
 
+  const [vendor, setVendor] = useState<{ name: string; profile_image: string | null } | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+
   useEffect(() => {
-    // Check if there is a session already
-    supabase.auth.getSession();
+    async function initSession() {
+      const params = new URLSearchParams(window.location.search);
+      const token_hash = params.get('token_hash');
+      const type = params.get('type') as EmailOtpType;
+
+      let userId = null;
+
+      if (token_hash && type) {
+        setIsVerifying(true);
+        const { data, error: verifyError } = await supabase.auth.verifyOtp({
+          token_hash,
+          type,
+        });
+
+        if (verifyError) {
+          setErrorMsg(`Link is invalid or has expired: ${verifyError.message}`);
+        } else if (data?.session) {
+          userId = data.session.user.id;
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        setIsVerifying(false);
+      } else {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          userId = session.user.id;
+        }
+      }
+
+      if (userId) {
+        const { data: vendorData } = await supabase
+          .from('vendors')
+          .select('name, profile_image')
+          .eq('id', userId)
+          .single();
+          
+        if (vendorData) {
+          setVendor(vendorData);
+        }
+      }
+    }
+
+    initSession();
   }, [supabase.auth]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,30 +85,9 @@ export function SetupPasswordForm() {
     setIsLoading(true);
 
     try {
-      // Extract token_hash and type from URL parameters
-      const params = new URLSearchParams(window.location.search);
-      const token_hash = params.get('token_hash');
-      const type = params.get('type') as EmailOtpType;
-
-      if (token_hash && type) {
-        // Exchange the token hash for a session
-        const { error: verifyError } = await supabase.auth.verifyOtp({
-          token_hash,
-          type,
-        });
-
-        if (verifyError) {
-          throw new Error(`Link is invalid or has expired: ${verifyError.message}`);
-        }
-        
-        // Remove token_hash from URL so it's not reused
-        window.history.replaceState({}, document.title, window.location.pathname);
-      } else {
-        // Fallback: check if the user is already authenticated (e.g. from a hash or previous session)
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) {
-          throw new Error('Authentication required. Please use the link sent to your email.');
-        }
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error('Authentication required. Please use the link sent to your email.');
       }
 
       const { error } = await supabase.auth.updateUser({ password });
@@ -96,6 +118,30 @@ export function SetupPasswordForm() {
         <h2 className="text-2xl font-bold tracking-tight">Set up your password</h2>
         <p className="text-sm text-muted-foreground">Please create a strong password for your vendor account.</p>
       </div>
+
+      {isVerifying ? (
+        <div className="flex justify-center items-center py-4">
+          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        </div>
+      ) : vendor ? (
+        <div className="flex flex-col items-center justify-center p-4 bg-slate-50 border rounded-md mb-4 space-y-3">
+          {vendor.profile_image ? (
+            <img 
+              src={vendor.profile_image.startsWith('http') ? vendor.profile_image : `https://imagedelivery.net/${process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg'}/${vendor.profile_image}/public`} 
+              alt={vendor.name} 
+              className="w-16 h-16 rounded-full object-cover border-2 border-[#E8960C]"
+            />
+          ) : (
+            <div className="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center border-2 border-[#E8960C]">
+              <span className="text-xl font-bold text-slate-500">{vendor.name.charAt(0)}</span>
+            </div>
+          )}
+          <div className="text-center">
+            <p className="text-xs text-muted-foreground uppercase font-semibold tracking-wider">Setting up password for</p>
+            <p className="font-bold text-lg text-[#0F172A]">{vendor.name}</p>
+          </div>
+        </div>
+      ) : null}
 
       {successMsg && (
         <div className="p-3 bg-green-50 text-green-700 border border-green-200 rounded-md text-sm">

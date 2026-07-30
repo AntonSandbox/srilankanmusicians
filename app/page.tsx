@@ -14,8 +14,19 @@ function getCategorySlug(category: string) {
 }
 
 export const metadata = {
-  title: 'Find Your Perfect Wedding Vendor',
-  description: 'Search for available florists, DJs, and cake designers for your special day.',
+  title: 'Search & Book Top Event Talent in Sri Lanka | Sri Lankan Event Portal',
+  description: 'Find and book the best event talent in Sri Lanka. Search verified emcees, live bands, DJs, makeup artists, cake artists, and photographers for your wedding or corporate event. 100% free to search.',
+  openGraph: {
+    title: 'Search & Book Top Event Talent in Sri Lanka',
+    description: 'Find and book the best event talent in Sri Lanka. Search verified emcees, live bands, DJs, makeup artists, cake artists, and photographers for your special day.',
+    url: '/',
+    siteName: 'Sri Lankan Event Portal',
+    locale: 'en_LK',
+    type: 'website',
+  },
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default async function PublicSearchPage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
