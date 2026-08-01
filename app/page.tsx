@@ -104,6 +104,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             </label>
 
             <div className='nav-links flex gap-4'>
+              <a href="https://srilankaneventportal.com/vendor/login" target="_blank" rel="noopener noreferrer" className="nav-btn-secondary">VENDOR LOGIN</a>
               <a href="#join-us" className="nav-btn-primary">BECOME A Emcees/ MC/ Compere</a>
             </div>
           </nav>
