@@ -111,6 +111,7 @@ export function VendorDashboardClient({ vendor, unavailableSlots, initialReviews
     setIsSubmittingSlot(true);
     const result = await deleteUnavailableSlot(id);
     setIsDeleting(null);
+    setIsSubmittingSlot(false);
 
     if (result.error) {
       alert(`Failed to delete unavailable slot: ${result.error}`);

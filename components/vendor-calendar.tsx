@@ -51,7 +51,7 @@ export function VendorCalendar({ unavailableSlots, onAddSlot, onClearSlots, onDe
         start: start < end ? start : end,
         end: start > end ? start : end
       }).map(d => format(d, 'yyyy-MM-dd'));
-      
+
       range.forEach(d => {
         if (!newSelection.includes(d)) newSelection.push(d);
       });
@@ -170,16 +170,16 @@ export function VendorCalendar({ unavailableSlots, onAddSlot, onClearSlots, onDe
                 <div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-all ${isAllDayUnavailable ? 'left-7' : 'left-1'}`} />
               </button>
             </div>
-            
+
             <div className="w-px h-6 bg-white/20 hidden lg:block"></div>
 
-            <Button 
-              size="sm" 
+            <Button
+              size="sm"
               onClick={() => setIsAddDialogOpen(true)}
               disabled={isSubmitting || isAllDayUnavailable}
               className="bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A] font-bold"
             >
-              <Plus className="w-4 h-4 mr-1.5" /> Add Time Slot
+              <Plus className="w-4 h-4 mr-1.5" /> Add Unavailable Time Slot
             </Button>
           </div>
         </div>
@@ -202,7 +202,7 @@ export function VendorCalendar({ unavailableSlots, onAddSlot, onClearSlots, onDe
             const dateStr = format(day, 'yyyy-MM-dd');
             const isSelected = selectedDates.includes(dateStr);
             const isCurrentMonth = isSameMonth(day, currentMonth);
-            
+
             // Get slots for this day
             const daySlots = unavailableSlots.filter(s => s.date === dateStr).sort((a, b) => a.start_time.localeCompare(b.start_time));
             const hasFullDay = daySlots.some(s => s.start_time.startsWith('00:00') && s.end_time.startsWith('23:59'));
@@ -215,7 +215,7 @@ export function VendorCalendar({ unavailableSlots, onAddSlot, onClearSlots, onDe
             else if (isPartiallyAvailable) bgClass = "bg-amber-50/80";
 
             return (
-              <div 
+              <div
                 key={dateStr}
                 onClick={(e) => handleDateClick(day, e)}
                 className={`min-h-[120px] p-2 border-r border-b border-[rgba(15,23,42,0.04)] relative group transition-colors cursor-pointer select-none
@@ -235,7 +235,7 @@ export function VendorCalendar({ unavailableSlots, onAddSlot, onClearSlots, onDe
                   {hasFullDay ? (
                     <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-medium rounded border border-red-200 truncate flex justify-between items-center group/slot">
                       Full Day
-                      <button 
+                      <button
                         onClick={(e) => { e.stopPropagation(); setSlotToDelete(daySlots.find(s => s.start_time.startsWith('00:00'))!); }}
                         className="opacity-0 group-hover/slot:opacity-100 p-0.5 hover:bg-red-200 rounded"
                       >
@@ -244,12 +244,12 @@ export function VendorCalendar({ unavailableSlots, onAddSlot, onClearSlots, onDe
                     </div>
                   ) : (
                     daySlots.map(slot => (
-                      <div 
-                        key={slot.id} 
+                      <div
+                        key={slot.id}
                         className="px-2 py-1 bg-amber-100 text-amber-900 text-[11px] font-medium rounded border border-amber-200 truncate flex justify-between items-center group/slot"
                       >
                         <span>{slot.start_time.substring(0, 5)} - {slot.end_time.substring(0, 5)}</span>
-                        <button 
+                        <button
                           onClick={(e) => { e.stopPropagation(); setSlotToDelete(slot); }}
                           className="opacity-0 group-hover/slot:opacity-100 p-0.5 hover:bg-amber-200 rounded shrink-0 ml-1"
                         >
@@ -300,7 +300,7 @@ export function VendorCalendar({ unavailableSlots, onAddSlot, onClearSlots, onDe
             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>Cancel</Button>
             <Button onClick={handleAddCustomSlot} disabled={isSubmitting} className="bg-[#E8960C] hover:bg-[#F5A929] text-[#0F172A] font-bold">
               {isSubmitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              Add Time Slot
+              Add Unavailable Time Slot
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -317,24 +317,24 @@ export function VendorCalendar({ unavailableSlots, onAddSlot, onClearSlots, onDe
           </DialogHeader>
           {slotToDelete && (
             <div className="py-4 px-4 bg-gray-50 rounded-lg border border-gray-100 my-2 text-sm font-medium">
-              {format(parseISO(slotToDelete.date), 'MMMM do, yyyy')} <br/>
+              {format(parseISO(slotToDelete.date), 'MMMM do, yyyy')} <br />
               <span className="text-gray-500 mt-1 block">
-                {slotToDelete.start_time.startsWith('00:00') && slotToDelete.end_time.startsWith('23:59') 
-                  ? 'Full Day' 
-                  : `${slotToDelete.start_time.substring(0,5)} to ${slotToDelete.end_time.substring(0,5)}`}
+                {slotToDelete.start_time.startsWith('00:00') && slotToDelete.end_time.startsWith('23:59')
+                  ? 'Full Day'
+                  : `${slotToDelete.start_time.substring(0, 5)} to ${slotToDelete.end_time.substring(0, 5)}`}
               </span>
             </div>
           )}
           <DialogFooter>
             <Button variant="outline" onClick={() => setSlotToDelete(null)}>Cancel</Button>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               onClick={async () => {
                 if (slotToDelete) {
                   await onDeleteSlot(slotToDelete.id);
                   setSlotToDelete(null);
                 }
-              }} 
+              }}
               disabled={isSubmitting}
             >
               {isSubmitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}

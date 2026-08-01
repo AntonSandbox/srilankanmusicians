@@ -6,7 +6,7 @@ import { VendorGrid } from '@/components/vendor-grid';
 import { SearchResultsList, VendorGridSkeleton } from '@/components/search-results-list';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, CircleDollarSign, ShieldCheck, MessageCircle } from 'lucide-react';
 import { SERVICES } from '@/lib/constants';
 
 function getCategorySlug(category: string) {
@@ -89,26 +89,45 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <header id="siteHeader">
         <div className="wrap">
           <nav>
-            <a href="/" className="logo"><img src="/srilankan_event_portal.png" alt="Sri Lankan Event Portal" style={{ height: '40px', width: 'auto' }} /></a>
-            <div className='flex gap-5'>
-              <a href="/become-vendor" className="nav-cta">Become a vendor</a>
-              <a href="/vendor/login" className="nav-cta">Vendor Login</a>
+            <a href="/" className="logo">
+              <img src="/srilankan_event_portal.png" alt="Sri Lankan Event Portal" style={{ height: '36px', width: 'auto' }} />
+            </a>
+
+            <input type="checkbox" id="mobile-menu-toggle" className="mobile-menu-toggle" />
+            <label htmlFor="mobile-menu-toggle" className="mobile-menu-btn">
+              <span></span>
+              <span></span>
+              <span></span>
+            </label>
+
+            <div className='nav-links flex gap-4'>
+              <a href="/become-vendor" className="nav-btn-primary">BECOME A VENDOR</a>
+              <a href="/vendor/login" className="nav-btn-secondary">VENDOR LOGIN</a>
             </div>
-
-
           </nav>
 
         </div>
       </header>
 
       <section className="hero">
+        <video autoPlay loop muted playsInline className="hero-bg-video">
+          <source src="/wedding-bg.mp4" type="video/mp4" />
+        </video>
+        <div className="hero-overlay"></div>
+        
         <div className="wrap">
           <div className="eyebrow">Sri Lanka's Event Talent, All in One Place</div>
-          <h1>Search Talent for your Event</h1>
+          <h1>Search Talent<br/>for your <span>Event</span></h1>
 
           <Suspense fallback={<div style={{ height: '300px', background: 'var(--cream)', borderRadius: '6px' }}></div>}>
             <SearchForm />
           </Suspense>
+        </div>
+
+        <div className="hero-bottom-curve">
+          <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,120 C480,0 960,0 1440,120 L1440,120 L0,120 Z" fill="#F8F6F1"></path>
+          </svg>
         </div>
       </section>
 
@@ -124,20 +143,43 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
       <section className="promise">
         <div className="wrap">
-          <h2>Free to search. <em>Vendors you can trust.</em></h2>
-          <ul className="benefits-list">
-            <li><span className="check">✓</span> No charge to you, ever — searching, browsing and checking availability is completely free</li>
-            <li><span className="check">✓</span> Every vendor on this platform is screened before being listed</li>
-            <li><span className="check">✓</span> Once you find someone available, you'll speak with them directly to confirm details, pricing and next steps</li>
-            <li><span className="check">✓</span> We handle the discovery — you handle the conversation</li>
-          </ul>
+          <div className="promise-header">
+            <h2>Free to search. <span>Vendors you can trust.</span></h2>
+            <p>We've built a platform that puts your peace of mind first.</p>
+          </div>
+          
+          <div className="promise-grid">
+            <div className="promise-card">
+              <div className="promise-icon">
+                <CircleDollarSign className="w-5 h-5" />
+              </div>
+              <h3>100% Free</h3>
+              <p>No charge to you, ever — searching, browsing and checking availability is completely free.</p>
+            </div>
+            
+            <div className="promise-card">
+              <div className="promise-icon">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h3>Verified Vendors</h3>
+              <p>Every vendor on this platform is meticulously screened before being listed to ensure top-tier quality.</p>
+            </div>
+            
+            <div className="promise-card">
+              <div className="promise-icon">
+                <MessageCircle className="w-5 h-5" />
+              </div>
+              <h3>Direct Contact</h3>
+              <p>Once you find someone available, you'll speak with them directly to confirm details, pricing and next steps.</p>
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="profiles" id="profiles">
         <div className="wrap">
-          <div className="section-eyebrow">Browse talent</div>
-          <h2>Every category, ready to book.</h2>
+          <h2 className="profiles-title">Discover exceptional <em>professionals</em> for your big day.</h2>
+          <p className="profiles-desc">From master emcees to award-winning photographers, explore our curated selection of verified event talent ready to bring your vision to life.</p>
 
           {categoryVendors.map(({ category, vendors }) => {
             const slug = getCategorySlug(category);
@@ -145,7 +187,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
               <div key={category} className="category-block">
                 <div className="category-head">
                   <h3>{category}</h3>
-                  <a className="view-more" href={`/browse/${slug}`}>View all {category} →</a>
+                  <a className="view-more" href={`/browse/${slug}`}>Explore All &rarr;</a>
                 </div>
                 <div className="profile-grid">
                   {vendors.map(v => (
@@ -169,44 +211,64 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
       <section className="explore" id="explore">
         <div className="wrap">
-          <div className="section-eyebrow">Explore by talent</div>
-          <h2>Every category has its own home — and its own community.</h2>
+          <div className="explore-header">
+            <h2 className="explore-title">Latest updates, news & happenings from the event world.</h2>
+            <a className="view-more" href="#">View all news &rarr;</a>
+          </div>
           <div className="explore-grid">
             <a className="explore-card" href="https://srilankanmc.com">
-              <div className="tag">Emcees &amp; Comperes</div>
-              <h3>Book an Emcee or Compere in Sri Lanka</h3>
-              <p>Search and book verified emcees and comperes for any occasion.</p>
-              <span className="link-arrow">Visit Sri Lankan Emcee →</span>
+              <div className="explore-img-wrap"><img src="/bg_mc.png" alt="Emcees & Comperes" /></div>
+              <div className="explore-content">
+                <div className="tag">Emcees &amp; Comperes</div>
+                <h3>Book an Emcee or Compere in Sri Lanka</h3>
+                <p>Search and book verified emcees and comperes for any occasion.</p>
+                <span className="link-arrow">Visit Sri Lankan Emcee &rarr;</span>
+              </div>
             </a>
             <a className="explore-card" href="https://srilankanband.com">
-              <div className="tag">Bands</div>
-              <h3>Book a Live Band in Sri Lanka</h3>
-              <p>Search and book live bands for weddings, corporate events and celebrations.</p>
-              <span className="link-arrow">Visit Sri Lankan Band →</span>
+              <div className="explore-img-wrap"><img src="/bg_band.png" alt="Bands" /></div>
+              <div className="explore-content">
+                <div className="tag">Bands</div>
+                <h3>Book a Live Band in Sri Lanka</h3>
+                <p>Search and book live bands for weddings, corporate events and celebrations.</p>
+                <span className="link-arrow">Visit Sri Lankan Band &rarr;</span>
+              </div>
             </a>
             <a className="explore-card" href="https://srilankandj.com">
-              <div className="tag">DJs</div>
-              <h3>Book a DJ in Sri Lanka</h3>
-              <p>Search and book DJs for any event, from intimate gatherings to large celebrations.</p>
-              <span className="link-arrow">Visit Sri Lankan DJ →</span>
+              <div className="explore-img-wrap"><img src="/bg_dj.png" alt="DJs" /></div>
+              <div className="explore-content">
+                <div className="tag">DJs</div>
+                <h3>Book a DJ in Sri Lanka</h3>
+                <p>Search and book DJs for any event, from intimate gatherings to large celebrations.</p>
+                <span className="link-arrow">Visit Sri Lankan DJ &rarr;</span>
+              </div>
             </a>
             <a className="explore-card" href="https://srilankanmua.com">
-              <div className="tag">Makeup Artists</div>
-              <h3>Book a Makeup Artist in Sri Lanka</h3>
-              <p>Search and book bridal and event makeup artists across the island.</p>
-              <span className="link-arrow">Visit Sri Lankan MUA →</span>
+              <div className="explore-img-wrap"><img src="/bg_mua.png" alt="Makeup Artists" /></div>
+              <div className="explore-content">
+                <div className="tag">Makeup Artists</div>
+                <h3>Book a Makeup Artist in Sri Lanka</h3>
+                <p>Search and book bridal and event makeup artists across the island.</p>
+                <span className="link-arrow">Visit Sri Lankan MUA &rarr;</span>
+              </div>
             </a>
             <a className="explore-card" href="https://srilankancakeartist.com">
-              <div className="tag">Cake Artists</div>
-              <h3>Book a Cake Artist in Sri Lanka</h3>
-              <p>Search and book cake artists for weddings and celebrations of any size.</p>
-              <span className="link-arrow">Visit Sri Lankan Cake Artist →</span>
+              <div className="explore-img-wrap"><img src="/bg_cake.png" alt="Cake Artists" /></div>
+              <div className="explore-content">
+                <div className="tag">Cake Artists</div>
+                <h3>Book a Cake Artist in Sri Lanka</h3>
+                <p>Search and book cake artists for weddings and celebrations of any size.</p>
+                <span className="link-arrow">Visit Sri Lankan Cake Artist &rarr;</span>
+              </div>
             </a>
             <a className="explore-card" href="https://srilankanphotographer.com">
-              <div className="tag">Photographers</div>
-              <h3>Book a Photographer in Sri Lanka</h3>
-              <p>Search and book event and wedding photographers, local and diaspora-friendly.</p>
-              <span className="link-arrow">Visit Sri Lankan Photographer →</span>
+              <div className="explore-img-wrap"><img src="/bg_photo.png" alt="Photographers" /></div>
+              <div className="explore-content">
+                <div className="tag">Photographers</div>
+                <h3>Book a Photographer in Sri Lanka</h3>
+                <p>Search and book event and wedding photographers, local and diaspora-friendly.</p>
+                <span className="link-arrow">Visit Sri Lankan Photographer &rarr;</span>
+              </div>
             </a>
           </div>
         </div>

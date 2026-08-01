@@ -43,10 +43,20 @@ export default async function BrowseCategoryPage(props: { params: Promise<{ cate
       <header id="siteHeader">
         <div className="wrap">
           <nav>
-            <a href="/" className="logo"><img src="/srilankan_event_portal.png" alt="Sri Lankan Event Portal" style={{ height: '40px', width: 'auto' }} /></a>
-            <div className='flex gap-5'>
-              <a href="/become-vendor" className="nav-cta">Become a vendor</a>
-              <a href="/vendor/login" className="nav-cta">Vendor Login</a>
+            <a href="/" className="logo">
+              <img src="/srilankan_event_portal.png" alt="Sri Lankan Event Portal" style={{ height: '36px', width: 'auto' }} />
+            </a>
+
+            <input type="checkbox" id="mobile-menu-toggle" className="mobile-menu-toggle" />
+            <label htmlFor="mobile-menu-toggle" className="mobile-menu-btn">
+              <span></span>
+              <span></span>
+              <span></span>
+            </label>
+
+            <div className='nav-links flex gap-4'>
+              <a href="/become-vendor" className="nav-btn-primary">BECOME A VENDOR</a>
+              <a href="/vendor/login" className="nav-btn-secondary">VENDOR LOGIN</a>
             </div>
           </nav>
         </div>

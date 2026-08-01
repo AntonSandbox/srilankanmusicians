@@ -49,7 +49,7 @@ BEGIN
       WHERE vus.vendor_id = v.id
         AND vus.date = p_date
         AND vus.start_time = '00:00:00'
-        AND vus.end_time = '23:59:59'
+        AND vus.end_time >= '23:59:00'
     ));
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

@@ -9,6 +9,16 @@ import { getVendorReviews, getFullVendorDetails } from '@/app/actions/vendors';
 import { format } from 'date-fns';
 import { Calendar as UICalendar } from '@/components/ui/calendar';
 
+const TIME_SLOTS = (() => {
+  const slots = [];
+  for (let h = 0; h < 24; h++) {
+    for (let m = 0; m < 60; m += 30) {
+      slots.push(`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`);
+    }
+  }
+  return slots;
+})();
+
 export interface Vendor {
   id: string;
   name: string;
@@ -152,113 +162,127 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
     <>
       {triggerType === 'profile-card' ? (
         <div
-          className="profile-card cursor-pointer"
+          className="profile-card group"
           onClick={() => { setIsOpen(true); setScrollToBooking(false); }}
         >
-          <div className="profile-avatar overflow-hidden">
+          {vendor.profile_image ? (
+            <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} className="vendor-img" />
+          ) : (
+            <div className="w-full h-full bg-zinc-200 flex items-center justify-center text-4xl font-serif text-amber-500 vendor-img">
+              {vendor.name.charAt(0).toUpperCase()}
+            </div>
+          )}
+          
+          <div className="profile-card-overlay">
+            <span className="profile-card-badge">
+              {vendor.category}
+            </span>
+            <h4 className="profile-card-name">{vendor.name}</h4>
+            <div className="profile-card-location">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <span>{vendor.location || 'Remote'}</span>
+            </div>
+            
+            <div className="profile-card-btn-container">
+               <div className="profile-card-btn">
+                 View Profile <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+               </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+          {/* Top Section - Image Header */}
+          <div className="relative h-56 w-full flex-shrink-0 cursor-pointer" onClick={() => { setIsOpen(true); setScrollToBooking(false); }}>
             {vendor.profile_image ? (
               <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} className="w-full h-full object-cover" />
             ) : (
-              vendor.name.charAt(0).toUpperCase()
+              <div className="w-full h-full bg-zinc-200 flex items-center justify-center text-5xl font-serif text-amber-500">
+                {vendor.name.charAt(0).toUpperCase()}
+              </div>
             )}
-          </div>
-          <h4>{vendor.name}</h4>
-          <p>{vendor.location || 'Remote'}</p>
-        </div>
-      ) : (
-        <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
-          {/* Top Section */}
-          <div className="flex gap-4 items-center mb-6">
-            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 flex-shrink-0 flex items-center justify-center text-3xl font-serif text-amber-500 shadow-sm border-2 border-white dark:border-zinc-900">
-              {vendor.profile_image ? (
-                <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} className="w-full h-full object-cover" />
-              ) : (
-                vendor.name.charAt(0).toUpperCase()
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-5">
+              <span className="bg-white/20 backdrop-blur-md text-white text-[9.5px] font-bold tracking-wider uppercase px-2.5 py-1 rounded w-fit mb-2">
+                {vendor.category}
+              </span>
+              <h2 className="text-[32px] font-bold font-serif text-white mb-1 leading-tight">{vendor.name}</h2>
+              {vendor.location && (
+                <div className="flex items-center gap-1.5 text-white/90 text-[13px] font-medium">
+                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#e8a846]"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>{vendor.location}</span>
+                </div>
               )}
-            </div>
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-auto mt-auto">{vendor.name}</h2>
-              <div className="text-zinc-600 dark:text-zinc-400 font-medium tracking-wide text-sm">{vendor.category}</div>
             </div>
           </div>
 
-          {/* Attributes */}
-          <div className="flex flex-col gap-5 mb-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Event Types */}
-              {vendor.occasions && vendor.occasions.length > 0 && (
-                <div>
-                  <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-2">Event Types</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {vendor.occasions.slice(0, 2).map(occ => (
-                      <span key={occ} className="px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded text-[11px] text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">{occ}</span>
-                    ))}
-                    {vendor.occasions.length > 2 && <span className="px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded text-[11px] text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">+{vendor.occasions.length - 2}</span>}
-                  </div>
+          {/* Body Section */}
+          <div className="p-5 flex flex-col flex-grow gap-5">
+            {/* Event Types */}
+            {vendor.occasions && vendor.occasions.length > 0 && (
+              <div>
+                <div className="text-[10px] font-bold text-[#7997b8] tracking-widest uppercase mb-2.5">Event Types</div>
+                <div className="flex flex-wrap gap-2">
+                  {vendor.occasions.slice(0, 3).map(occ => (
+                    <span key={occ} className="px-2.5 py-1.5 border border-zinc-100 rounded text-[11.5px] text-[#4a4a4a] bg-[#fbfbfb]">{occ}</span>
+                  ))}
+                  {vendor.occasions.length > 3 && (
+                    <span className="px-2.5 py-1.5 border border-zinc-100 rounded text-[11.5px] text-[#4a4a4a] bg-[#fbfbfb]">+{vendor.occasions.length - 3}</span>
+                  )}
                 </div>
-              )}
-              {/* Locations */}
-              {vendor.location && (
-                <div>
-                  <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-2">Locations Served</div>
-                  <div className="flex flex-wrap gap-1.5">
-                    <span className="px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded text-[11px] text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">{vendor.location}</span>
-                  </div>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+
             {/* Languages */}
             {vendor.languages && vendor.languages.length > 0 && (
               <div>
-                <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-2">Languages</div>
-                <div className="flex flex-wrap gap-1.5">
-                  <span className="px-2.5 py-1 border border-zinc-200 dark:border-zinc-800 rounded text-[11px] text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">{vendor.languages.slice(0, 2).join(' + ')}{vendor.languages.length > 2 ? ` + ${vendor.languages.length - 2} more` : ''}</span>
+                <div className="text-[10px] font-bold text-[#7997b8] tracking-widest uppercase mb-1.5">Languages</div>
+                <div className="text-[14px] font-medium text-[#2b2b2b]">
+                  {vendor.languages.join(' • ')}
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Bottom Container (forces alignment) */}
-          <div className="mt-auto flex flex-col gap-6">
-            {/* Budget Box */}
-            {vendor.budget_range ? (
-              <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 px-4 py-3 rounded-lg flex flex-col justify-center shadow-sm w-fit min-w-[160px]">
-                <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-1">Starting From</div>
-                <div className="text-xl font-mono font-bold text-zinc-900 dark:text-zinc-50">
-                  {(() => {
-                    const splitBudget = vendor.budget_range?.split(/[-–]/).map(s => s.trim());
-                    return splitBudget && splitBudget.length > 0 ? splitBudget[0] : vendor.budget_range;
-                  })()}
+            {/* Divider */}
+            <div className="h-px w-full bg-zinc-100 my-1"></div>
+
+            {/* Bottom Container */}
+            <div className="mt-auto flex flex-col gap-4">
+              {/* Budget */}
+              <div>
+                <div className="text-[10px] font-bold text-[#7997b8] tracking-widest uppercase mb-1">Starting From</div>
+                <div className="text-[22px] font-bold text-[#111827]">
+                  {vendor.budget_range ? (
+                    (() => {
+                      const splitBudget = vendor.budget_range.split(/[-–]/).map(s => s.trim());
+                      return splitBudget && splitBudget.length > 0 ? splitBudget[0] : vendor.budget_range;
+                    })()
+                  ) : '-'}
                 </div>
               </div>
-            ) : (
-              <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 px-4 py-3 rounded-lg flex flex-col justify-center shadow-sm w-fit min-w-[160px] opacity-0 pointer-events-none select-none">
-                <div className="text-[10px] font-bold text-zinc-400 tracking-wider uppercase mb-1">Starting From</div>
-                <div className="text-xl font-mono font-bold text-zinc-900 dark:text-zinc-50">-</div>
-              </div>
-            )}
 
-            {/* Buttons */}
-            <div className="grid grid-cols-2 gap-3 mt-1">
-              <button
-                onClick={() => { setIsOpen(true); setScrollToBooking(false); }}
-                className="w-full py-2.5 bg-[#F8F6F1] hover:bg-[#EFEAE0] text-[#1D4A34] border border-[#1D4A34]/15 rounded-[4px] font-semibold text-[13.5px] transition-colors"
-              >
-                Click to view more
-              </button>
-              <button
-                onClick={() => { setIsOpen(true); setScrollToBooking(true); }}
-                className="w-full py-2.5 bg-[#996515] hover:bg-[#E67E22] text-white rounded-[4px] font-semibold text-[13.5px] transition-colors shadow-sm"
-              >
-                Book tentatively
-              </button>
+              {/* Buttons */}
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={() => { setIsOpen(true); setScrollToBooking(false); }}
+                  className="w-full py-2.5 bg-[#f3f4f6] hover:bg-[#e5e7eb] text-[#111827] rounded-[10px] font-bold text-[13.5px] transition-colors"
+                >
+                  View Profile
+                </button>
+                <button
+                  onClick={() => { setIsOpen(true); setScrollToBooking(true); }}
+                  className="w-full py-2.5 bg-[#dda44a] hover:bg-[#c99036] text-white rounded-[10px] font-bold text-[13.5px] transition-colors"
+                >
+                  Book
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent showCloseButton={false} className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[60vw] w-full max-h-[calc(100dvh-4rem)] overflow-y-auto p-0 gap-0 border-0 bg-white dark:bg-zinc-950">
+        <DialogContent showCloseButton={false} className="max-w-[95vw] w-[95vw] sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[60vw] md:w-full max-h-[calc(100dvh-2rem)] md:max-h-[calc(100dvh-4rem)] overflow-y-auto p-0 gap-0 border-0 bg-white dark:bg-zinc-950">
           <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-0 z-50">
             <DialogTitle className="text-xl font-bold font-serif">{popupVendor.name}</DialogTitle>
             <DialogClose className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-md px-3 py-1.5 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
@@ -290,14 +314,15 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               <div className="h-64 bg-zinc-200 dark:bg-zinc-800 rounded-xl"></div>
             </div>
           ) : (
-            <div className="p-6 sm:p-10">
+            <div className="p-4 sm:p-10">
               <div className="flex flex-col gap-10">
-                {/* TOP SECTION */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                  {/* Top Left: DP & Bio */}
-                  <div className="flex flex-col h-full">
-                    {/* DP Avatar */}
-                    <div className="w-40 h-40 md:w-56 md:h-56 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 border-4 border-white dark:border-zinc-950 shadow-lg flex-shrink-0 flex items-center justify-center text-6xl font-serif text-amber-500 mx-auto md:mx-0 mb-8">
+                
+                {/* Responsive Top Layout */}
+                <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
+                  
+                  {/* Left Column (DP + Desktop Bio) */}
+                  <div className="w-full md:w-1/3 flex flex-col items-center md:items-start shrink-0">
+                    <div className="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 border-4 border-white dark:border-zinc-950 shadow-lg flex items-center justify-center text-5xl md:text-6xl font-serif text-amber-500 mb-4 md:mb-8 mx-auto md:mx-0">
                       {popupVendor.profile_image ? (
                         <img src={getImageUrl(popupVendor.profile_image)} alt={popupVendor.name} className="w-full h-full object-cover" />
                       ) : (
@@ -305,9 +330,19 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                       )}
                     </div>
 
-                    {/* Bio */}
+                    {/* Mobile Title */}
+                    <div className="md:hidden text-center w-full mb-6">
+                      <div className="text-amber-500 font-bold tracking-widest text-[10px] uppercase mb-1">
+                        {popupVendor.category}
+                      </div>
+                      <h1 className="text-3xl font-bold font-serif text-zinc-900 dark:text-zinc-50 leading-tight">
+                        {popupVendor.name}
+                      </h1>
+                    </div>
+                    
+                    {/* Desktop Bio */}
                     {popupVendor.bio && (
-                      <div className="mt-auto border-t border-b border-dashed border-zinc-300 dark:border-zinc-700 py-6">
+                      <div className="hidden md:block w-full border-t border-dashed border-zinc-300 dark:border-zinc-700 pt-6 mt-2">
                         <h3 className="text-lg font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-3">Bio</h3>
                         <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed whitespace-pre-wrap">
                           {popupVendor.bio}
@@ -316,19 +351,20 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                     )}
                   </div>
 
-                  {/* Top Right: Title & Video */}
-                  <div className="flex flex-col h-full md:pt-4">
-                    <div className="mb-8">
+                  {/* Right Column (Title, Media, Details) */}
+                  <div className="w-full md:w-2/3 flex flex-col">
+                    {/* Desktop Title */}
+                    <div className="hidden md:block mb-8">
                       <div className="text-amber-500 font-bold tracking-widest text-sm uppercase mb-2">
                         {popupVendor.category}
                       </div>
-                      <h1 className="text-4xl sm:text-5xl font-bold font-serif text-zinc-900 dark:text-zinc-50">
+                      <h1 className="text-4xl lg:text-5xl font-bold font-serif text-zinc-900 dark:text-zinc-50">
                         {popupVendor.name}
                       </h1>
                     </div>
 
                     {/* Media (Video or Cover Image) */}
-                    <div className="mb-auto mt-auto w-full">
+                    <div className="w-full mb-8">
                       {(() => {
                         let youtubeId = null;
                         if (popupVendor.video_url) {
@@ -359,44 +395,54 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                         return null;
                       })()}
                     </div>
-                  </div>
-                </div>
 
-                {/* BOTTOM SECTION */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                  {/* Bottom Left: Event Types & Languages */}
-                  <div className="flex flex-col gap-6">
-                    {popupVendor.occasions && popupVendor.occasions.length > 0 && (
-                      <div>
-                        <div className="text-xs font-bold text-zinc-400 tracking-wider uppercase mb-3">Event Types</div>
-                        <div className="flex flex-wrap gap-2">
-                          {popupVendor.occasions.map((occ, i) => (
-                            <span key={i} className="px-3 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded text-xs text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">{occ}</span>
-                          ))}
-                        </div>
+                    {/* Mobile Bio */}
+                    {popupVendor.bio && (
+                      <div className="md:hidden w-full border-t border-b border-dashed border-zinc-300 dark:border-zinc-700 py-6 mb-8 text-center">
+                        <h3 className="text-lg font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-3">Bio</h3>
+                        <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed whitespace-pre-wrap">
+                          {popupVendor.bio}
+                        </p>
                       </div>
                     )}
 
-                    {popupVendor.languages && popupVendor.languages.length > 0 && (
-                      <div>
-                        <div className="text-xs font-bold text-zinc-400 tracking-wider uppercase mb-3">Languages</div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded text-xs text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">{popupVendor.languages.join(' + ')}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                    {/* Attributes Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                      {/* Left: Event Types & Languages */}
+                      <div className="flex flex-col gap-6">
+                        {popupVendor.occasions && popupVendor.occasions.length > 0 && (
+                          <div>
+                            <div className="text-[10px] font-bold text-[#7997b8] tracking-widest uppercase mb-3 text-center md:text-left">Event Types</div>
+                            <div className="flex flex-wrap justify-center md:justify-start gap-2">
+                              {popupVendor.occasions.map((occ, i) => (
+                                <span key={i} className="px-2.5 py-1.5 border border-zinc-100 rounded text-[11.5px] text-[#4a4a4a] bg-[#fbfbfb]">{occ}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
 
-                  {/* Bottom Right: Locations Served */}
-                  <div className="flex flex-col gap-6">
-                    {popupVendor.location && (
-                      <div>
-                        <div className="text-xs font-bold text-zinc-400 tracking-wider uppercase mb-3">Locations Served</div>
-                        <div className="flex flex-wrap gap-2">
-                          <span className="px-3 py-1.5 border border-zinc-200 dark:border-zinc-800 rounded text-xs text-zinc-600 dark:text-zinc-300 bg-white dark:bg-zinc-900">{popupVendor.location}</span>
-                        </div>
+                        {popupVendor.languages && popupVendor.languages.length > 0 && (
+                          <div>
+                            <div className="text-[10px] font-bold text-[#7997b8] tracking-widest uppercase mb-2 text-center md:text-left">Languages</div>
+                            <div className="text-[14px] font-medium text-[#3a3a3a] text-center md:text-left">
+                              {popupVendor.languages.join(' • ')}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                    )}
+
+                      {/* Right: Locations Served */}
+                      <div className="flex flex-col gap-6">
+                        {popupVendor.location && (
+                          <div>
+                            <div className="text-[10px] font-bold text-[#7997b8] tracking-widest uppercase mb-3 text-center md:text-left">Locations Served</div>
+                            <div className="flex flex-wrap justify-center md:justify-start gap-2">
+                              <span className="px-3 py-1.5 border border-zinc-100 rounded text-xs text-[#4a4a4a] bg-[#fbfbfb]">{popupVendor.location}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -538,7 +584,13 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                           disabled={(date) => {
                             const today = new Date();
                             today.setHours(0, 0, 0, 0);
-                            return date < today;
+                            if (date < today) return true;
+                            
+                            const dateStr = format(date, 'yyyy-MM-dd');
+                            const isFullyBooked = popupVendor.unavailableSlots?.some(slot => 
+                              slot.date === dateStr && slot.start_time.startsWith('00:00') && slot.end_time.startsWith('23:59')
+                            );
+                            return !!isFullyBooked;
                           }}
                           className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm p-3 w-fit"
                         />
@@ -579,27 +631,69 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                             <div className="grid grid-cols-2 gap-4 mt-4">
                               <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">Start Time</label>
-                                <input
-                                  type="time"
+                                <select
                                   value={bookingStartTime}
                                   onChange={(e) => {
                                     setBookingStartTime(e.target.value);
                                     if (submitResult?.success) setSubmitResult(null);
+                                    if (bookingEndTime && e.target.value >= bookingEndTime) {
+                                      setBookingEndTime('');
+                                    }
                                   }}
                                   className="w-full h-10 rounded-md border border-zinc-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 transition-colors"
-                                />
+                                >
+                                  <option value="">Select time...</option>
+                                  {TIME_SLOTS.map(time => {
+                                    const timeNum = time.replace(':', '');
+                                    const disabled = popupVendor.unavailableSlots?.some(slot => {
+                                      if (slot.date !== selectedDateStr) return false;
+                                      const slotStart = slot.start_time.substring(0, 5).replace(':', '');
+                                      const slotEnd = slot.end_time.substring(0, 5).replace(':', '');
+                                      return timeNum >= slotStart && timeNum < slotEnd;
+                                    });
+                                    return <option key={time} value={time} disabled={disabled}>{time}</option>
+                                  })}
+                                </select>
                               </div>
                               <div className="space-y-1.5">
                                 <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300">End Time</label>
-                                <input
-                                  type="time"
+                                <select
                                   value={bookingEndTime}
                                   onChange={(e) => {
                                     setBookingEndTime(e.target.value);
                                     if (submitResult?.success) setSubmitResult(null);
                                   }}
                                   className="w-full h-10 rounded-md border border-zinc-300 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 transition-colors"
-                                />
+                                >
+                                  <option value="">Select time...</option>
+                                  {TIME_SLOTS.map(time => {
+                                    let disabled = false;
+                                    const timeNum = time.replace(':', '');
+                                    
+                                    if (!bookingStartTime) {
+                                      disabled = popupVendor.unavailableSlots?.some(slot => {
+                                        if (slot.date !== selectedDateStr) return false;
+                                        const slotStart = slot.start_time.substring(0, 5).replace(':', '');
+                                        const slotEnd = slot.end_time.substring(0, 5).replace(':', '');
+                                        return timeNum > slotStart && timeNum <= slotEnd;
+                                      }) || false;
+                                    } else {
+                                      if (time <= bookingStartTime) {
+                                        disabled = true;
+                                      } else {
+                                        const startNum = bookingStartTime.replace(':', '');
+                                        disabled = popupVendor.unavailableSlots?.some(slot => {
+                                          if (slot.date !== selectedDateStr) return false;
+                                          const slotStart = slot.start_time.substring(0, 5).replace(':', '');
+                                          const slotEnd = slot.end_time.substring(0, 5).replace(':', '');
+                                          return slotStart < timeNum && slotEnd > startNum;
+                                        }) || false;
+                                      }
+                                    }
+                                    
+                                    return <option key={time} value={time} disabled={disabled}>{time}</option>
+                                  })}
+                                </select>
                               </div>
                             </div>
                           </div>
