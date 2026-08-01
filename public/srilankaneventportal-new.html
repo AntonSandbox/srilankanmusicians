@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sri Lankan Event Portal | Find Emcees, Bands, DJs, Makeup Artists, Cake Artists & Photographers</title>
-<meta name="description" content="Search verified event talent across Sri Lanka — emcees, bands, DJs, makeup artists, cake artists and photographers — by occasion, date, location and budget.">
+<title>Sri Lankan Event Portal | Find Emcees, Bands, DJs, Makeup Artists, Emcees/ MC/ Comperes & Photographers</title>
+<meta name="description" content="Search verified event talent across Sri Lanka — emcees, bands, DJs, makeup artists, Emcees/ MC/ Comperes and photographers — by occasion, date, location and budget.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -168,7 +168,7 @@
             <option>Band</option>
             <option>DJ</option>
             <option>Makeup Artist</option>
-            <option>Cake Artist</option>
+            <option>Emcees/ MC/ Compere</option>
             <option>Photographer</option>
           </select>
         </div>
@@ -269,7 +269,7 @@
     </div>
 
     <div class="category-block">
-      <div class="category-head"><h3>Cake Artists</h3><a class="view-more" href="https://srilankancakeartist.com">View all Cake Artists →</a></div>
+      <div class="category-head"><h3>Emcees/ MC/ Comperes</h3><a class="view-more" href="https://srilankancakeartist.com">View all Emcees/ MC/ Comperes →</a></div>
       <div class="profile-grid">
         <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">SL</div><h4>Sweet Layers by Amaya</h4><p>Colombo · 6 yrs</p></div>
         <div class="profile-card"><div class="sample-tag">Sample</div><div class="profile-avatar">KC</div><h4>Kandy Cake House</h4><p>Kandy · 8 yrs</p></div>
@@ -322,10 +322,10 @@
         <span class="link-arrow">Visit Sri Lankan MUA →</span>
       </a>
       <a class="explore-card" href="https://srilankancakeartist.com">
-        <div class="tag">Cake Artists</div>
-        <h3>Book a Cake Artist in Sri Lanka</h3>
-        <p>Search and book cake artists for weddings and celebrations of any size.</p>
-        <span class="link-arrow">Visit Sri Lankan Cake Artist →</span>
+        <div class="tag">Emcees/ MC/ Comperes</div>
+        <h3>Book a Emcees/ MC/ Compere in Sri Lanka</h3>
+        <p>Search and book Emcees/ MC/ Comperes for weddings and celebrations of any size.</p>
+        <span class="link-arrow">Visit Sri Lankan Emcees/ MC/ Compere →</span>
       </a>
       <a class="explore-card" href="https://srilankanphotographer.com">
         <div class="tag">Photographers</div>
@@ -359,8 +359,8 @@
         <div class="mentor-body"><div class="mentor-cat">Makeup Artists</div><div class="mentor-name">Ambassador to be announced</div></div>
       </div>
       <div class="mentor-card">
-        <div class="video-box"><div class="play-btn" role="button" aria-label="Play Cake Artist mentor video"></div><div class="video-caption">Cake Artist</div></div>
-        <div class="mentor-body"><div class="mentor-cat">Cake Artists</div><div class="mentor-name">Ambassador to be announced</div></div>
+        <div class="video-box"><div class="play-btn" role="button" aria-label="Play Emcees/ MC/ Compere mentor video"></div><div class="video-caption">Emcees/ MC/ Compere</div></div>
+        <div class="mentor-body"><div class="mentor-cat">Emcees/ MC/ Comperes</div><div class="mentor-name">Ambassador to be announced</div></div>
       </div>
       <div class="mentor-card">
         <div class="video-box"><div class="play-btn" role="button" aria-label="Play Photographer mentor video"></div><div class="video-caption">Photographer</div></div>
@@ -426,7 +426,7 @@
   if (talentTypeSelect && budgetSelect) {
     talentTypeSelect.addEventListener('change', function(e) {
       const val = e.target.value;
-      if (val === 'Emcee / Compere' || val === 'Cake Artist') {
+      if (val === 'Emcee / Compere' || val === 'Emcees/ MC/ Compere') {
         budgetSelect.innerHTML = specialBudgetOptions;
       } else {
         budgetSelect.innerHTML = defaultBudgetOptions;

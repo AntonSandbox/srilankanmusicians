@@ -51,21 +51,21 @@ export function SearchForm() {
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    
+
     const params = new URLSearchParams(searchParams.toString());
-    
+
     if (occasion && occasion !== 'none') params.set('occasion', occasion);
     else params.delete('occasion');
 
     if (category && category !== 'none') params.set('category', category);
     else params.delete('category');
-    
+
     if (date) params.set('date', format(date, 'yyyy-MM-dd'));
     else params.delete('date');
 
     if (location && location !== 'none') params.set('location', location);
     else params.delete('location');
-    
+
     params.delete('language');
     languages.forEach(lang => {
       params.append('language', lang);
@@ -98,9 +98,9 @@ export function SearchForm() {
           </div>
           <div className="field">
             <label htmlFor="s-date">Event date</label>
-            <input 
-              type="date" 
-              id="s-date" 
+            <input
+              type="date"
+              id="s-date"
               value={date ? format(date, 'yyyy-MM-dd') : ''}
               onChange={(e) => setDate(e.target.value ? new Date(e.target.value) : undefined)}
             />
@@ -146,7 +146,7 @@ export function SearchForm() {
             <label htmlFor="s-budget">Budget range</label>
             <select id="s-budget" value={budget} onChange={(e) => setBudget(e.target.value)}>
               <option value="none">Any Budget</option>
-              {(category === 'Emcees/ MC/ Compere' || category === 'Cake Artist'
+              {(category === 'Emcees/ MC/ Compere' || category === 'Emcees/ MC/ Compere'
                 ? ['Under LKR 25,000', 'LKR 25,000 – 50,000', 'LKR 50,000 – 100,000', 'LKR 100,000 – 200,000', 'Above LKR 200,000']
                 : BUDGET_RANGES
               ).map(range => (
@@ -162,7 +162,7 @@ export function SearchForm() {
               Searching...
             </>
           ) : (
-            'Find Available Talent'
+            'Find Available Emcees/ MC/ Comperes'
           )}
         </button>
       </form>

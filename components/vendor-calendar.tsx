@@ -7,7 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { UnavailableSlot } from '@/app/vendor/dashboard/VendorDashboardClient';
+export interface UnavailableSlot {
+  id: string;
+  vendor_id: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  created_at?: string;
+}
 
 interface VendorCalendarProps {
   unavailableSlots: UnavailableSlot[];

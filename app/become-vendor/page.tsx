@@ -44,8 +44,7 @@ export default function BecomeVendorPage() {
           <nav>
             <a href="/" className="logo"><img src="/srilankan_event_portal.png" alt="Sri Lankan Event Portal" style={{ height: '40px', width: 'auto' }} /></a>
             <div className='flex gap-5'>
-              <a href="/become-vendor" className="nav-cta">Become a vendor</a>
-              <a href="/vendor/login" className="nav-cta">Vendor Login</a>
+              <a href="/become-vendor" className="nav-cta">Become a Emcees/ MC/ Compere</a>
             </div>
           </nav>
         </div>
@@ -54,8 +53,8 @@ export default function BecomeVendorPage() {
       <section className="hero" style={{ minHeight: 'calc(100vh - 80px)', paddingBottom: '80px' }}>
         <div className="wrap">
           <div className="eyebrow">Join Our Platform</div>
-          <h1>Become a Vendor</h1>
-          
+          <h1>Become a Emcees/ MC/ Compere</h1>
+
           <div className="mt-12 max-w-md mx-auto bg-white rounded-2xl shadow-lg p-8 text-left" style={{ border: '1px solid rgba(0,0,0,0.1)' }}>
             {status === 'success' ? (
               <div className="text-center py-8">
@@ -64,7 +63,7 @@ export default function BecomeVendorPage() {
                 </div>
                 <h3 className="text-2xl font-semibold mb-2" style={{ fontFamily: 'var(--font-heading)', color: 'var(--espresso)' }}>Application Submitted!</h3>
                 <p className="text-gray-600 mb-6">Thank you for your interest. We have received your details and will be in touch soon.</p>
-                <button 
+                <button
                   onClick={() => setStatus('idle')}
                   className="w-full py-3 px-4 rounded-full font-medium transition-all hover:opacity-90"
                   style={{ backgroundColor: 'var(--saffron)', color: 'var(--espresso)' }}

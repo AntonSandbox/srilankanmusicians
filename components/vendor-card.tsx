@@ -8,6 +8,7 @@ import { sendTentativeBookingRequest } from '@/app/actions/booking';
 import { getVendorReviews, getFullVendorDetails } from '@/app/actions/vendors';
 import { format } from 'date-fns';
 import { Calendar as UICalendar } from '@/components/ui/calendar';
+import { Logo } from '@/components/ui/logo';
 
 const TIME_SLOTS = (() => {
   const slots = [];
@@ -284,7 +285,10 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent showCloseButton={false} className="max-w-[95vw] w-[95vw] sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[60vw] md:w-full max-h-[calc(100dvh-2rem)] md:max-h-[calc(100dvh-4rem)] overflow-y-auto p-0 gap-0 border-0 bg-white dark:bg-zinc-950">
           <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-0 z-50">
-            <DialogTitle className="text-xl font-bold font-serif">{popupVendor.name}</DialogTitle>
+            <DialogTitle className="flex items-center">
+              <span className="sr-only">{popupVendor.name}</span>
+              <Logo style={{ fontSize: '11px' }} />
+            </DialogTitle>
             <DialogClose className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-md px-3 py-1.5 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
               <X className="w-4 h-4" /> Close
             </DialogClose>

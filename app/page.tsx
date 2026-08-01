@@ -6,19 +6,21 @@ import { VendorGrid } from '@/components/vendor-grid';
 import { SearchResultsList, VendorGridSkeleton } from '@/components/search-results-list';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
-import { Sparkles, CircleDollarSign, ShieldCheck, MessageCircle } from 'lucide-react';
+import { Sparkles, CircleDollarSign, ShieldCheck, MessageCircle, Video, MousePointer2, Percent, CalendarCheck, TrendingUp } from 'lucide-react';
 import { SERVICES } from '@/lib/constants';
+import { JoinForm } from '@/components/join-form';
+import { Logo } from '@/components/ui/logo';
 
 function getCategorySlug(category: string) {
   return category.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 }
 
 export const metadata = {
-  title: 'Search & Book Top Event Talent in Sri Lanka | Sri Lankan Event Portal',
-  description: 'Find and book the best event talent in Sri Lanka. Search verified emcees, live bands, DJs, makeup artists, cake artists, and photographers for your wedding or corporate event. 100% free to search.',
+  title: 'Search & Book Top Emcees/ MC/ Comperes in Sri Lanka | Sri Lankan Event Portal',
+  description: 'Find and book the best Emcees/ MC/ Comperes in Sri Lanka. Search verified Emcees/ MC/ Comperes for your wedding or corporate event. 100% free to search.',
   openGraph: {
-    title: 'Search & Book Top Event Talent in Sri Lanka',
-    description: 'Find and book the best event talent in Sri Lanka. Search verified emcees, live bands, DJs, makeup artists, cake artists, and photographers for your special day.',
+    title: 'Search & Book Top Emcees/ MC/ Comperes in Sri Lanka',
+    description: 'Find and book the best Emcees/ MC/ Comperes in Sri Lanka. Search verified Emcees/ MC/ Comperes for your special day.',
     url: '/',
     siteName: 'Sri Lankan Event Portal',
     locale: 'en_LK',
@@ -70,7 +72,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
   const { count: totalProfessionals } = await supabase
     .from('vendors')
-    .select('*', { count: 'exact', head: true });
+    .select('*', { count: 'exact', head: true })
+    .eq('category', 'Emcees/ MC/ Compere');
 
   const categories = SERVICES[0].items;
   const categoryVendors = await Promise.all(
@@ -89,8 +92,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <header id="siteHeader">
         <div className="wrap">
           <nav>
-            <a href="/" className="logo">
-              <img src="/srilankan_event_portal.png" alt="Sri Lankan Event Portal" style={{ height: '36px', width: 'auto' }} />
+            <a href="/" className="logo" style={{ fontSize: '13px' }}>
+              <Logo />
             </a>
 
             <input type="checkbox" id="mobile-menu-toggle" className="mobile-menu-toggle" />
@@ -101,8 +104,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             </label>
 
             <div className='nav-links flex gap-4'>
-              <a href="/become-vendor" className="nav-btn-primary">BECOME A VENDOR</a>
-              <a href="/vendor/login" className="nav-btn-secondary">VENDOR LOGIN</a>
+              <a href="#join-us" className="nav-btn-primary">BECOME A Emcees/ MC/ Compere</a>
             </div>
           </nav>
 
@@ -110,14 +112,17 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       </header>
 
       <section className="hero">
-        <video autoPlay loop muted playsInline className="hero-bg-video">
-          <source src="/wedding-bg.mp4" type="video/mp4" />
+        <video autoPlay loop muted playsInline className="hero-bg-video desktop-video">
+          <source src="/emcee-bg2.mp4" type="video/mp4" />
+        </video>
+        <video autoPlay loop muted playsInline className="hero-bg-video mobile-video">
+          <source src="/emcee-bg2.mp4" type="video/mp4" />
         </video>
         <div className="hero-overlay"></div>
-        
+
         <div className="wrap">
-          <div className="eyebrow">Sri Lanka's Event Talent, All in One Place</div>
-          <h1>Search Talent<br/>for your <span>Event</span></h1>
+          <div className="eyebrow">Sri Lanka's Top Emcees/ MC/ Comperes, All in One Place</div>
+          <h1>Search Emcees/ MC/ Comperes<br />for your <span>Event</span></h1>
 
           <Suspense fallback={<div style={{ height: '300px', background: 'var(--cream)', borderRadius: '6px' }}></div>}>
             <SearchForm />
@@ -147,7 +152,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             <h2>Free to search. <span>Vendors you can trust.</span></h2>
             <p>We've built a platform that puts your peace of mind first.</p>
           </div>
-          
+
           <div className="promise-grid">
             <div className="promise-card">
               <div className="promise-icon">
@@ -156,15 +161,15 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
               <h3>100% Free</h3>
               <p>No charge to you, ever — searching, browsing and checking availability is completely free.</p>
             </div>
-            
+
             <div className="promise-card">
               <div className="promise-icon">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3>Verified Vendors</h3>
-              <p>Every vendor on this platform is meticulously screened before being listed to ensure top-tier quality.</p>
+              <h3>Verified Emcees/ MC/ Comperes</h3>
+              <p>Every Emcees/ MC/ Compere on this platform is meticulously screened before being listed to ensure top-tier quality.</p>
             </div>
-            
+
             <div className="promise-card">
               <div className="promise-icon">
                 <MessageCircle className="w-5 h-5" />
@@ -178,8 +183,11 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
       <section className="profiles" id="profiles">
         <div className="wrap">
-          <h2 className="profiles-title">Discover exceptional <em>professionals</em> for your big day.</h2>
-          <p className="profiles-desc">From master emcees to award-winning photographers, explore our curated selection of verified event talent ready to bring your vision to life.</p>
+          <div className="titles-mid">
+            <h2 className="profiles-title">Discover exceptional <em>Emcees/ MC/ Comperes</em> for your big day.</h2>
+            <p className="profiles-desc">From master bakers to award-winning designers, explore our curated selection of verified Emcees/ MC/ Comperes ready to bring your vision to life.</p>
+
+          </div>
 
           {categoryVendors.map(({ category, vendors }) => {
             const slug = getCategorySlug(category);
@@ -191,11 +199,11 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
                 </div>
                 <div className="profile-grid">
                   {vendors.map(v => (
-                    <VendorCard 
-                      key={v.id} 
-                      vendor={v} 
-                      cloudflareAccountHash={cloudflareAccountHash} 
-                      triggerType="profile-card" 
+                    <VendorCard
+                      key={v.id}
+                      vendor={v}
+                      cloudflareAccountHash={cloudflareAccountHash}
+                      triggerType="profile-card"
                     />
                   ))}
                   {vendors.length === 0 && (
@@ -209,100 +217,102 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         </div>
       </section>
 
-      <section className="explore" id="explore">
+      <section className="mentor-section">
         <div className="wrap">
-          <div className="explore-header">
-            <h2 className="explore-title">Latest updates, news & happenings from the event world.</h2>
-            <a className="view-more" href="#">View all news &rarr;</a>
+          <div className="mentor-header">
+            <h2 className="mentor-title">Hear from our Mentor for Emcees or Comperes</h2>
           </div>
-          <div className="explore-grid">
-            <a className="explore-card" href="https://srilankanmc.com">
-              <div className="explore-img-wrap"><img src="/bg_mc.png" alt="Emcees & Comperes" /></div>
-              <div className="explore-content">
-                <div className="tag">Emcees &amp; Comperes</div>
-                <h3>Book an Emcee or Compere in Sri Lanka</h3>
-                <p>Search and book verified emcees and comperes for any occasion.</p>
-                <span className="link-arrow">Visit Sri Lankan Emcee &rarr;</span>
+          <div className="mentor-content">
+            <div className="mentor-video">
+              <div className="video-box-large">
+                <div className="video-bg"></div>
+                <div className="watch-badge">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                  <span>Watch on YouTube</span>
+                </div>
+                <div className="play-btn-large">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+                <div className="video-caption-large">
+                  <strong>Vijaya Corea</strong>
+                  <span className="caption-divider"></span>
+                  <span>Emcee mentor</span>
+                </div>
               </div>
-            </a>
-            <a className="explore-card" href="https://srilankanband.com">
-              <div className="explore-img-wrap"><img src="/bg_band.png" alt="Bands" /></div>
-              <div className="explore-content">
-                <div className="tag">Bands</div>
-                <h3>Book a Live Band in Sri Lanka</h3>
-                <p>Search and book live bands for weddings, corporate events and celebrations.</p>
-                <span className="link-arrow">Visit Sri Lankan Band &rarr;</span>
-              </div>
-            </a>
-            <a className="explore-card" href="https://srilankandj.com">
-              <div className="explore-img-wrap"><img src="/bg_dj.png" alt="DJs" /></div>
-              <div className="explore-content">
-                <div className="tag">DJs</div>
-                <h3>Book a DJ in Sri Lanka</h3>
-                <p>Search and book DJs for any event, from intimate gatherings to large celebrations.</p>
-                <span className="link-arrow">Visit Sri Lankan DJ &rarr;</span>
-              </div>
-            </a>
-            <a className="explore-card" href="https://srilankanmua.com">
-              <div className="explore-img-wrap"><img src="/bg_mua.png" alt="Makeup Artists" /></div>
-              <div className="explore-content">
-                <div className="tag">Makeup Artists</div>
-                <h3>Book a Makeup Artist in Sri Lanka</h3>
-                <p>Search and book bridal and event makeup artists across the island.</p>
-                <span className="link-arrow">Visit Sri Lankan MUA &rarr;</span>
-              </div>
-            </a>
-            <a className="explore-card" href="https://srilankancakeartist.com">
-              <div className="explore-img-wrap"><img src="/bg_cake.png" alt="Cake Artists" /></div>
-              <div className="explore-content">
-                <div className="tag">Cake Artists</div>
-                <h3>Book a Cake Artist in Sri Lanka</h3>
-                <p>Search and book cake artists for weddings and celebrations of any size.</p>
-                <span className="link-arrow">Visit Sri Lankan Cake Artist &rarr;</span>
-              </div>
-            </a>
-            <a className="explore-card" href="https://srilankanphotographer.com">
-              <div className="explore-img-wrap"><img src="/bg_photo.png" alt="Photographers" /></div>
-              <div className="explore-content">
-                <div className="tag">Photographers</div>
-                <h3>Book a Photographer in Sri Lanka</h3>
-                <p>Search and book event and wedding photographers, local and diaspora-friendly.</p>
-                <span className="link-arrow">Visit Sri Lankan Photographer &rarr;</span>
-              </div>
-            </a>
+            </div>
+            <div className="mentor-details">
+              <svg className="quote-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 11L8 15H11V19H5V15L7 11H5V7H11V11H10ZM20 11L18 15H21V19H15V15L17 11H15V7H21V11H20Z" fill="currentColor" />
+              </svg>
+              <h3>Vijaya Corea</h3>
+              <p>One of Sri Lanka's most recognised emcees and comperes, on why he's backing the next generation of hosts entering the industry.</p>
+              <a href="#" className="mentor-link">Watch full interview &rarr;</a>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="mentors">
+      <section className="offer-section">
         <div className="wrap">
-          <div className="section-eyebrow">Ambassadors</div>
-          <h2>Hear from Our Mentors</h2>
-          <div className="mentor-grid">
-            <div className="mentor-card">
-              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Emcee mentor video"></div><div className="video-caption">Emcee / Compere</div></div>
-              <div className="mentor-body"><div className="mentor-cat">Emcees &amp; Comperes</div><div className="mentor-name">Vijaya Corea</div></div>
+          <div className="offer-header">
+            <h2>If you believe you have the talent, <em>give it six months.</em></h2>
+            <p className="offer-subtitle">List with us for six months. If you don't get a single booking in that time, your next six months are free — no catch, no small print.</p>
+            <p className="offer-highlight">There is no commission or hidden fees on any booking.</p>
+          </div>
+
+          <div className="offer-grid">
+            <div className="offer-card">
+              <div className="offer-icon"><Video className="w-5 h-5" /></div>
+              <p>A video and photo profile, made for you</p>
             </div>
-            <div className="mentor-card">
-              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Band mentor video"></div><div className="video-caption">Band</div></div>
-              <div className="mentor-body"><div className="mentor-cat">Bands</div><div className="mentor-name">Ambassador to be announced</div></div>
+            <div className="offer-card">
+              <div className="offer-icon"><MousePointer2 className="w-5 h-5" /></div>
+              <p>Every event featured on our social media</p>
             </div>
-            <div className="mentor-card">
-              <div className="video-box"><div className="play-btn" role="button" aria-label="Play DJ mentor video"></div><div className="video-caption">DJ</div></div>
-              <div className="mentor-body"><div className="mentor-cat">DJs</div><div className="mentor-name">Ambassador to be announced</div></div>
+            <div className="offer-card">
+              <div className="offer-icon"><Percent className="w-5 h-5" /></div>
+              <p>Referrals sent your way</p>
             </div>
-            <div className="mentor-card">
-              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Makeup Artist mentor video"></div><div className="video-caption">Makeup Artist</div></div>
-              <div className="mentor-body"><div className="mentor-cat">Makeup Artists</div><div className="mentor-name">Ambassador to be announced</div></div>
+            <div className="offer-card">
+              <div className="offer-icon"><CalendarCheck className="w-5 h-5" /></div>
+              <p>Tentative bookings, confirmed by us</p>
             </div>
-            <div className="mentor-card">
-              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Cake Artist mentor video"></div><div className="video-caption">Cake Artist</div></div>
-              <div className="mentor-body"><div className="mentor-cat">Cake Artists</div><div className="mentor-name">Ambassador to be announced</div></div>
+            <div className="offer-card">
+              <div className="offer-icon"><CircleDollarSign className="w-5 h-5" /></div>
+              <p>Zero commission, zero hidden fees</p>
             </div>
-            <div className="mentor-card">
-              <div className="video-box"><div className="play-btn" role="button" aria-label="Play Photographer mentor video"></div><div className="video-caption">Photographer</div></div>
-              <div className="mentor-body"><div className="mentor-cat">Photographers</div><div className="mentor-name">Ambassador to be announced</div></div>
+            <div className="offer-card">
+              <div className="offer-icon"><TrendingUp className="w-5 h-5" /></div>
+              <p>ROI covered in a single event</p>
             </div>
+            <div className="offer-card">
+              <div className="offer-icon"><ShieldCheck className="w-5 h-5" /></div>
+              <p>No bookings in 6 months? Next 6 free</p>
+            </div>
+          </div>
+
+          <div className="offer-banner-dark">
+            <p><em>Our priority is simple: your talent showcased, never wasted.</em></p>
+          </div>
+
+          <div className="offer-banner-light">
+            <div className="offer-banner-dot"></div>
+            <p>Your profile also appears on Sri Lankan Wedding Portal and Sri Lankan Event Portal, at no extra cost</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="join-section" id="join-us">
+        <div className="wrap">
+          <div className="join-container">
+            <div className="join-header">
+
+              <h2>Become an Emcee or Compere</h2>
+              <p>Fill this in and we'll call you to confirm your details and walk you through membership.</p>
+            </div>
+            <JoinForm />
           </div>
         </div>
       </section>
@@ -312,6 +322,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>Powered by <img src="/MentSpire_logo.svg" alt="MentSpire" style={{ height: '20px', width: 'auto' }} /></span>
             <span style={{ borderLeft: '1px solid rgba(248,246,241,0.25)', paddingLeft: '20px' }}>Also part of <a href="https://lankanweddingportal.com">Sri Lankan Wedding Portal</a></span>
+            <span style={{ borderLeft: '1px solid rgba(248,246,241,0.25)', paddingLeft: '20px' }}><a href="/terms-and-conditions">Terms & Conditions</a></span>
           </div>
           <div className="foot-socials">
             <a href="https://instagram.com" aria-label="Instagram">

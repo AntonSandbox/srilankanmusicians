@@ -3,9 +3,9 @@ import { Resend } from 'resend';
 
 export async function POST(request: Request) {
   try {
-    const { name, phone, talentType } = await request.json();
+    const { name, phone, city, languages, experience, portfolio, talentType } = await request.json();
 
-    if (!name || !phone || !talentType) {
+    if (!name || !phone) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
@@ -23,12 +23,16 @@ export async function POST(request: Request) {
       from: 'Vendor Application <onboarding@mail.spytlabs.com>',
       to: adminEmail,
       subject: `New Vendor Application: ${name}`,
-      text: `A new vendor has applied to join the platform.\n\nName: ${name}\nPhone: ${phone}\nTalent Type: ${talentType}`,
+      text: `A new vendor has applied to join the platform.\n\nName: ${name}\nPhone: ${phone}\nCity: ${city || 'N/A'}\nLanguages: ${languages || 'N/A'}\nExperience: ${experience || 'N/A'}\nPortfolio: ${portfolio || 'N/A'}\nTalent Type: ${talentType || 'N/A'}`,
       html: `
         <h2>New Vendor Application</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Talent Type:</strong> ${talentType}</p>
+        <p><strong>City/Area:</strong> ${city || 'N/A'}</p>
+        <p><strong>Languages:</strong> ${languages || 'N/A'}</p>
+        <p><strong>Experience:</strong> ${experience || 'N/A'}</p>
+        <p><strong>Portfolio/Link:</strong> ${portfolio || 'N/A'}</p>
+        <p><strong>Talent Type:</strong> ${talentType || 'N/A'}</p>
       `,
     });
 

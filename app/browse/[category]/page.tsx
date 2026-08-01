@@ -14,9 +14,9 @@ function getCategoryFromSlug(slug: string) {
 export async function generateMetadata(props: { params: Promise<{ category: string }> }): Promise<Metadata> {
   const params = await props.params;
   const categoryName = getCategoryFromSlug(params.category);
-  
+
   if (!categoryName) return { title: 'Category Not Found' };
-  
+
   return {
     title: `Book ${categoryName} in Sri Lanka`,
     description: `Browse and book top-rated ${categoryName} for your events in Sri Lanka. Read reviews, check availability, and contact directly.`,
@@ -55,8 +55,7 @@ export default async function BrowseCategoryPage(props: { params: Promise<{ cate
             </label>
 
             <div className='nav-links flex gap-4'>
-              <a href="/become-vendor" className="nav-btn-primary">BECOME A VENDOR</a>
-              <a href="/vendor/login" className="nav-btn-secondary">VENDOR LOGIN</a>
+              <a href="/become-vendor" className="nav-btn-primary">BECOME A Emcees/ MC/ Compere</a>
             </div>
           </nav>
         </div>
@@ -66,9 +65,9 @@ export default async function BrowseCategoryPage(props: { params: Promise<{ cate
         <div className="wrap">
           <div className="section-eyebrow">Browse talent</div>
           <h2>All {categoryName}</h2>
-          
+
           <BrowseClient category={categoryName} cloudflareHash={cloudflareAccountHash} />
-          
+
         </div>
       </section>
 

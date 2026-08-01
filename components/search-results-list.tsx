@@ -3,11 +3,11 @@ import { VendorGrid } from '@/components/vendor-grid';
 import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
-export async function SearchResultsList({ 
-  searchParams, 
-  cloudflareAccountHash, 
-  totalProfessionals 
-}: { 
+export async function SearchResultsList({
+  searchParams,
+  cloudflareAccountHash,
+  totalProfessionals
+}: {
   searchParams: { [key: string]: string | string[] | undefined },
   cloudflareAccountHash: string,
   totalProfessionals: number
@@ -44,7 +44,7 @@ export async function SearchResultsList({
   );
 
   const args = {
-    p_category: category || null,
+    p_category: 'Emcees/ MC/ Compere',
     p_location: location || null,
     p_languages: languages || null,
     p_date: date || null,
@@ -110,7 +110,7 @@ export async function SearchResultsList({
   return (
     <>
       <div className="section-eyebrow" style={{ marginBottom: '8px' }}>Search Results</div>
-      <h2 style={{ marginBottom: '32px' }}>Available Talent for Your Event</h2>
+      <h2 style={{ marginBottom: '32px' }}>Available Emcees/ MC/ Comperes for Your Event</h2>
       <VendorGrid vendors={vendors} cloudflareAccountHash={cloudflareAccountHash} totalProfessionals={totalProfessionals || 542} />
     </>
   );
@@ -120,14 +120,14 @@ export function VendorGridSkeleton() {
   return (
     <>
       <div className="section-eyebrow" style={{ marginBottom: '8px' }}>Search Results</div>
-      <h2 style={{ marginBottom: '32px' }}>Available Talent for Your Event</h2>
+      <h2 style={{ marginBottom: '32px' }}>Available Emcees/ MC/ Comperes for Your Event</h2>
       <div className="vendors-hd in animate-pulse">
         <div className="vhd-left">
           <div className="h-4 w-48 bg-zinc-200 dark:bg-zinc-800 rounded mb-2"></div>
           <div className="h-8 w-64 bg-zinc-200 dark:bg-zinc-800 rounded"></div>
         </div>
         <div className="vhd-sort">
-           <div className="h-10 w-32 bg-zinc-200 dark:bg-zinc-800 rounded"></div>
+          <div className="h-10 w-32 bg-zinc-200 dark:bg-zinc-800 rounded"></div>
         </div>
       </div>
       <div className="vgrid">
