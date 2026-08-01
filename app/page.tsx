@@ -54,7 +54,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   // The search fetching has been moved to SearchResultsList
 
   // Cloudflare Images uses an Account Hash for delivery, not the API Account ID
-  const cloudflareAccountHash = process.env.NEXT_PUBLIC_CLOUDFLARE_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
+  const cloudflareAccountHash = process.env.NEXT_PUBLIC_CF_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
 
   const cookieStore = await cookies();
   const supabase = createServerClient(
