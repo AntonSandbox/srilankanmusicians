@@ -105,7 +105,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
             <div className='nav-links flex gap-4'>
               <a href="https://srilankaneventportal.com/vendor/login" target="_blank" rel="noopener noreferrer" className="nav-btn-secondary">VENDOR LOGIN</a>
-              <a href="#join-us" className="nav-btn-primary">BECOME A Emcees/ MC/ Compere</a>
+              <a href="#join-us" className="nav-btn-primary">BECOME A Emcee/ Compere</a>
             </div>
           </nav>
 
@@ -122,8 +122,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         <div className="hero-overlay"></div>
 
         <div className="wrap">
-          <div className="eyebrow">Sri Lanka's Top Emcees/ MC/ Comperes, All in One Place</div>
-          <h1>Search Emcees/ MC/ Comperes<br />for your <span>Event</span></h1>
+          <div className="eyebrow">Sri Lanka's Top Emcees/ Comperes, All in One Place</div>
+          <h1>Search Emcees/ Comperes<br />for your <span>Event</span></h1>
 
           <Suspense fallback={<div style={{ height: '300px', background: 'var(--cream)', borderRadius: '6px' }}></div>}>
             <SearchForm />
@@ -248,7 +248,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
                 <path d="M10 11L8 15H11V19H5V15L7 11H5V7H11V11H10ZM20 11L18 15H21V19H15V15L17 11H15V7H21V11H20Z" fill="currentColor" />
               </svg>
               <h3>Vijaya Corea</h3>
-              <p>One of Sri Lanka's most recognised emcees and comperes, on why he's backing the next generation of hosts entering the industry.</p>
+              <p>One of Sri Lanka's most recognised Master of ceremonies for over 62 years, on why he's backing the next generation of hosts entering the industry.</p>
               <a href="#" className="mentor-link">Watch full interview &rarr;</a>
             </div>
           </div>
@@ -276,10 +276,10 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
               <div className="offer-icon"><Percent className="w-5 h-5" /></div>
               <p>Referrals sent your way</p>
             </div>
-            <div className="offer-card">
+            {/* <div className="offer-card">
               <div className="offer-icon"><CalendarCheck className="w-5 h-5" /></div>
               <p>Tentative bookings, confirmed by us</p>
-            </div>
+            </div> */}
             <div className="offer-card">
               <div className="offer-icon"><CircleDollarSign className="w-5 h-5" /></div>
               <p>Zero commission, zero hidden fees</p>
@@ -298,10 +298,10 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             <p><em>Our priority is simple: your talent showcased, never wasted.</em></p>
           </div>
 
-          <div className="offer-banner-light">
+          {/* <div className="offer-banner-light">
             <div className="offer-banner-dot"></div>
             <p>Your profile also appears on Sri Lankan Wedding Portal and Sri Lankan Event Portal, at no extra cost</p>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -322,7 +322,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         <div className="wrap">
           <div style={{ display: 'flex', gap: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>Powered by <img src="/MentSpire_logo.svg" alt="MentSpire" style={{ height: '20px', width: 'auto' }} /></span>
-            <span style={{ borderLeft: '1px solid rgba(248,246,241,0.25)', paddingLeft: '20px' }}>Also part of <a href="https://lankanweddingportal.com">Sri Lankan Wedding Portal</a></span>
+            {/* <span style={{ borderLeft: '1px solid rgba(248,246,241,0.25)', paddingLeft: '20px' }}>Also part of <a href="https://lankanweddingportal.com">Sri Lankan Wedding Portal</a></span> */}
             <span style={{ borderLeft: '1px solid rgba(248,246,241,0.25)', paddingLeft: '20px' }}><a href="/terms-and-conditions">Terms & Conditions</a></span>
           </div>
           <div className="foot-socials">
