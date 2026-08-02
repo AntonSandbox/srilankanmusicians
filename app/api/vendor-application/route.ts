@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const resend = new Resend(resendApiKey);
 
     const { data, error } = await resend.emails.send({
-      from: 'Vendor Application <onboarding@mail.spytlabs.com>',
+      from: `Vendor Application <${process.env.RESEND_FROM_EMAIL}>`,
       to: adminEmail,
       subject: `New Vendor Application: ${name}`,
       text: `A new vendor has applied to join the platform.\n\nName: ${name}\nPhone: ${phone}\nCity: ${city || 'N/A'}\nLanguages: ${languages || 'N/A'}\nExperience: ${experience || 'N/A'}\nPortfolio: ${portfolio || 'N/A'}\nTalent Type: ${talentType || 'N/A'}`,

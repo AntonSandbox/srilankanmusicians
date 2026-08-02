@@ -61,9 +61,8 @@ export async function sendTentativeBookingRequest(prevState: any, formData: Form
     `;
 
     // Resend requires a verified domain or "onboarding@resend.dev" for testing.
-    // Assuming spytlabs is verified as per vendor-actions.ts: 'spytLabs <onboarding@mail.spytlabs.com>'
     await resend.emails.send({
-      from: 'Platform <onboarding@mail.spytlabs.com>',
+      from: `Platform <${process.env.RESEND_FROM_EMAIL}>`,
       to: toEmails,
       replyTo: email,
       subject: `New Booking Request for ${vendorName}`,
