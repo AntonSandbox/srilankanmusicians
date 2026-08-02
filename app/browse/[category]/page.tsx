@@ -36,7 +36,7 @@ export default async function BrowseCategoryPage(props: { params: Promise<{ cate
     return <div className="text-center py-20 text-xl">Category not found</div>;
   }
 
-  const cloudflareAccountHash = process.env.NEXT_PUBLIC_CF_ACCOUNT_HASH || 'olsA5w0GxmMpS1hyYoBOrg';
+  const cloudflareAccountHash = process.env.NEXT_PUBLIC_CF_ACCOUNT_HASH || 'CXXrCUeORPaBgBA-OAR4aA';
 
   return (
     <div className="new-home">
