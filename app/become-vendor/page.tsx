@@ -6,8 +6,11 @@ import { SERVICES } from '@/lib/constants';
 
 export default function BecomeVendorPage() {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [talentType, setTalentType] = useState(SERVICES[0].items[0]);
+  const [whatsapp, setWhatsapp] = useState('');
+  const [email, setEmail] = useState('');
+  const [city, setCity] = useState('');
+  const [languages, setLanguages] = useState('');
+  const [startingRate, setStartingRate] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,7 +23,7 @@ export default function BecomeVendorPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, phone, talentType }),
+        body: JSON.stringify({ name, whatsapp, email, city, languages, startingRate }),
       });
 
       if (!res.ok) {
@@ -29,8 +32,11 @@ export default function BecomeVendorPage() {
 
       setStatus('success');
       setName('');
-      setPhone('');
-      setTalentType(SERVICES[0].items[0]);
+      setWhatsapp('');
+      setEmail('');
+      setCity('');
+      setLanguages('');
+      setStartingRate('');
     } catch (error) {
       console.error(error);
       setStatus('error');
@@ -87,31 +93,68 @@ export default function BecomeVendorPage() {
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: 'var(--espresso)' }}>Phone Number</label>
+                  <label htmlFor="whatsapp" className="block text-sm font-medium mb-2" style={{ color: 'var(--espresso)' }}>WhatsApp Number</label>
                   <input
                     type="tel"
-                    id="phone"
+                    id="whatsapp"
                     required
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    value={whatsapp}
+                    onChange={(e) => setWhatsapp(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
-                    placeholder="Enter your phone number"
+                    placeholder="07X XXX XXXX"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="talentType" className="block text-sm font-medium mb-2" style={{ color: 'var(--espresso)' }}>Talent Type</label>
-                  <select
-                    id="talentType"
+                  <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: 'var(--espresso)' }}>Email Address</label>
+                  <input
+                    type="email"
+                    id="email"
                     required
-                    value={talentType}
-                    onChange={(e) => setTalentType(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:border-transparent bg-white transition-all"
-                  >
-                    {SERVICES[0].items.map((item) => (
-                      <option key={item} value={item}>{item}</option>
-                    ))}
-                  </select>
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
+                    placeholder="you@email.com"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="city" className="block text-sm font-medium mb-2" style={{ color: 'var(--espresso)' }}>City / Area</label>
+                  <input
+                    type="text"
+                    id="city"
+                    required
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
+                    placeholder="e.g. Colombo 03"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="languages" className="block text-sm font-medium mb-2" style={{ color: 'var(--espresso)' }}>Languages you host in</label>
+                  <input
+                    type="text"
+                    id="languages"
+                    required
+                    value={languages}
+                    onChange={(e) => setLanguages(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
+                    placeholder="e.g. English, Sinhala"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="startingRate" className="block text-sm font-medium mb-2" style={{ color: 'var(--espresso)' }}>Starting Rate per Event</label>
+                  <input
+                    type="text"
+                    id="startingRate"
+                    required
+                    value={startingRate}
+                    onChange={(e) => setStartingRate(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:border-transparent transition-all"
+                    placeholder="e.g. LKR 50,000"
+                  />
                 </div>
 
                 {status === 'error' && (

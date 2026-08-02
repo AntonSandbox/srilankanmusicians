@@ -4,11 +4,11 @@ import { useState } from 'react';
 
 export function JoinForm() {
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
+  const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
   const [languages, setLanguages] = useState('');
-  const [experience, setExperience] = useState('');
-  const [portfolio, setPortfolio] = useState('');
+  const [startingRate, setStartingRate] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,12 +23,11 @@ export function JoinForm() {
         },
         body: JSON.stringify({ 
           name, 
-          phone, 
+          whatsapp, 
+          email,
           city, 
           languages, 
-          experience, 
-          portfolio, 
-          talentType: 'Emcees/ MC/ Compere' 
+          startingRate
         }),
       });
 
@@ -38,11 +37,11 @@ export function JoinForm() {
 
       setStatus('success');
       setName('');
-      setPhone('');
+      setWhatsapp('');
+      setEmail('');
       setCity('');
       setLanguages('');
-      setExperience('');
-      setPortfolio('');
+      setStartingRate('');
     } catch (error) {
       console.error(error);
       setStatus('error');
@@ -65,8 +64,12 @@ export function JoinForm() {
             <input id="join-name" type="text" placeholder="Your full name" required value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div className="join-field">
-            <label htmlFor="join-phone">WhatsApp number</label>
-            <input id="join-phone" type="text" placeholder="07X XXX XXXX" required value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <label htmlFor="join-whatsapp">WhatsApp number</label>
+            <input id="join-whatsapp" type="text" placeholder="07X XXX XXXX" required value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
+          </div>
+          <div className="join-field">
+            <label htmlFor="join-email">Email Address</label>
+            <input id="join-email" type="email" placeholder="you@email.com" required value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div className="join-field">
             <label htmlFor="join-city">City / area</label>
@@ -77,12 +80,8 @@ export function JoinForm() {
             <input id="join-lang" type="text" placeholder="e.g. Sinhala, English" required value={languages} onChange={(e) => setLanguages(e.target.value)} />
           </div>
           <div className="join-field">
-            <label htmlFor="join-exp">Years of experience</label>
-            <input id="join-exp" type="text" placeholder="e.g. 5 years" required value={experience} onChange={(e) => setExperience(e.target.value)} />
-          </div>
-          <div className="join-field">
-            <label htmlFor="join-port">Instagram / portfolio or sample video link</label>
-            <input id="join-port" type="text" placeholder="Paste a link to your work" required value={portfolio} onChange={(e) => setPortfolio(e.target.value)} />
+            <label htmlFor="join-rate">Starting rate per event</label>
+            <input id="join-rate" type="text" placeholder="e.g. LKR 50,000" required value={startingRate} onChange={(e) => setStartingRate(e.target.value)} />
           </div>
           
           {status === 'error' && <p className="join-error">Failed to submit. Please try again.</p>}
