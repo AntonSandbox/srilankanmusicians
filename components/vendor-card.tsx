@@ -173,21 +173,21 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               {vendor.name.charAt(0).toUpperCase()}
             </div>
           )}
-          
+
           <div className="profile-card-overlay">
-            <span className="profile-card-badge">
+            {/* <span className="profile-card-badge">
               {vendor.category}
-            </span>
+            </span> */}
             <h4 className="profile-card-name">{vendor.name}</h4>
             <div className="profile-card-location">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
               <span>{vendor.location || 'Remote'}</span>
             </div>
-            
+
             <div className="profile-card-btn-container">
-               <div className="profile-card-btn">
-                 View Profile <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-               </div>
+              <div className="profile-card-btn">
+                View Profile <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              </div>
             </div>
           </div>
         </div>
@@ -210,7 +210,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               <h2 className="text-[32px] font-bold font-serif text-white mb-1 leading-tight">{vendor.name}</h2>
               {vendor.location && (
                 <div className="flex items-center gap-1.5 text-white/90 text-[13px] font-medium">
-                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#e8a846]"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#e8a846]"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
                   <span>{vendor.location}</span>
                 </div>
               )}
@@ -320,10 +320,10 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
           ) : (
             <div className="p-4 sm:p-10">
               <div className="flex flex-col gap-10">
-                
+
                 {/* Responsive Top Layout */}
                 <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-                  
+
                   {/* Left Column (DP + Desktop Bio) */}
                   <div className="w-full md:w-1/3 flex flex-col items-center md:items-start shrink-0">
                     <div className="w-32 h-32 md:w-48 md:h-48 rounded-full overflow-hidden bg-zinc-100 dark:bg-zinc-800 border-4 border-white dark:border-zinc-950 shadow-lg flex items-center justify-center text-5xl md:text-6xl font-serif text-amber-500 mb-4 md:mb-8 mx-auto md:mx-0">
@@ -343,7 +343,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                         {popupVendor.name}
                       </h1>
                     </div>
-                    
+
                     {/* Desktop Bio */}
                     {popupVendor.bio && (
                       <div className="hidden md:block w-full border-t border-dashed border-zinc-300 dark:border-zinc-700 pt-6 mt-2">
@@ -589,9 +589,9 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                             const today = new Date();
                             today.setHours(0, 0, 0, 0);
                             if (date < today) return true;
-                            
+
                             const dateStr = format(date, 'yyyy-MM-dd');
-                            const isFullyBooked = popupVendor.unavailableSlots?.some(slot => 
+                            const isFullyBooked = popupVendor.unavailableSlots?.some(slot =>
                               slot.date === dateStr && slot.start_time.startsWith('00:00') && slot.end_time.startsWith('23:59')
                             );
                             return !!isFullyBooked;
@@ -673,7 +673,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                                   {TIME_SLOTS.map(time => {
                                     let disabled = false;
                                     const timeNum = time.replace(':', '');
-                                    
+
                                     if (!bookingStartTime) {
                                       disabled = popupVendor.unavailableSlots?.some(slot => {
                                         if (slot.date !== selectedDateStr) return false;
@@ -694,7 +694,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                                         }) || false;
                                       }
                                     }
-                                    
+
                                     return <option key={time} value={time} disabled={disabled}>{time}</option>
                                   })}
                                 </select>

@@ -104,8 +104,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             </label>
 
             <div className='nav-links flex gap-4'>
-              <a href="https://srilankaneventportal.com/vendor/login" target="_blank" rel="noopener noreferrer" className="nav-btn-secondary">VENDOR LOGIN</a>
-              <a href="#join-us" className="nav-btn-primary">BECOME A Emcee/ Compere</a>
+              <a href="https://srilankaneventportal.com/vendor/login" target="_blank" rel="noopener noreferrer" className="nav-btn-secondary">Emcee/ Compere LOGIN</a>
+              <a href="#join-us" className="nav-btn-primary">BECOME AN Emcee/ Compere</a>
             </div>
           </nav>
 
@@ -150,7 +150,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <section className="promise">
         <div className="wrap">
           <div className="promise-header">
-            <h2>Free to search. <span>Vendors you can trust.</span></h2>
+            <h2>Free to search. <span>comperes you can trust.</span></h2>
             <p>We've built a platform that puts your peace of mind first.</p>
           </div>
 
@@ -195,7 +195,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             return (
               <div key={category} className="category-block">
                 <div className="category-head">
-                  <h3>{category}</h3>
+                  <h3>{category === 'Emcees/ MC/ Compere' ? 'Emcees/ Comperes' : category}</h3>
                   <a className="view-more" href={`/browse/${slug}`}>Explore All &rarr;</a>
                 </div>
                 <div className="profile-grid">
@@ -225,23 +225,25 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           </div>
           <div className="mentor-content">
             <div className="mentor-video">
-              <div className="video-box-large">
-                <div className="video-bg"></div>
-                <div className="watch-badge">
-                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
-                  <span>Watch on YouTube</span>
+              <a href="https://youtu.be/4Axj6aj-wtQ?si=ECZc3P_FvhJAEz8X" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
+                <div className="video-box-large">
+                  <div className="video-bg"></div>
+                  <div className="watch-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                    <span>Watch on YouTube</span>
+                  </div>
+                  <div className="play-btn-large">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                  <div className="video-caption-large">
+                    <strong>Vijaya Corea</strong>
+                    <span className="caption-divider"></span>
+                    <span>Emcee mentor</span>
+                  </div>
                 </div>
-                <div className="play-btn-large">
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-                <div className="video-caption-large">
-                  <strong>Vijaya Corea</strong>
-                  <span className="caption-divider"></span>
-                  <span>Emcee mentor</span>
-                </div>
-              </div>
+              </a>
             </div>
             <div className="mentor-details">
               <svg className="quote-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -249,7 +251,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
               </svg>
               <h3>Vijaya Corea</h3>
               <p>One of Sri Lanka's most recognised Master of ceremonies for over 62 years, on why he's backing the next generation of hosts entering the industry.</p>
-              <a href="#" className="mentor-link">Watch full interview &rarr;</a>
+              <a href="https://youtu.be/4Axj6aj-wtQ?si=ECZc3P_FvhJAEz8X" target="_blank" rel="noopener noreferrer" className="mentor-link">Watch full interview &rarr;</a>
             </div>
           </div>
         </div>

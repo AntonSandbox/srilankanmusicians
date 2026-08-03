@@ -19,7 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { OCCASIONS, SERVICES, LOCATIONS, LANGUAGES, BUDGET_RANGES } from '@/lib/constants';
+import { OCCASIONS, LOCATIONS, LANGUAGES } from '@/lib/constants';
 
 export function SearchForm() {
   const router = useRouter();
@@ -27,7 +27,6 @@ export function SearchForm() {
   const [isPending, startTransition] = useTransition();
 
   const [occasion, setOccasion] = useState(searchParams.get('occasion') || '');
-  const [category, setCategory] = useState(searchParams.get('category') || '');
   const [date, setDate] = useState<Date | undefined>(
     searchParams.get('date') ? new Date(searchParams.get('date') as string) : undefined
   );
@@ -38,7 +37,6 @@ export function SearchForm() {
   // Sync state if URL changes externally
   useEffect(() => {
     setOccasion(searchParams.get('occasion') || '');
-    setCategory(searchParams.get('category') || '');
     setDate(searchParams.get('date') ? new Date(searchParams.get('date') as string) : undefined);
     setLocation(searchParams.get('location') || '');
     setLanguages(searchParams.getAll('language'));
@@ -56,9 +54,6 @@ export function SearchForm() {
 
     if (occasion && occasion !== 'none') params.set('occasion', occasion);
     else params.delete('occasion');
-
-    if (category && category !== 'none') params.set('category', category);
-    else params.delete('category');
 
     if (date) params.set('date', format(date, 'yyyy-MM-dd'));
     else params.delete('date');
@@ -105,19 +100,6 @@ export function SearchForm() {
               onChange={(e) => setDate(e.target.value ? new Date(e.target.value) : undefined)}
             />
           </div>
-          <div className="field">
-            <label htmlFor="s-talent">Talent type</label>
-            <select id="s-talent" value={category} onChange={(e) => setCategory(e.target.value)}>
-              <option value="none">All Services</option>
-              {SERVICES.map((group) => (
-                <optgroup key={group.group} label={group.group}>
-                  {group.items.map((item) => (
-                    <option key={item} value={item}>{item}</option>
-                  ))}
-                </optgroup>
-              ))}
-            </select>
-          </div>
         </div>
         <div className="search-grid" style={{ marginBottom: '22px' }}>
           <div className="field">
@@ -146,10 +128,7 @@ export function SearchForm() {
             <label htmlFor="s-budget">Budget range</label>
             <select id="s-budget" value={budget} onChange={(e) => setBudget(e.target.value)}>
               <option value="none">Any Budget</option>
-              {(category === 'Emcees/ MC/ Compere' || category === 'Emcees/ MC/ Compere'
-                ? ['Under LKR 25,000', 'LKR 25,000 – 50,000', 'LKR 50,000 – 100,000', 'LKR 100,000 – 200,000', 'Above LKR 200,000']
-                : BUDGET_RANGES
-              ).map(range => (
+              {['Under LKR 25,000', 'LKR 25,000 – 50,000', 'LKR 50,000 – 100,000', 'LKR 100,000 – 200,000', 'Above LKR 200,000'].map(range => (
                 <option key={range} value={range}>{range}</option>
               ))}
             </select>

@@ -21,12 +21,12 @@ export function JoinForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          name, 
-          whatsapp, 
+        body: JSON.stringify({
+          name,
+          whatsapp,
           email,
-          city, 
-          languages, 
+          city,
+          languages,
           startingRate
         }),
       });
@@ -83,14 +83,14 @@ export function JoinForm() {
             <label htmlFor="join-rate">Starting rate per event</label>
             <input id="join-rate" type="text" placeholder="e.g. LKR 50,000" required value={startingRate} onChange={(e) => setStartingRate(e.target.value)} />
           </div>
-          
+
           {status === 'error' && <p className="join-error">Failed to submit. Please try again.</p>}
-          
+
           <button type="submit" className="join-submit-btn" disabled={status === 'loading'}>
-            {status === 'loading' ? 'Submitting...' : 'Submit and get a call back'}
+            {status === 'loading' ? 'Submitting...' : 'Submit'}
           </button>
-          
-          <p className="join-disclaimer">No payment now. We'll confirm pricing and next steps by phone before anything is finalised.</p>
+
+          <p className="join-disclaimer">No payment now. We will confirm pricing and next steps via Ruvi@mentspire.com before anything is finalised. Please do not make any payment to any bank account sent via any other email except Ruvi@mentspire.com only and that too upon speaking with you. We will not take responsibility if you use any other modes.</p>
         </form>
       )}
     </div>
