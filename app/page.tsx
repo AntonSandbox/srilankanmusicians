@@ -262,7 +262,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
                 <path d="M10 11L8 15H11V19H5V15L7 11H5V7H11V11H10ZM20 11L18 15H21V19H15V15L17 11H15V7H21V11H20Z" fill="currentColor" />
               </svg>
               <h3>Vijaya Corea</h3>
-              <p>One of Sri Lanka's most recognised Master of ceremonies for over 62 years, on why he's backing the next generation of hosts entering the industry.</p>
+              <p>In this exclusive interview, we seek advice  from Dr. Vijaya Corea, Sri Lanka's most iconic broadcaster, compere and media personality, with over 60 years behind the microphone.</p>
               <a href="https://youtu.be/4Axj6aj-wtQ?si=ECZc3P_FvhJAEz8X" target="_blank" rel="noopener noreferrer" className="mentor-link">Watch full interview &rarr;</a>
             </div>
           </div>
