@@ -204,9 +204,9 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
             )}
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-5">
-              <span className="bg-white/20 backdrop-blur-md text-white text-[9.5px] font-bold tracking-wider uppercase px-2.5 py-1 rounded w-fit mb-2">
+              {/* <span className="bg-white/20 backdrop-blur-md text-white text-[9.5px] font-bold tracking-wider uppercase px-2.5 py-1 rounded w-fit mb-2">
                 {vendor.category}
-              </span>
+              </span> */}
               <h2 className="text-[32px] font-bold font-serif text-white mb-1 leading-tight">{vendor.name}</h2>
               {vendor.location && (
                 <div className="flex items-center gap-1.5 text-white/90 text-[13px] font-medium">
