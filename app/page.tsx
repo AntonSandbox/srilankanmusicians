@@ -70,19 +70,31 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
     }
   );
 
-  const { count: totalProfessionals } = await supabase
+  let countQuery = supabase
     .from('vendors')
     .select('*', { count: 'exact', head: true })
     .eq('category', 'Emcees/ MC/ Compere');
+    
+  if (process.env.NODE_ENV !== 'development') {
+    countQuery = countQuery.neq('contact_email', 'tharushamjayasooriya@gmail.com');
+  }
+
+  const { count: totalProfessionals } = await countQuery;
 
   const categories = SERVICES[0].items;
   const categoryVendors = await Promise.all(
     categories.map(async (cat) => {
-      const { data } = await supabase
+      let query = supabase
         .from('vendors')
         .select('id, name, category, location, profile_image')
         .eq('category', cat)
-        .limit(5);
+        .order('created_at', { ascending: false });
+        
+      if (process.env.NODE_ENV !== 'development') {
+        query = query.neq('contact_email', 'tharushamjayasooriya@gmail.com');
+      }
+
+      const { data } = await query.limit(5);
       return { category: cat, vendors: (data as Vendor[]) || [] };
     })
   );

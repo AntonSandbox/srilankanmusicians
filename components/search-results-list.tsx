@@ -59,6 +59,10 @@ export async function SearchResultsList({
     fetchError = error;
   } else if (data) {
     vendors = data as Vendor[];
+    
+    if (process.env.NODE_ENV !== 'development') {
+      vendors = vendors.filter(v => (v as any).contact_email !== 'tharushamjayasooriya@gmail.com');
+    }
 
     if (vendors.length > 0) {
       const vendorIds = vendors.map(v => v.id);
