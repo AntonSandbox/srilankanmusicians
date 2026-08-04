@@ -74,7 +74,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
     .from('vendors')
     .select('*', { count: 'exact', head: true })
     .eq('category', 'Emcees/ MC/ Compere');
-    
+
   if (process.env.NODE_ENV !== 'development') {
     countQuery = countQuery.neq('contact_email', 'tharushamjayasooriya@gmail.com');
   }
@@ -89,7 +89,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         .select('id, name, category, location, profile_image')
         .eq('category', cat)
         .order('created_at', { ascending: false });
-        
+
       if (process.env.NODE_ENV !== 'development') {
         query = query.neq('contact_email', 'tharushamjayasooriya@gmail.com');
       }
@@ -197,7 +197,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <section className="profiles" id="profiles">
         <div className="wrap">
           <div className="titles-mid">
-            <h2 className="profiles-title">Discover exceptional <em>Emcees/ MC/ Comperes</em> for your big day.</h2>
+            <h2 className="profiles-title">Discover exceptional <em>Emcees/ Comperes</em> for your big day.</h2>
             <p className="profiles-desc">From master bakers to award-winning designers, explore our curated selection of verified Emcees/ MC/ Comperes ready to bring your vision to life.</p>
 
           </div>
