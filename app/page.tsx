@@ -168,26 +168,32 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
           <div className="promise-grid">
             <div className="promise-card">
-              <div className="promise-icon">
-                <CircleDollarSign className="w-5 h-5" />
+              <div className="promise-card-header">
+                <div className="promise-icon">
+                  <CircleDollarSign className="w-5 h-5" />
+                </div>
+                <h3>100% Free</h3>
               </div>
-              <h3>100% Free</h3>
               <p>No charge to you, ever — searching, browsing and checking availability is completely free.</p>
             </div>
 
             <div className="promise-card">
-              <div className="promise-icon">
-                <ShieldCheck className="w-5 h-5" />
+              <div className="promise-card-header">
+                <div className="promise-icon">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <h3>Verified Emcees/ MC/ Comperes</h3>
               </div>
-              <h3>Verified Emcees/ MC/ Comperes</h3>
               <p>Every Emcees/ MC/ Compere on this platform is meticulously screened before being listed to ensure top-tier quality.</p>
             </div>
 
             <div className="promise-card">
-              <div className="promise-icon">
-                <MessageCircle className="w-5 h-5" />
+              <div className="promise-card-header">
+                <div className="promise-icon">
+                  <MessageCircle className="w-5 h-5" />
+                </div>
+                <h3>Direct Contact</h3>
               </div>
-              <h3>Direct Contact</h3>
               <p>Once you find someone available, you'll speak with them directly to confirm details, pricing and next steps.</p>
             </div>
           </div>
@@ -198,7 +204,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         <div className="wrap">
           <div className="titles-mid">
             <h2 className="profiles-title">Discover exceptional <em>Emcees/ Comperes</em> for your big day.</h2>
-            <p className="profiles-desc">From master bakers to award-winning designers, explore our curated selection of verified Emcees/ MC/ Comperes ready to bring your vision to life.</p>
+            {/* <p className="profiles-desc">From master bakers to award-winning designers, explore our curated selection of verified Emcees/ MC/ Comperes ready to bring your vision to life.</p> */}
 
           </div>
 
@@ -207,7 +213,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             return (
               <div key={category} className="category-block">
                 <div className="category-head">
-                  <h3>{category === 'Emcees/ MC/ Compere' ? 'Emcees/ Comperes' : category}</h3>
+                  {/* <h3>{category === 'Emcees/ MC/ Compere' ? 'Emcees/ Comperes' : category}</h3> */}
                   <a className="view-more" href={`/browse/${slug}`}>Explore All &rarr;</a>
                 </div>
                 <div className="profile-grid">
@@ -250,7 +256,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
                     </svg>
                   </div>
                   <div className="video-caption-large">
-                    <strong>Vijaya Corea</strong>
+                    <strong>Dr. Vijaya Corea</strong>
                     <span className="caption-divider"></span>
                     <span>Emcee mentor</span>
                   </div>
@@ -261,9 +267,9 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
               <svg className="quote-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 11L8 15H11V19H5V15L7 11H5V7H11V11H10ZM20 11L18 15H21V19H15V15L17 11H15V7H21V11H20Z" fill="currentColor" />
               </svg>
-              <h3>Vijaya Corea</h3>
+              <h3>Dr. Vijaya Corea</h3>
               <p>In this exclusive interview, we seek advice  from Dr. Vijaya Corea, Sri Lanka's most iconic broadcaster, compere and media personality, with over 60 years behind the microphone.</p>
-              <a href="https://youtu.be/4Axj6aj-wtQ?si=ECZc3P_FvhJAEz8X" target="_blank" rel="noopener noreferrer" className="mentor-link">Watch full interview &rarr;</a>
+              {/* <a href="https://youtu.be/4Axj6aj-wtQ?si=ECZc3P_FvhJAEz8X" target="_blank" rel="noopener noreferrer" className="mentor-link">Watch full interview &rarr;</a> */}
             </div>
           </div>
         </div>

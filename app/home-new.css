@@ -436,6 +436,13 @@
   text-align: left;
 }
 
+.new-home .promise-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
 .new-home .promise-icon {
   width: 52px;
   height: 52px;
@@ -447,7 +454,7 @@
   align-items: center;
   justify-content: center;
   color: #e8a846;
-  margin-bottom: 24px;
+  flex-shrink: 0;
 }
 
 .new-home .promise-card h3 {
@@ -455,7 +462,7 @@
   font-weight: 800;
   font-size: 19px;
   color: var(--mid);
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 
 .new-home .promise-card p {
