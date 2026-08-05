@@ -128,7 +128,7 @@ export function SearchForm() {
             <label htmlFor="s-budget">Budget range</label>
             <select id="s-budget" value={budget} onChange={(e) => setBudget(e.target.value)}>
               <option value="none">Any Budget</option>
-              {['Under LKR 25,000', 'LKR 25,000 – 50,000', 'LKR 50,000 – 100,000', 'LKR 100,000 – 200,000', 'Above LKR 200,000'].map(range => (
+              {['Under LKR 20,000', 'Starting from LKR 20,000', 'Starting from LKR 50,000', 'Starting from LKR 100,000', 'Starting from LKR 250,000', 'Starting from  LKR 500,000'].map(range => (
                 <option key={range} value={range}>{range}</option>
               ))}
             </select>

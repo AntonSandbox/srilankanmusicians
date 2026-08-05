@@ -139,12 +139,23 @@ export const LANGUAGES = [
   'Tamil',
 ];
 
+// export const BUDGET_RANGES = [
+//   'Under LKR 20,000',
+//   'LKR 20,000 – 50,000',
+//   'LKR 50,000 – 100,000',
+//   'LKR 100,000 – 250,000',
+//   'LKR 250,000 – 500,000',
+//   'LKR 500,000+',
+//   'Flexible — show all',
+// ];
+
+
 export const BUDGET_RANGES = [
   'Under LKR 20,000',
-  'LKR 20,000 – 50,000',
-  'LKR 50,000 – 100,000',
-  'LKR 100,000 – 250,000',
-  'LKR 250,000 – 500,000',
-  'LKR 500,000+',
+  'Starting from LKR 20,000',
+  'Starting from  LKR 50,000',
+  'Starting from  LKR 100,000',
+  'Starting from  LKR 250,000',
+  'Starting from  LKR 500,000',
   'Flexible — show all',
 ];
