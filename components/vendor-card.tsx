@@ -347,7 +347,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                     {/* Desktop Bio */}
                     {popupVendor.bio && (
                       <div className="hidden md:block w-full border-t border-dashed border-zinc-300 dark:border-zinc-700 pt-6 mt-2">
-                        <h3 className="text-lg font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-3">Bio</h3>
+                        <h3 className="text-lg font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-3">About</h3>
                         <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed whitespace-pre-wrap">
                           {popupVendor.bio}
                         </p>
@@ -403,7 +403,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                     {/* Mobile Bio */}
                     {popupVendor.bio && (
                       <div className="md:hidden w-full border-t border-b border-dashed border-zinc-300 dark:border-zinc-700 py-6 mb-8 text-center">
-                        <h3 className="text-lg font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-3">Bio</h3>
+                        <h3 className="text-lg font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-3">About</h3>
                         <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed whitespace-pre-wrap">
                           {popupVendor.bio}
                         </p>
@@ -454,7 +454,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               {/* Portfolio */}
               {popupVendor.portfolio && popupVendor.portfolio.length > 0 && (
                 <div className="mt-16">
-                  <h2 className="text-2xl font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-6">Portfolio</h2>
+                  <h2 className="text-2xl font-bold font-serif text-zinc-900 dark:text-zinc-50 mb-6">Featured</h2>
                   <div className="flex flex-col sm:flex-row gap-4">
                     {/* Main Image */}
                     <div
@@ -712,7 +712,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                   </div>
 
                   <div className="space-y-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-                    <h3 className="text-lg font-bold font-serif text-zinc-900 dark:text-zinc-50">Your Details</h3>
+                    <h3 className="text-lg font-bold font-serif text-zinc-900 dark:text-zinc-50">Add your Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                       <div className="space-y-1.5">
                         <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Your Full Name</label>
@@ -784,7 +784,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                     ) : (
                       <>
                         <Send className="w-5 h-5" />
-                        SEND TENTATIVE BOOKING REQUEST
+                        Book
                       </>
                     )}
                   </button>

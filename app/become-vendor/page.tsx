@@ -48,7 +48,7 @@ export default function BecomeVendorPage() {
       <header id="siteHeader">
         <div className="wrap">
           <nav>
-            <a href="/" className="logo"><img src="/srilankan_event_portal.png" alt="Sri Lankan Event Portal" style={{ height: '40px', width: 'auto' }} /></a>
+            <a href="/" className="logo"><img src="/Cake Artistsrilankan_cake_artist.png" alt="Sri Lankan Event Portal" style={{ height: '40px', width: 'auto' }} /></a>
             <div className='flex gap-5'>
               <a href="/become-vendor" className="nav-cta">Become a Cake Artist</a>
             </div>
