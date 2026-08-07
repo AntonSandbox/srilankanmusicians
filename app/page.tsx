@@ -126,10 +126,10 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
       <section className="hero">
         <video autoPlay loop muted playsInline className="hero-bg-video desktop-video">
-          <source src="/emcee-bg2.mp4" type="video/mp4" />
+          <source src="/cake-bg.mp4" type="video/mp4" />
         </video>
         <video autoPlay loop muted playsInline className="hero-bg-video mobile-video">
-          <source src="/emcee-bg2.mp4" type="video/mp4" />
+          <source src="/cake-bg.mp4" type="video/mp4" />
         </video>
         <div className="hero-overlay"></div>
 
