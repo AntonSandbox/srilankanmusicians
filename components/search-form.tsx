@@ -141,7 +141,7 @@ export function SearchForm() {
               Searching...
             </>
           ) : (
-            'Find Available Emcees/ MC/ Comperes'
+            'Find Available Cake Artists'
           )}
         </button>
       </form>

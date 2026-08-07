@@ -17,7 +17,7 @@ export const SERVICES = [
   {
     group: 'Professionals',
     items: [
-      'Emcees/ MC/ Compere'
+      'Cake Artist'
     ],
   },
 ];

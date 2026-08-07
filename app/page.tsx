@@ -16,11 +16,11 @@ function getCategorySlug(category: string) {
 }
 
 export const metadata = {
-  title: 'Search & Book Top Emcees/ MC/ Comperes in Sri Lanka | Sri Lankan Event Portal',
-  description: 'Find and book the best Emcees/ MC/ Comperes in Sri Lanka. Search verified Emcees/ MC/ Comperes for your wedding or corporate event. 100% free to search.',
+  title: 'Search & Book Top Cake Artists in Sri Lanka | Sri Lankan Event Portal',
+  description: 'Find and book the best Cake Artists in Sri Lanka. Search verified Cake Artists for your wedding or corporate event. 100% free to search.',
   openGraph: {
-    title: 'Search & Book Top Emcees/ MC/ Comperes in Sri Lanka',
-    description: 'Find and book the best Emcees/ MC/ Comperes in Sri Lanka. Search verified Emcees/ MC/ Comperes for your special day.',
+    title: 'Search & Book Top Cake Artists in Sri Lanka',
+    description: 'Find and book the best Cake Artists in Sri Lanka. Search verified Cake Artists for your special day.',
     url: '/',
     siteName: 'Sri Lankan Event Portal',
     locale: 'en_LK',
@@ -73,7 +73,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   let countQuery = supabase
     .from('vendors')
     .select('*', { count: 'exact', head: true })
-    .eq('category', 'Emcees/ MC/ Compere');
+    .eq('category', 'Cake Artist');
 
   if (process.env.NODE_ENV !== 'development') {
     countQuery = countQuery.neq('contact_email', 'tharushamjayasooriya@gmail.com');
@@ -116,8 +116,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             </label>
 
             <div className='nav-links flex gap-4'>
-              <a href="https://srilankaneventportal.com/vendor/login" target="_blank" rel="noopener noreferrer" className="nav-btn-secondary">Emcee/ Compere LOGIN</a>
-              <a href="#join-us" className="nav-btn-primary">BECOME AN Emcee/ Compere</a>
+              <a href="https://srilankaneventportal.com/vendor/login" target="_blank" rel="noopener noreferrer" className="nav-btn-secondary">Cake Artist LOGIN</a>
+              <a href="#join-us" className="nav-btn-primary">BECOME AN Cake Artist</a>
             </div>
           </nav>
 
@@ -134,8 +134,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         <div className="hero-overlay"></div>
 
         <div className="wrap">
-          <div className="eyebrow">Sri Lanka's Top Emcees/ Comperes, All in One Place</div>
-          <h1>Search Emcees/ Comperes<br />for your <span>Event</span></h1>
+          <div className="eyebrow">Sri Lanka's Top Cake Artist, All in One Place</div>
+          <h1>Search Cake Artist<br />for your <span>Event</span></h1>
 
           <Suspense fallback={<div style={{ height: '300px', background: 'var(--cream)', borderRadius: '6px' }}></div>}>
             <SearchForm />
@@ -162,32 +162,38 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <section className="promise">
         <div className="wrap">
           <div className="promise-header">
-            <h2>Free to search. <span>comperes you can trust.</span></h2>
+            <h2>Free to search. <span>Comperes you can trust.</span></h2>
             <p>We've built a platform that puts your peace of mind first.</p>
           </div>
 
           <div className="promise-grid">
             <div className="promise-card">
-              <div className="promise-icon">
-                <CircleDollarSign className="w-5 h-5" />
+              <div className="promise-card-header">
+                <div className="promise-icon">
+                  <CircleDollarSign className="w-5 h-5" />
+                </div>
+                <h3>100% Free</h3>
               </div>
-              <h3>100% Free</h3>
               <p>No charge to you, ever — searching, browsing and checking availability is completely free.</p>
             </div>
 
             <div className="promise-card">
-              <div className="promise-icon">
-                <ShieldCheck className="w-5 h-5" />
+              <div className="promise-card-header">
+                <div className="promise-icon">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <h3>Verified Cake Artists</h3>
               </div>
-              <h3>Verified Emcees/ MC/ Comperes</h3>
-              <p>Every Emcees/ MC/ Compere on this platform is meticulously screened before being listed to ensure top-tier quality.</p>
+              <p>Every Cake Artist on this platform is meticulously screened before being listed to ensure top-tier quality.</p>
             </div>
 
             <div className="promise-card">
-              <div className="promise-icon">
-                <MessageCircle className="w-5 h-5" />
+              <div className="promise-card-header">
+                <div className="promise-icon">
+                  <MessageCircle className="w-5 h-5" />
+                </div>
+                <h3>Direct Contact</h3>
               </div>
-              <h3>Direct Contact</h3>
               <p>Once you find someone available, you'll speak with them directly to confirm details, pricing and next steps.</p>
             </div>
           </div>
@@ -197,8 +203,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <section className="profiles" id="profiles">
         <div className="wrap">
           <div className="titles-mid">
-            <h2 className="profiles-title">Discover exceptional <em>Emcees/ Comperes</em> for your big day.</h2>
-            <p className="profiles-desc">From master bakers to award-winning designers, explore our curated selection of verified Emcees/ MC/ Comperes ready to bring your vision to life.</p>
+            <h2 className="profiles-title">Discover exceptional <em>Cake Artist</em> for your big day.</h2>
+            {/* <p className="profiles-desc">From master bakers to award-winning designers, explore our curated selection of verified Cake Artists ready to bring your vision to life.</p> */}
 
           </div>
 
@@ -207,7 +213,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             return (
               <div key={category} className="category-block">
                 <div className="category-head">
-                  <h3>{category === 'Emcees/ MC/ Compere' ? 'Emcees/ Comperes' : category}</h3>
+                  {/* <h3>{category === 'Cake Artist' ? 'Cake Artist' : category}</h3> */}
                   <a className="view-more" href={`/browse/${slug}`}>Explore All &rarr;</a>
                 </div>
                 <div className="profile-grid">
@@ -230,44 +236,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         </div>
       </section>
 
-      <section className="mentor-section">
-        <div className="wrap">
-          <div className="mentor-header">
-            <h2 className="mentor-title">Hear from our Mentor for Emcees or Comperes</h2>
-          </div>
-          <div className="mentor-content">
-            <div className="mentor-video">
-              <a href="https://youtu.be/4Axj6aj-wtQ?si=ECZc3P_FvhJAEz8X" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
-                <div className="video-box-large">
-                  <div className="video-bg" style={{ background: 'url(/vijay-corea-thumbnail.png) center/cover no-repeat' }}></div>
-                  <div className="watch-badge">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
-                    <span>Watch on YouTube</span>
-                  </div>
-                  <div className="play-btn-large">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-                  <div className="video-caption-large">
-                    <strong>Vijaya Corea</strong>
-                    <span className="caption-divider"></span>
-                    <span>Emcee mentor</span>
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div className="mentor-details">
-              <svg className="quote-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 11L8 15H11V19H5V15L7 11H5V7H11V11H10ZM20 11L18 15H21V19H15V15L17 11H15V7H21V11H20Z" fill="currentColor" />
-              </svg>
-              <h3>Vijaya Corea</h3>
-              <p>In this exclusive interview, we seek advice  from Dr. Vijaya Corea, Sri Lanka's most iconic broadcaster, compere and media personality, with over 60 years behind the microphone.</p>
-              <a href="https://youtu.be/4Axj6aj-wtQ?si=ECZc3P_FvhJAEz8X" target="_blank" rel="noopener noreferrer" className="mentor-link">Watch full interview &rarr;</a>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       <section className="offer-section">
         <div className="wrap">
@@ -324,7 +293,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           <div className="join-container">
             <div className="join-header">
 
-              <h2>Become an Emcee or Compere</h2>
+              <h2>Become an Cake Artist</h2>
               <p>Fill this in and we'll call you to confirm your details and walk you through membership.</p>
             </div>
             <JoinForm />

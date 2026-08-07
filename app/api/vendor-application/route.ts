@@ -23,9 +23,10 @@ export async function POST(request: Request) {
       from: `Vendor Application <${process.env.RESEND_FROM_EMAIL}>`,
       to: adminEmail,
       subject: `New Vendor Application: ${name}`,
-      text: `A new vendor has applied to join the platform.\n\nName: ${name}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nCity: ${city || 'N/A'}\nLanguages: ${languages || 'N/A'}\nStarting Rate: ${startingRate || 'N/A'}`,
+      text: `A new vendor has applied to join the platform. This vendor request comes from the Cake Artist website.\n\nName: ${name}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nCity: ${city || 'N/A'}\nLanguages: ${languages || 'N/A'}\nStarting Rate: ${startingRate || 'N/A'}`,
       html: `
         <h2>New Vendor Application</h2>
+        <p><em>This vendor request comes from the Cake Artist website.</em></p>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>WhatsApp:</strong> ${whatsapp}</p>
         <p><strong>Email:</strong> ${email}</p>
