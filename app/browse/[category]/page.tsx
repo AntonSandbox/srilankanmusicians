@@ -55,7 +55,7 @@ export default async function BrowseCategoryPage(props: { params: Promise<{ cate
             </label>
 
             <div className='nav-links flex gap-4'>
-              <a href="/become-vendor" className="nav-btn-primary">BECOME A Emcees/ MC/ Compere</a>
+              <a href="/become-vendor" className="nav-btn-primary">BECOME A Cake Artist</a>
             </div>
           </nav>
         </div>
