@@ -1410,6 +1410,7 @@
   
   .new-home .mobile-video {
     display: block;
+    object-position: 65% center;
   }
 
   .new-home header {
@@ -1563,6 +1564,18 @@
 
   .new-home .offer-grid {
     grid-template-columns: 1fr;
+  }
+
+  .new-home .offer-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .new-home .offer-icon {
+    margin-bottom: 0;
+    flex-shrink: 0;
   }
 
   .new-home .offer-banner-light {
