@@ -37,19 +37,13 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   const category = typeof searchParams.category === 'string' ? searchParams.category : undefined;
   const location = typeof searchParams.location === 'string' ? searchParams.location : undefined;
 
-  // language can be string or string[]
-  let languages: string[] | undefined = undefined;
-  if (Array.isArray(searchParams.language)) {
-    languages = searchParams.language;
-  } else if (typeof searchParams.language === 'string') {
-    languages = [searchParams.language];
-  }
+
 
   const date = typeof searchParams.date === 'string' ? searchParams.date : undefined;
   const occasion = typeof searchParams.occasion === 'string' ? searchParams.occasion : undefined;
   const budget = typeof searchParams.budget === 'string' ? searchParams.budget : undefined;
 
-  const hasSearchParams = category || location || (languages && languages.length > 0) || date || occasion || budget;
+  const hasSearchParams = category || location || date || occasion || budget;
 
   // The search fetching has been moved to SearchResultsList
 
@@ -117,7 +111,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
             <div className='nav-links flex gap-4'>
               <a href="https://srilankaneventportal.com/vendor/login" target="_blank" rel="noopener noreferrer" className="nav-btn-secondary">Cake Artist LOGIN</a>
-              <a href="#join-us" className="nav-btn-primary">BECOME AN Cake Artist</a>
+              <a href="#join-us" className="nav-btn-primary">BECOME A Cake Artist</a>
             </div>
           </nav>
 
@@ -247,10 +241,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           </div>
 
           <div className="offer-grid">
-            <div className="offer-card">
-              <div className="offer-icon"><Video className="w-5 h-5" /></div>
-              <p>A video and photo profile, made for you</p>
-            </div>
+
             <div className="offer-card">
               <div className="offer-icon"><MousePointer2 className="w-5 h-5" /></div>
               <p>Every event featured on our social media</p>
@@ -293,7 +284,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           <div className="join-container">
             <div className="join-header">
 
-              <h2>Become an Cake Artist</h2>
+              <h2>Become a Cake Artist</h2>
               <p>Fill this in and we'll call you to confirm your details and walk you through membership.</p>
             </div>
             <JoinForm />

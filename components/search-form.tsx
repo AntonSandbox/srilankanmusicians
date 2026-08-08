@@ -31,7 +31,6 @@ export function SearchForm() {
     searchParams.get('date') ? new Date(searchParams.get('date') as string) : undefined
   );
   const [location, setLocation] = useState(searchParams.get('location') || '');
-  const [languages, setLanguages] = useState<string[]>(searchParams.getAll('language'));
   const [budget, setBudget] = useState(searchParams.get('budget') || '');
 
   // Sync state if URL changes externally
@@ -39,13 +38,9 @@ export function SearchForm() {
     setOccasion(searchParams.get('occasion') || '');
     setDate(searchParams.get('date') ? new Date(searchParams.get('date') as string) : undefined);
     setLocation(searchParams.get('location') || '');
-    setLanguages(searchParams.getAll('language'));
     setBudget(searchParams.get('budget') || '');
   }, [searchParams]);
 
-  const toggleLanguage = (lang: string) => {
-    setLanguages(prev => prev.includes(lang) ? prev.filter(l => l !== lang) : [...prev, lang]);
-  };
 
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -61,10 +56,6 @@ export function SearchForm() {
     if (location && location !== 'none') params.set('location', location);
     else params.delete('location');
 
-    params.delete('language');
-    languages.forEach(lang => {
-      params.append('language', lang);
-    });
 
     if (budget && budget !== 'none') params.set('budget', budget);
     else params.delete('budget');
@@ -112,15 +103,6 @@ export function SearchForm() {
                     <option key={item} value={item}>{item}</option>
                   ))}
                 </optgroup>
-              ))}
-            </select>
-          </div>
-          <div className="field">
-            <label htmlFor="s-lang">Language</label>
-            <select id="s-lang" value={languages[0] || 'none'} onChange={(e) => setLanguages(e.target.value === 'none' ? [] : [e.target.value])}>
-              <option value="none">Preferred language</option>
-              {LANGUAGES.map(lang => (
-                <option key={lang} value={lang}>{lang}</option>
               ))}
             </select>
           </div>
