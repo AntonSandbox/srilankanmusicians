@@ -15,12 +15,7 @@ export async function SearchResultsList({
   const category = typeof searchParams.category === 'string' ? searchParams.category : undefined;
   const location = typeof searchParams.location === 'string' ? searchParams.location : undefined;
 
-  let languages: string[] | undefined = undefined;
-  if (Array.isArray(searchParams.language)) {
-    languages = searchParams.language;
-  } else if (typeof searchParams.language === 'string') {
-    languages = [searchParams.language];
-  }
+
 
   const date = typeof searchParams.date === 'string' ? searchParams.date : undefined;
   const occasion = typeof searchParams.occasion === 'string' ? searchParams.occasion : undefined;
@@ -46,7 +41,7 @@ export async function SearchResultsList({
   const args = {
     p_category: 'Cake Artist',
     p_location: location || null,
-    p_languages: languages || null,
+    p_languages: null,
     p_date: date || null,
     p_occasion: occasion || null,
     p_budget: budget || null

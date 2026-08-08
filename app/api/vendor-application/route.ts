@@ -3,7 +3,7 @@ import { Resend } from 'resend';
 
 export async function POST(request: Request) {
   try {
-    const { name, whatsapp, email, city, languages, startingRate } = await request.json();
+    const { name, whatsapp, email, city, startingRate } = await request.json();
 
     if (!name || !whatsapp || !email) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       from: `Vendor Application <${process.env.RESEND_FROM_EMAIL}>`,
       to: adminEmail,
       subject: `New Vendor Application: ${name}`,
-      text: `A new vendor has applied to join the platform. This vendor request comes from the Cake Artist website.\n\nName: ${name}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nCity: ${city || 'N/A'}\nLanguages: ${languages || 'N/A'}\nStarting Rate: ${startingRate || 'N/A'}`,
+      text: `A new vendor has applied to join the platform. This vendor request comes from the Cake Artist website.\n\nName: ${name}\nWhatsApp: ${whatsapp}\nEmail: ${email}\nCity: ${city || 'N/A'}\nStarting Rate: ${startingRate || 'N/A'}`,
       html: `
         <h2>New Vendor Application</h2>
         <p><em>This vendor request comes from the Cake Artist website.</em></p>
@@ -31,7 +31,6 @@ export async function POST(request: Request) {
         <p><strong>WhatsApp:</strong> ${whatsapp}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>City/Area:</strong> ${city || 'N/A'}</p>
-        <p><strong>Languages:</strong> ${languages || 'N/A'}</p>
         <p><strong>Starting Rate per Event:</strong> ${startingRate || 'N/A'}</p>
       `,
     });

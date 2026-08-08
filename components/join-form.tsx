@@ -7,7 +7,6 @@ export function JoinForm() {
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
-  const [languages, setLanguages] = useState('');
   const [startingRate, setStartingRate] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
@@ -26,7 +25,6 @@ export function JoinForm() {
           whatsapp,
           email,
           city,
-          languages,
           startingRate
         }),
       });
@@ -40,7 +38,6 @@ export function JoinForm() {
       setWhatsapp('');
       setEmail('');
       setCity('');
-      setLanguages('');
       setStartingRate('');
     } catch (error) {
       console.error(error);
@@ -74,10 +71,6 @@ export function JoinForm() {
           <div className="join-field">
             <label htmlFor="join-city">City / area</label>
             <input id="join-city" type="text" placeholder="e.g. Colombo, Kandy, Galle" required value={city} onChange={(e) => setCity(e.target.value)} />
-          </div>
-          <div className="join-field">
-            <label htmlFor="join-lang">Languages you host in</label>
-            <input id="join-lang" type="text" placeholder="e.g. Sinhala, English" required value={languages} onChange={(e) => setLanguages(e.target.value)} />
           </div>
           <div className="join-field">
             <label htmlFor="join-rate">Starting rate per event</label>
