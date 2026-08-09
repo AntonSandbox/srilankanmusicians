@@ -156,7 +156,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <section className="promise">
         <div className="wrap">
           <div className="promise-header">
-            <h2>Free to search. <span>Comperes you can trust.</span></h2>
+            <h2>Free to search. <span>Cake artists you can trust.</span></h2>
             <p>We've built a platform that puts your peace of mind first.</p>
           </div>
 
