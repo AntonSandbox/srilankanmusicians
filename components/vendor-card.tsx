@@ -192,25 +192,29 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
           </div>
         </div>
       ) : (
-        <div className="bg-white border border-zinc-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full">
+        <div className="group bg-white border border-zinc-200/80 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:border-amber-200 transition-all duration-300 flex flex-col h-full transform hover:-translate-y-1">
           {/* Top Section - Image Header */}
-          <div className="relative h-56 w-full flex-shrink-0 cursor-pointer" onClick={() => { setIsOpen(true); setScrollToBooking(false); }}>
+          <div className="relative h-72 sm:h-80 w-full flex-shrink-0 cursor-pointer bg-zinc-950 overflow-hidden" onClick={() => { setIsOpen(true); setScrollToBooking(false); }}>
+            {/* Blurred Background Layer */}
+            {vendor.profile_image && (
+              <img src={getImageUrl(vendor.profile_image)} alt="" className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-60 scale-125" aria-hidden="true" />
+            )}
+
+            {/* Actual contained image */}
             {vendor.profile_image ? (
-              <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} className="w-full h-full object-cover" />
+              <img src={getImageUrl(vendor.profile_image)} alt={vendor.name} className="relative w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" />
             ) : (
-              <div className="w-full h-full bg-zinc-200 flex items-center justify-center text-5xl font-serif text-amber-500">
+              <div className="relative w-full h-full bg-zinc-900 flex items-center justify-center text-5xl font-serif text-amber-500">
                 {vendor.name.charAt(0).toUpperCase()}
               </div>
             )}
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-5">
-              {/* <span className="bg-white/20 backdrop-blur-md text-white text-[9.5px] font-bold tracking-wider uppercase px-2.5 py-1 rounded w-fit mb-2">
-                {vendor.category}
-              </span> */}
-              <h2 className="text-[32px] font-bold font-serif text-white mb-1 leading-tight">{vendor.name}</h2>
+
+            {/* Gradient Overlay for Header */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-6 opacity-95 transition-opacity group-hover:opacity-100">
+              <h2 className="text-[28px] font-bold font-serif text-white mb-1.5 leading-tight drop-shadow-md">{vendor.name}</h2>
               {vendor.location && (
-                <div className="flex items-center gap-1.5 text-white/90 text-[13px] font-medium">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#e8a846]"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></svg>
+                <div className="flex items-center gap-1.5 text-white/90 text-[13px] font-medium drop-shadow-md">
+                  <MapPin className="w-4 h-4 text-amber-400" />
                   <span>{vendor.location}</span>
                 </div>
               )}
@@ -218,41 +222,40 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
           </div>
 
           {/* Body Section */}
-          <div className="p-5 flex flex-col flex-grow gap-5">
-            {/* Event Types */}
-            {vendor.occasions && vendor.occasions.length > 0 && (
-              <div>
-                <div className="text-[10px] font-bold text-[#7997b8] tracking-widest uppercase mb-2.5">Event Types</div>
-                <div className="flex flex-wrap gap-2">
-                  {vendor.occasions.slice(0, 3).map(occ => (
-                    <span key={occ} className="px-2.5 py-1.5 border border-zinc-100 rounded text-[11.5px] text-[#4a4a4a] bg-[#fbfbfb]">{occ}</span>
-                  ))}
-                  {vendor.occasions.length > 3 && (
-                    <span className="px-2.5 py-1.5 border border-zinc-100 rounded text-[11.5px] text-[#4a4a4a] bg-[#fbfbfb]">+{vendor.occasions.length - 3}</span>
-                  )}
+          <div className="p-6 flex flex-col flex-grow bg-white">
+            <div className="flex flex-col gap-5 flex-grow">
+              {/* Event Types */}
+              {vendor.occasions && vendor.occasions.length > 0 && (
+                <div>
+                  <div className="text-[10px] font-bold text-zinc-400 tracking-widest uppercase mb-3">Expertise</div>
+                  <div className="flex flex-wrap gap-2">
+                    {vendor.occasions.slice(0, 3).map(occ => (
+                      <span key={occ} className="px-3 py-1.5 border border-zinc-100 rounded-lg text-[11px] font-medium text-zinc-600 bg-zinc-50">{occ}</span>
+                    ))}
+                    {vendor.occasions.length > 3 && (
+                      <span className="px-3 py-1.5 border border-zinc-100 rounded-lg text-[11px] font-medium text-zinc-600 bg-zinc-50">+{vendor.occasions.length - 3}</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Languages */}
-            {vendor.languages && vendor.languages.length > 0 && (
-              <div>
-                <div className="text-[10px] font-bold text-[#7997b8] tracking-widest uppercase mb-1.5">Languages</div>
-                <div className="text-[14px] font-medium text-[#2b2b2b]">
-                  {vendor.languages.join(' • ')}
+              {/* Languages */}
+              {vendor.languages && vendor.languages.length > 0 && (
+                <div>
+                  <div className="text-[10px] font-bold text-zinc-400 tracking-widest uppercase mb-1.5">Languages</div>
+                  <div className="text-[13.5px] font-medium text-zinc-700">
+                    {vendor.languages.join(' • ')}
+                  </div>
                 </div>
-              </div>
-            )}
-
-            {/* Divider */}
-            <div className="h-px w-full bg-zinc-100 my-1"></div>
+              )}
+            </div>
 
             {/* Bottom Container */}
-            <div className="mt-auto flex flex-col gap-4">
+            <div className="pt-5 mt-5 border-t border-zinc-100 flex flex-col gap-5">
               {/* Budget */}
               <div>
-                <div className="text-[10px] font-bold text-[#7997b8] tracking-widest uppercase mb-1">Starting From</div>
-                <div className="text-[22px] font-bold text-[#111827]">
+                <div className="text-[10px] font-bold text-zinc-400 tracking-widest uppercase mb-1">Starting From</div>
+                <div className="text-[22px] font-bold text-zinc-900">
                   {vendor.budget_range ? (
                     (() => {
                       const splitBudget = vendor.budget_range.split(/[-–]/).map(s => s.trim());
@@ -266,13 +269,13 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               <div className="grid grid-cols-2 gap-3">
                 <button
                   onClick={() => { setIsOpen(true); setScrollToBooking(false); }}
-                  className="w-full py-2.5 bg-[#f3f4f6] hover:bg-[#e5e7eb] text-[#111827] rounded-[10px] font-bold text-[13.5px] transition-colors"
+                  className="w-full py-2.5 bg-white border-2 border-zinc-100 hover:border-amber-200 hover:bg-amber-50 text-zinc-700 hover:text-amber-700 rounded-xl font-bold text-[13.5px] transition-colors"
                 >
-                  View Profile
+                  Profile
                 </button>
                 <button
                   onClick={() => { setIsOpen(true); setScrollToBooking(true); }}
-                  className="w-full py-2.5 bg-[#dda44a] hover:bg-[#c99036] text-white rounded-[10px] font-bold text-[13.5px] transition-colors"
+                  className="w-full py-2.5 bg-[#dda44a] hover:bg-[#c99036] text-white rounded-xl font-bold text-[13.5px] shadow-sm hover:shadow-md transition-all"
                 >
                   Book
                 </button>
