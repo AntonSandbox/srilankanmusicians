@@ -43,7 +43,9 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
   const occasion = typeof searchParams.occasion === 'string' ? searchParams.occasion : undefined;
   const budget = typeof searchParams.budget === 'string' ? searchParams.budget : undefined;
 
-  const hasSearchParams = category || location || date || occasion || budget;
+  const name = typeof searchParams.name === 'string' ? searchParams.name : undefined;
+
+  const hasSearchParams = category || location || date || occasion || budget || name;
 
   // The search fetching has been moved to SearchResultsList
 
