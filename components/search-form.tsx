@@ -32,6 +32,7 @@ export function SearchForm() {
   );
   const [location, setLocation] = useState(searchParams.get('location') || '');
   const [budget, setBudget] = useState(searchParams.get('budget') || '');
+  const [name, setName] = useState(searchParams.get('name') || '');
 
   // Sync state if URL changes externally
   useEffect(() => {
@@ -39,6 +40,7 @@ export function SearchForm() {
     setDate(searchParams.get('date') ? new Date(searchParams.get('date') as string) : undefined);
     setLocation(searchParams.get('location') || '');
     setBudget(searchParams.get('budget') || '');
+    setName(searchParams.get('name') || '');
   }, [searchParams]);
 
 
@@ -60,6 +62,11 @@ export function SearchForm() {
     if (budget && budget !== 'none') params.set('budget', budget);
     else params.delete('budget');
 
+
+    if (name.trim()) params.set('name', name.trim());
+    else params.delete('name');
+
+
     startTransition(() => {
       router.push(`/?${params.toString()}`);
     });
@@ -68,7 +75,7 @@ export function SearchForm() {
   return (
     <div className="search-panel">
       <form onSubmit={handleSearch}>
-        <div className="search-grid">
+        <div className="search-grid" style={{ marginBottom: '22px' }}>
           <div className="field">
             <label htmlFor="s-occasion">What is your occasion</label>
             <select id="s-occasion" value={occasion} onChange={(e) => setOccasion(e.target.value)}>
@@ -83,6 +90,17 @@ export function SearchForm() {
             </select>
           </div>
           <div className="field">
+            <label htmlFor="s-name">Search by Name</label>
+            <input
+              type="text"
+              id="s-name"
+              placeholder="e.g. John Doe"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full"
+            />
+          </div>
+          <div className="field">
             <label htmlFor="s-date">Event date</label>
             <input
               type="date"
@@ -91,8 +109,6 @@ export function SearchForm() {
               onChange={(e) => setDate(e.target.value ? new Date(e.target.value) : undefined)}
             />
           </div>
-        </div>
-        <div className="search-grid" style={{ marginBottom: '22px' }}>
           <div className="field">
             <label htmlFor="s-loc">Location</label>
             <select id="s-loc" value={location} onChange={(e) => setLocation(e.target.value)}>

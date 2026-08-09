@@ -20,6 +20,8 @@ export async function SearchResultsList({
   const date = typeof searchParams.date === 'string' ? searchParams.date : undefined;
   const occasion = typeof searchParams.occasion === 'string' ? searchParams.occasion : undefined;
   const budget = typeof searchParams.budget === 'string' ? searchParams.budget : undefined;
+  const name = typeof searchParams.name === 'string' ? searchParams.name : undefined;
+
 
   let vendors: Vendor[] = [];
   let fetchError = null;
@@ -44,7 +46,8 @@ export async function SearchResultsList({
     p_languages: null,
     p_date: date || null,
     p_occasion: occasion || null,
-    p_budget: budget || null
+    p_budget: budget || null,
+    p_name: name || null
   };
 
   const { data, error } = await supabase.rpc('search_available_vendors', args);
@@ -54,7 +57,7 @@ export async function SearchResultsList({
     fetchError = error;
   } else if (data) {
     vendors = data as Vendor[];
-    
+
     if (process.env.NODE_ENV !== 'development') {
       vendors = vendors.filter(v => (v as any).contact_email !== 'tharushamjayasooriya@gmail.com');
     }
