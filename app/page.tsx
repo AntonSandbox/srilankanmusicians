@@ -281,6 +281,46 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
         </div>
       </section>
 
+
+      <section className="mentor-section">
+        <div className="wrap">
+          <div className="mentor-header">
+            <h2 className="mentor-title">Hear from our Mentor for Cake Artists</h2>
+          </div>
+          <div className="mentor-content">
+            <div className="mentor-video">
+              <a href="https://youtu.be/oP_zj-8T0WE?si=JchovtiMF9eA1CHC" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
+                <div className="video-box-large">
+                  <div className="video-bg" style={{ background: 'url(/oP_zj-8T0WE-HD.jpg) center/cover no-repeat' }}></div>
+                  <div className="watch-badge">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
+                    <span>Watch on YouTube</span>
+                  </div>
+                  <div className="play-btn-large">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                  <div className="video-caption-large">
+                    <strong>Ms. Orancy Siriwardene</strong>
+                    <span className="caption-divider"></span>
+                    <span>Cake Artist mentor</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+            <div className="mentor-details">
+              <svg className="quote-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 11L8 15H11V19H5V15L7 11H5V7H11V11H10ZM20 11L18 15H21V19H15V15L17 11H15V7H21V11H20Z" fill="currentColor" />
+              </svg>
+              <h3>Ms. Orancy Siriwardene</h3>
+              <p>In this exclusive interview, we seek advice from Ms. Orancy Siriwardene, Sri Lanka's renowned cake artist, with over 30 years working as a cake artist.</p>
+              {/* <a href="https://youtu.be/4Axj6aj-wtQ?si=ECZc3P_FvhJAEz8X" target="_blank" rel="noopener noreferrer" className="mentor-link">Watch full interview &rarr;</a> */}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="join-section" id="join-us">
         <div className="wrap">
           <div className="join-container">
