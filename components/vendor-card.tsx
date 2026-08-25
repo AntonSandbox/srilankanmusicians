@@ -548,6 +548,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
 
                   setIsSubmitting(true);
                   setSubmitResult(null);
+                  formData.append('vendorId', popupVendor.id);
                   formData.append('vendorEmail', popupVendor.contact_email || '');
                   formData.append('vendorName', popupVendor.name);
                   formData.append('date', format(selectedBookingDate, 'yyyy-MM-dd'));

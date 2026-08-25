@@ -1,7 +1,7 @@
 'use server';
 
 import { Resend } from 'resend';
-
+import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendTentativeBookingRequest(prevState: any, formData: FormData) {
@@ -19,6 +19,36 @@ export async function sendTentativeBookingRequest(prevState: any, formData: Form
 
     if (!name || !email || !date || !occasion) {
       return { success: false, error: 'Please fill in all required fields.' };
+    }
+
+    const vendorId = formData.get('vendorId') as string;
+    
+    if (vendorId) {
+      const supabaseAdmin = createSupabaseClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
+      const { error: dbError } = await supabaseAdmin
+        .from('vendor_booking_requests')
+        .insert({
+          vendor_id: vendorId,
+          client_name: name,
+          client_email: email,
+          client_phone: phone || null,
+          event_date: date,
+          event_slot: slot || null,
+          event_occasion: occasion,
+          event_location: location || null,
+          special_requirements: requirements || null,
+          status: 'pending'
+        });
+      
+      if (dbError) {
+        console.error('Failed to insert booking request:', dbError);
+        // Continue to send email even if DB insert fails, or we could return error here.
+        // Returning error is safer to let the user know.
+        // return { success: false, error: 'Failed to record booking request in database.' };
+      }
     }
 
     const adminEmail = process.env.ADMIN_EMAIL;
