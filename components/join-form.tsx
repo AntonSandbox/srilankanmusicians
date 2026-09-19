@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from 'react';
+import { CATEGORIES } from '@/lib/constants';
 
 export function JoinForm() {
   const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
@@ -22,6 +24,7 @@ export function JoinForm() {
         },
         body: JSON.stringify({
           name,
+          category,
           whatsapp,
           email,
           city,
@@ -35,6 +38,7 @@ export function JoinForm() {
 
       setStatus('success');
       setName('');
+      setCategory('');
       setWhatsapp('');
       setEmail('');
       setCity('');
@@ -59,6 +63,20 @@ export function JoinForm() {
           <div className="join-field">
             <label htmlFor="join-name">Full name</label>
             <input id="join-name" type="text" placeholder="Your full name" required value={name} onChange={(e) => setName(e.target.value)} />
+          </div>
+          <div className="join-field">
+            <label htmlFor="join-category">Category</label>
+            <select
+              id="join-category"
+              required
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="" disabled>Select your category</option>
+              {CATEGORIES[0].items.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
           </div>
           <div className="join-field">
             <label htmlFor="join-whatsapp">WhatsApp number</label>

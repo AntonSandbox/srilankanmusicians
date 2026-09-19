@@ -44,7 +44,7 @@ export default async function BrowseCategoryPage(props: { params: Promise<{ cate
         <div className="wrap">
           <nav>
             <a href="/" className="logo">
-              <img src="/srilankan_cake_artist.png" alt="Sri Lankan Event Portal" style={{ height: '36px', width: 'auto' }} />
+              <img src="/musician-logo.png" alt="Sri Lankan Event Portal" style={{ height: '36px', width: 'auto' }} />
             </a>
 
             <input type="checkbox" id="mobile-menu-toggle" className="mobile-menu-toggle" />

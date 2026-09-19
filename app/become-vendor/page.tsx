@@ -2,10 +2,11 @@
 
 import '../home-new.css';
 import { useState } from 'react';
-import { SERVICES } from '@/lib/constants';
+import { SERVICES, CATEGORIES } from '@/lib/constants';
 
 export default function BecomeVendorPage() {
   const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
@@ -23,7 +24,7 @@ export default function BecomeVendorPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, whatsapp, email, city, languages, startingRate }),
+        body: JSON.stringify({ name, category, whatsapp, email, city, languages, startingRate }),
       });
 
       if (!res.ok) {
@@ -32,6 +33,7 @@ export default function BecomeVendorPage() {
 
       setStatus('success');
       setName('');
+      setCategory('');
       setWhatsapp('');
       setEmail('');
       setCity('');
@@ -48,7 +50,7 @@ export default function BecomeVendorPage() {
       <header id="siteHeader">
         <div className="wrap">
           <nav>
-            <a href="/" className="logo"><img src="/Musiciansrilankan_cake_artist.png" alt="Sri Lankan Event Portal" style={{ height: '40px', width: 'auto' }} /></a>
+            <a href="/" className="logo"><img src="/Musicianmusician-logo.png" alt="Sri Lankan Event Portal" style={{ height: '40px', width: 'auto' }} /></a>
             <div className='flex gap-5'>
               <a href="/become-vendor" className="nav-cta">Become a Musician</a>
             </div>
@@ -90,6 +92,22 @@ export default function BecomeVendorPage() {
                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#E8960C] focus:border-transparent transition-all"
                     placeholder="Enter your full name"
                   />
+                </div>
+
+                <div>
+                  <label htmlFor="category" className="block text-sm font-medium mb-2" style={{ color: 'var(--espresso)' }}>Category</label>
+                  <select
+                    id="category"
+                    required
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#E8960C] focus:border-transparent transition-all bg-white"
+                  >
+                    <option value="" disabled>Select your category</option>
+                    {CATEGORIES[0].items.map((cat) => (
+                      <option key={cat} value={cat}>{cat}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>

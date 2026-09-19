@@ -4,7 +4,7 @@ export function Logo({ className = '', style }: { className?: string, style?: Re
   return (
     <div className={`site-brand-logo ${className}`} style={{ display: 'inline-flex', alignItems: 'center', ...style }}>
       <Image
-        src="/srilankan_cake_artist.png"
+        src="/musician-logo.png"
         alt="Sri Lankan Musician Logo"
         width={350}
         height={50}
