@@ -19,7 +19,8 @@ export const SERVICES = [
     items: [
       'Band',
       'DJ',
-      'Soloist'
+      'Soloist',
+      'Composer'
     ],
   },
 ];
