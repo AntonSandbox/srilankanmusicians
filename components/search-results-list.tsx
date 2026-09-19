@@ -12,14 +12,14 @@ export async function SearchResultsList({
   cloudflareAccountHash: string,
   totalProfessionals: number
 }) {
-  const category = typeof searchParams.category === 'string' ? searchParams.category : undefined;
-  const location = typeof searchParams.location === 'string' ? searchParams.location : undefined;
+  const category = typeof searchParams.category === 'string' && searchParams.category !== 'none' ? searchParams.category : undefined;
+  const location = typeof searchParams.location === 'string' && searchParams.location !== 'none' ? searchParams.location : undefined;
 
 
 
   const date = typeof searchParams.date === 'string' ? searchParams.date : undefined;
-  const occasion = typeof searchParams.occasion === 'string' ? searchParams.occasion : undefined;
-  const budget = typeof searchParams.budget === 'string' ? searchParams.budget : undefined;
+  const occasion = typeof searchParams.occasion === 'string' && searchParams.occasion !== 'none' ? searchParams.occasion : undefined;
+  const budget = typeof searchParams.budget === 'string' && searchParams.budget !== 'none' ? searchParams.budget : undefined;
   const name = typeof searchParams.name === 'string' ? searchParams.name : undefined;
 
 
@@ -41,7 +41,7 @@ export async function SearchResultsList({
   );
 
   const args = {
-    p_category: 'Cake Artist',
+    p_category: category || null,
     p_location: location || null,
     p_languages: null,
     p_date: date || null,
@@ -112,7 +112,9 @@ export async function SearchResultsList({
   return (
     <>
       <div className="section-eyebrow" style={{ marginBottom: '8px' }}>Search Results</div>
-      <h2 style={{ marginBottom: '32px' }}>Available Cake Artists for Your Event</h2>
+      <h2 style={{ marginBottom: '32px' }}>
+        {category ? `Available ${category}${category.endsWith('s') ? '' : 's'} for Your Event` : 'Available Talent for Your Event'}
+      </h2>
       <VendorGrid vendors={vendors} cloudflareAccountHash={cloudflareAccountHash} totalProfessionals={totalProfessionals || 542} />
     </>
   );
@@ -122,7 +124,7 @@ export function VendorGridSkeleton() {
   return (
     <>
       <div className="section-eyebrow" style={{ marginBottom: '8px' }}>Search Results</div>
-      <h2 style={{ marginBottom: '32px' }}>Available Cake Artists for Your Event</h2>
+      <h2 style={{ marginBottom: '32px' }}>Available Talent for Your Event</h2>
       <div className="vendors-hd in animate-pulse">
         <div className="vhd-left">
           <div className="h-4 w-48 bg-zinc-200 dark:bg-zinc-800 rounded mb-2"></div>

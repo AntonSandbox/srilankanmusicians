@@ -19,13 +19,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { OCCASIONS, LOCATIONS, LANGUAGES } from '@/lib/constants';
+import { OCCASIONS, LOCATIONS, LANGUAGES, CATEGORIES } from '@/lib/constants';
 
 export function SearchForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
+  const [category, setCategory] = useState(searchParams.get('category') || '');
   const [occasion, setOccasion] = useState(searchParams.get('occasion') || '');
   const [date, setDate] = useState<Date | undefined>(
     searchParams.get('date') ? new Date(searchParams.get('date') as string) : undefined
@@ -36,6 +37,7 @@ export function SearchForm() {
 
   // Sync state if URL changes externally
   useEffect(() => {
+    setCategory(searchParams.get('category') || '');
     setOccasion(searchParams.get('occasion') || '');
     setDate(searchParams.get('date') ? new Date(searchParams.get('date') as string) : undefined);
     setLocation(searchParams.get('location') || '');
@@ -48,6 +50,9 @@ export function SearchForm() {
     if (e) e.preventDefault();
 
     const params = new URLSearchParams(searchParams.toString());
+
+    if (category && category !== 'none') params.set('category', category);
+    else params.delete('category');
 
     if (occasion && occasion !== 'none') params.set('occasion', occasion);
     else params.delete('occasion');
@@ -76,6 +81,19 @@ export function SearchForm() {
     <div className="search-panel">
       <form onSubmit={handleSearch}>
         <div className="search-grid" style={{ marginBottom: '22px' }}>
+          <div className="field">
+            <label htmlFor="s-category">Category</label>
+            <select id="s-category" value={category} onChange={(e) => setCategory(e.target.value)}>
+              <option value="none">All Categories</option>
+              {CATEGORIES.map((group) => (
+                <optgroup key={group.group} label={group.group}>
+                  {group.items.map((item) => (
+                    <option key={item} value={item}>{item}</option>
+                  ))}
+                </optgroup>
+              ))}
+            </select>
+          </div>
           <div className="field">
             <label htmlFor="s-occasion">What is your occasion</label>
             <select id="s-occasion" value={occasion} onChange={(e) => setOccasion(e.target.value)}>
@@ -139,7 +157,9 @@ export function SearchForm() {
               Searching...
             </>
           ) : (
-            'Find Available Cake Artists'
+            category && category !== 'none'
+              ? `Find Available ${category}${category.endsWith('s') ? '' : 's'}`
+              : 'Find Available Talent'
           )}
         </button>
       </form>

@@ -114,7 +114,8 @@ CREATE OR REPLACE FUNCTION search_available_vendors(
   p_languages text[] DEFAULT NULL,
   p_date date DEFAULT NULL,
   p_occasion text DEFAULT NULL,
-  p_budget text DEFAULT NULL
+  p_budget text DEFAULT NULL,
+  p_name text DEFAULT NULL
 )
 RETURNS SETOF vendors AS $$
 BEGIN
@@ -126,6 +127,7 @@ BEGIN
     (p_category IS NULL OR v.category = p_category)
     AND (p_location IS NULL OR v.location = p_location)
     AND (p_budget IS NULL OR v.budget_range = p_budget)
+    AND (p_name IS NULL OR v.name ILIKE '%' || p_name || '%')
     
     -- 2. Array Match Filters
     -- Occasion: Check if the provided occasion string exists anywhere inside the vendor's occasions array

@@ -15,12 +15,17 @@ export const OCCASIONS = [
 
 export const SERVICES = [
   {
-    group: 'Professionals',
+    group: 'Musicians',
     items: [
-      'Cake Artist'
+      'Band',
+      'DJ',
+      'Soloist',
+      'Composer'
     ],
   },
 ];
+
+export const CATEGORIES = SERVICES;
 
 export const LOCATIONS = [
   {

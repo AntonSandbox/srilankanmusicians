@@ -286,13 +286,15 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
       )}
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent showCloseButton={false} className="max-w-[95vw] w-[95vw] sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[60vw] md:w-full max-h-[calc(100dvh-2rem)] md:max-h-[calc(100dvh-4rem)] overflow-y-auto p-0 gap-0 border-0 bg-white dark:bg-zinc-950">
-          <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-0 z-50">
-            <DialogTitle className="flex items-center">
+        <DialogContent showCloseButton={false} className="max-w-[95vw] w-[95vw] sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[60vw] md:w-full max-h-[calc(100dvh-2rem)] md:max-h-[calc(100dvh-4rem)] overflow-y-auto overflow-x-hidden p-0 gap-0 border-0 bg-white dark:bg-zinc-950">
+          <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-0 z-50 min-w-0 w-full gap-4">
+            <DialogTitle className="flex items-center min-w-0">
               <span className="sr-only">{popupVendor.name}</span>
-              <Logo style={{ fontSize: '11px' }} />
+              <div className="[&_img]:!h-6 sm:[&_img]:!h-10 [&_img]:!w-auto">
+                <Logo style={{ fontSize: '11px' }} />
+              </div>
             </DialogTitle>
-            <DialogClose className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-md px-3 py-1.5 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">
+            <DialogClose className="flex items-center gap-2 border border-zinc-200 dark:border-zinc-800 rounded-md px-3 py-1.5 text-sm font-medium hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors shrink-0">
               <X className="w-4 h-4" /> Close
             </DialogClose>
           </div>
@@ -321,8 +323,8 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               <div className="h-64 bg-zinc-200 dark:bg-zinc-800 rounded-xl"></div>
             </div>
           ) : (
-            <div className="p-4 sm:p-10">
-              <div className="flex flex-col gap-10">
+            <div className="p-3 sm:p-10 min-w-0 w-full">
+              <div className="flex flex-col gap-10 min-w-0">
 
                 {/* Responsive Top Layout */}
                 <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
@@ -508,7 +510,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
               )}
 
               {/* Budget Banner */}
-              <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 px-8 py-6 rounded-xl mt-16 flex flex-wrap items-center gap-x-16 gap-y-4 shadow-sm">
+              <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 px-5 sm:px-8 py-5 sm:py-6 rounded-xl mt-16 flex flex-wrap items-center gap-x-8 sm:gap-x-16 gap-y-4 shadow-sm">
                 {(() => {
                   const splitBudget = popupVendor.budget_range?.split(/[-–]/).map(s => s.trim());
                   const isRange = splitBudget && splitBudget.length === 2;
@@ -583,35 +585,37 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                   }
                 }} className="space-y-8">
 
-                  <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 p-6 sm:p-8 rounded-xl shadow-sm">
-                    <div className="flex flex-col lg:flex-row gap-8">
-                      <div className="shrink-0 space-y-3">
+                  <div className="bg-[#FAF7F2] dark:bg-amber-950/20 border border-amber-200/50 p-4 sm:p-8 rounded-xl shadow-sm min-w-0">
+                    <div className="flex flex-col lg:flex-row gap-8 min-w-0">
+                      <div className="shrink-0 space-y-3 min-w-0 w-full lg:w-auto">
                         <label className="text-sm font-bold text-zinc-700 dark:text-zinc-300 block">Event Date</label>
-                        <UICalendar
-                          mode="single"
-                          selected={selectedBookingDate}
-                          onSelect={(d) => {
-                            setSelectedBookingDate(d);
-                            setBookingStartTime('');
-                            setBookingEndTime('');
-                            if (submitResult?.success) setSubmitResult(null);
-                          }}
-                          disabled={(date) => {
-                            const today = new Date();
-                            today.setHours(0, 0, 0, 0);
-                            if (date < today) return true;
+                        <div className="overflow-x-auto w-full max-w-[85vw] pb-2 sm:max-w-none">
+                          <UICalendar
+                            mode="single"
+                            selected={selectedBookingDate}
+                            onSelect={(d) => {
+                              setSelectedBookingDate(d);
+                              setBookingStartTime('');
+                              setBookingEndTime('');
+                              if (submitResult?.success) setSubmitResult(null);
+                            }}
+                            disabled={(date) => {
+                              const today = new Date();
+                              today.setHours(0, 0, 0, 0);
+                              if (date < today) return true;
 
-                            const dateStr = format(date, 'yyyy-MM-dd');
-                            const isFullyBooked = popupVendor.unavailableSlots?.some(slot =>
-                              slot.date === dateStr && slot.start_time.startsWith('00:00') && slot.end_time.startsWith('23:59')
-                            );
-                            return !!isFullyBooked;
-                          }}
-                          className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm p-3 w-fit"
-                        />
+                              const dateStr = format(date, 'yyyy-MM-dd');
+                              const isFullyBooked = popupVendor.unavailableSlots?.some(slot =>
+                                slot.date === dateStr && slot.start_time.startsWith('00:00') && slot.end_time.startsWith('23:59')
+                              );
+                              return !!isFullyBooked;
+                            }}
+                            className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg shadow-sm p-3 w-fit min-w-min"
+                          />
+                        </div>
                       </div>
 
-                      <div className="flex-1 space-y-3">
+                      <div className="flex-1 space-y-3 min-w-0">
                         {selectedBookingDate ? (
                           <div className="space-y-4">
                             <label className="text-sm font-bold text-zinc-700 dark:text-zinc-300 block">
@@ -713,7 +717,7 @@ export function VendorCard({ vendor, cloudflareAccountHash, triggerType = 'searc
                             </div>
                           </div>
                         ) : (
-                          <div className="p-6 bg-zinc-50 text-zinc-500 dark:bg-zinc-900/50 dark:text-zinc-400 rounded-lg border border-zinc-100 dark:border-zinc-800 h-full flex flex-col items-center justify-center text-center space-y-2">
+                          <div className="p-4 sm:p-6 bg-zinc-50 text-zinc-500 dark:bg-zinc-900/50 dark:text-zinc-400 rounded-lg border border-zinc-100 dark:border-zinc-800 h-full flex flex-col items-center justify-center text-center space-y-2">
                             <Calendar className="w-8 h-8 opacity-20" />
                             <p>Select a highlighted date from the calendar to view available time slots.</p>
                           </div>
