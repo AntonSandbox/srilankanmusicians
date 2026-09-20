@@ -101,7 +101,7 @@ export function JoinForm() {
             {status === 'loading' ? 'Submitting...' : 'Submit'}
           </button>
 
-          <p className="join-disclaimer">No payment now. We will confirm pricing and next steps via Ruvi@mentspire.com before anything is finalised. Please do not make any payment to any bank account sent via any other email except Ruvi@mentspire.com only and that too upon speaking with you. We will not take responsibility if you use any other modes.</p>
+          <p className="join-disclaimer">No payment now. We will confirm pricing and next steps via ruvindya@mentspire.com before anything is finalised. Please do not make any payment to any bank account sent via any other email except ruvindya@mentspire.com only and that too upon speaking with you. We will not take responsibility if you use any other modes.</p>
         </form>
       )}
     </div>
