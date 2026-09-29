@@ -60,23 +60,23 @@ export default function TermsAndConditionsPage() {
           </h3>
           
           <p style={{ marginBottom: '15px' }}>
-            Sri Lankan MC and MentSpire do not accept any payments from guests or event organisers at any stage of the booking process.
+            srilankanmusician.com and MentSpire do not accept any payments from guests or event organisers at any stage of the booking process.
           </p>
           
           <p style={{ marginBottom: '15px' }}>
-            Once your emcee has confirmed their availability and agreed a rate directly with you, all payments are to be made directly to your chosen emcee. Sri Lankan MC and MentSpire do not collect, process or hold any funds on behalf of guests, couples or event organisers — and will not do so under any circumstances.
+            Once your musician has confirmed their availability and agreed a rate directly with you, all payments are to be made directly to your chosen musician. srilankanmusician.com and MentSpire do not collect, process or hold any funds on behalf of guests, couples or event organisers — and will not do so under any circumstances.
           </p>
 
           <p style={{ marginBottom: '15px', fontWeight: 500 }}>Please ensure you:</p>
           
           <ul style={{ listStyleType: 'disc', paddingLeft: '20px', marginBottom: '20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <li>Speak directly with your chosen emcee to confirm their availability, rate and all event requirements before making any payment.</li>
+            <li>Speak directly with your chosen musician to confirm their availability, rate and all event requirements before making any payment.</li>
             <li>Have a clear record of all payments made. We strongly recommend confirming all financial arrangements in writing via email to your vendor prior to making any payment.</li>
             <li>Retain all receipts, bank transfer records and written confirmations for your own reference.</li>
           </ul>
 
           <p style={{ marginBottom: '15px' }}>
-            Sri Lankan MC and MentSpire are a connection platform. Our role is to help you find the right professional, check their availability and make initial contact — nothing more. We do not act as agents, do not take commission from bookings, and do not collect funds from guests or couples at any point.
+            srilankanmusician.com and MentSpire are a connection platform. Our role is to help you find the right professional, check their availability and make initial contact — nothing more. We do not act as agents, do not take commission from bookings, and do not collect funds from guests or couples at any point.
           </p>
 
           <p style={{ marginBottom: '40px' }}>
@@ -111,7 +111,7 @@ export default function TermsAndConditionsPage() {
             <li>Wait for your official account confirmation email from <strong>ruvindya@mentspire.com</strong> before making any payment.</li>
             <li>Make payment only to the bank account details provided in that confirmation email.</li>
             <li>Retain your payment receipt and email it to <strong>ruvindya@mentspire.com</strong> as confirmation of your payment.</li>
-            <li>Do not make any payment in response to any email, message or request from any other address or individual claiming to represent MentSpire or Sri Lankan MC.</li>
+            <li>Do not make any payment in response to any email, message or request from any other address or individual claiming to represent MentSpire or srilankanmusician.com.</li>
           </ul>
 
           <p style={{ marginBottom: '40px' }}>
@@ -125,7 +125,7 @@ export default function TermsAndConditionsPage() {
           </h2>
 
           <p style={{ marginBottom: '15px' }}>
-            Sri Lankan MC is operated under MentSpire. By using this platform — whether as a guest, couple, event organiser or vendor — you agree to these terms.
+            srilankanmusician.com is operated under MentSpire. By using this platform — whether as a guest, couple, event organiser or vendor — you agree to these terms.
           </p>
 
           <p style={{ marginBottom: '15px' }}>
