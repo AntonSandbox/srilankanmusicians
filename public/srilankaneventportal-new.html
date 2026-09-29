@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sri Lankan Event Portal | Find Emcees, Bands, DJs, Makeup Artists, Cake Artists & Photographers</title>
+  <title>Sri Lankan Event Portal | Find Emcees, Bands, DJs, Makeup Artists, Musicians & Photographers</title>
   <meta name="description"
-    content="Search verified event talent across Sri Lanka — emcees, bands, DJs, makeup artists, Cake Artists and photographers — by occasion, date, location and budget.">
+    content="Search verified event talent across Sri Lanka — emcees, bands, DJs, makeup artists, Musicians and photographers — by occasion, date, location and budget.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -688,7 +688,7 @@
               <option>Band</option>
               <option>DJ</option>
               <option>Makeup Artist</option>
-              <option>Cake Artist</option>
+              <option>Musician</option>
               <option>Photographer</option>
             </select>
           </div>
@@ -903,7 +903,7 @@
 
       <div class="category-block">
         <div class="category-head">
-          <h3>Cake Artists</h3><a class="view-more" href="https://srilankancakeartist.com">View all Cake Artists →</a>
+          <h3>Musicians</h3><a class="view-more" href="https://srilankancakeartist.com">View all Musicians →</a>
         </div>
         <div class="profile-grid">
           <div class="profile-card">
@@ -987,7 +987,7 @@
       <div class="explore-grid">
         <a class="explore-card" href="https://srilankanmc.com">
           <div class="tag">Emcees &amp; Comperes</div>
-          <h3>Book an Cake Artist in Sri Lanka</h3>
+          <h3>Book an Musician in Sri Lanka</h3>
           <p>Search and book verified emcees and comperes for any occasion.</p>
           <span class="link-arrow">Visit Sri Lankan Emcee →</span>
         </a>
@@ -1010,10 +1010,10 @@
           <span class="link-arrow">Visit Sri Lankan MUA →</span>
         </a>
         <a class="explore-card" href="https://srilankancakeartist.com">
-          <div class="tag">Cake Artists</div>
-          <h3>Book a Cake Artist in Sri Lanka</h3>
-          <p>Search and book Cake Artists for weddings and celebrations of any size.</p>
-          <span class="link-arrow">Visit Sri Lankan Cake Artist →</span>
+          <div class="tag">Musicians</div>
+          <h3>Book a Musician in Sri Lanka</h3>
+          <p>Search and book Musicians for weddings and celebrations of any size.</p>
+          <span class="link-arrow">Visit Sri Lankan Musician →</span>
         </a>
         <a class="explore-card" href="https://srilankanphotographer.com">
           <div class="tag">Photographers</div>
@@ -1072,11 +1072,11 @@
         </div>
         <div class="mentor-card">
           <div class="video-box">
-            <div class="play-btn" role="button" aria-label="Play Cake Artist mentor video"></div>
-            <div class="video-caption">Cake Artist</div>
+            <div class="play-btn" role="button" aria-label="Play Musician mentor video"></div>
+            <div class="video-caption">Musician</div>
           </div>
           <div class="mentor-body">
-            <div class="mentor-cat">Cake Artists</div>
+            <div class="mentor-cat">Musicians</div>
             <div class="mentor-name">Ambassador to be announced</div>
           </div>
         </div>
@@ -1163,7 +1163,7 @@
     if (talentTypeSelect && budgetSelect) {
       talentTypeSelect.addEventListener('change', function (e) {
         const val = e.target.value;
-        if (val === 'Emcee / Compere' || val === 'Cake Artist') {
+        if (val === 'Emcee / Compere' || val === 'Musician') {
           budgetSelect.innerHTML = specialBudgetOptions;
         } else {
           budgetSelect.innerHTML = defaultBudgetOptions;

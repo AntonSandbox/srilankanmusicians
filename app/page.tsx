@@ -16,11 +16,11 @@ function getCategorySlug(category: string) {
 }
 
 export const metadata = {
-  title: 'Search & Book Top Cake Artists in Sri Lanka | Sri Lankan Event Portal',
-  description: 'Find and book the best Cake Artists in Sri Lanka. Search verified Cake Artists for your wedding or corporate event. 100% free to search.',
+  title: 'Search & Book Top Musicians in Sri Lanka | Sri Lankan Event Portal',
+  description: 'Find and book the best Musicians in Sri Lanka. Search verified Musicians for your wedding or corporate event. 100% free to search.',
   openGraph: {
-    title: 'Search & Book Top Cake Artists in Sri Lanka',
-    description: 'Find and book the best Cake Artists in Sri Lanka. Search verified Cake Artists for your special day.',
+    title: 'Search & Book Top Musicians in Sri Lanka',
+    description: 'Find and book the best Musicians in Sri Lanka. Search verified Musicians for your special day.',
     url: '/',
     siteName: 'Sri Lankan Event Portal',
     locale: 'en_LK',
@@ -34,14 +34,14 @@ export const metadata = {
 export default async function PublicSearchPage(props: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
   const searchParams = await props.searchParams;
 
-  const category = typeof searchParams.category === 'string' ? searchParams.category : undefined;
-  const location = typeof searchParams.location === 'string' ? searchParams.location : undefined;
+  const category = typeof searchParams.category === 'string' && searchParams.category !== 'none' ? searchParams.category : undefined;
+  const location = typeof searchParams.location === 'string' && searchParams.location !== 'none' ? searchParams.location : undefined;
 
 
 
   const date = typeof searchParams.date === 'string' ? searchParams.date : undefined;
-  const occasion = typeof searchParams.occasion === 'string' ? searchParams.occasion : undefined;
-  const budget = typeof searchParams.budget === 'string' ? searchParams.budget : undefined;
+  const occasion = typeof searchParams.occasion === 'string' && searchParams.occasion !== 'none' ? searchParams.occasion : undefined;
+  const budget = typeof searchParams.budget === 'string' && searchParams.budget !== 'none' ? searchParams.budget : undefined;
 
   const name = typeof searchParams.name === 'string' ? searchParams.name : undefined;
 
@@ -68,8 +68,11 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
   let countQuery = supabase
     .from('vendors')
-    .select('*', { count: 'exact', head: true })
-    .eq('category', 'Cake Artist');
+    .select('*', { count: 'exact', head: true });
+
+  if (category) {
+    countQuery = countQuery.eq('category', category);
+  }
 
   if (process.env.NODE_ENV !== 'development') {
     countQuery = countQuery.neq('contact_email', 'tharushamjayasooriya@gmail.com');
@@ -112,8 +115,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             </label>
 
             <div className='nav-links flex gap-4'>
-              <a href="https://srilankaneventportal.com/vendor/login" target="_blank" rel="noopener noreferrer" className="nav-btn-secondary">Cake Artist LOGIN</a>
-              <a href="#join-us" className="nav-btn-primary">BECOME A Cake Artist</a>
+              <a href="https://srilankaneventportal.com/vendor/login" target="_blank" rel="noopener noreferrer" className="nav-btn-secondary">Musician LOGIN</a>
+              <a href="#join-us" className="nav-btn-primary">BECOME A Musician</a>
             </div>
           </nav>
 
@@ -122,16 +125,16 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
 
       <section className="hero">
         <video autoPlay loop muted playsInline className="hero-bg-video desktop-video">
-          <source src="/cake-bg.mp4" type="video/mp4" />
+          <source src="/musician-bg-mentspire.mp4" type="video/mp4" />
         </video>
         <video autoPlay loop muted playsInline className="hero-bg-video mobile-video">
-          <source src="/cake-bg.mp4" type="video/mp4" />
+          <source src="/musician-bg-mentspire.mp4" type="video/mp4" />
         </video>
         <div className="hero-overlay"></div>
 
         <div className="wrap">
-          <div className="eyebrow">Sri Lanka's Top Cake Artist, All in One Place</div>
-          <h1>Search Cake Artist<br />for your <span>Event</span></h1>
+          <div className="eyebrow">Sri Lanka's Top Musicians, All in One Place</div>
+          <h1>Search Musicians<br />for your <span>Event</span></h1>
 
           <Suspense fallback={<div style={{ height: '300px', background: 'var(--cream)', borderRadius: '6px' }}></div>}>
             <SearchForm />
@@ -158,7 +161,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <section className="promise">
         <div className="wrap">
           <div className="promise-header">
-            <h2>Free to search. <span>Cake artists you can trust.</span></h2>
+            <h2>Free to search. <span>Musicians you can trust.</span></h2>
             <p>We've built a platform that puts your peace of mind first.</p>
           </div>
 
@@ -178,9 +181,9 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
                 <div className="promise-icon">
                   <ShieldCheck className="w-5 h-5" />
                 </div>
-                <h3>Verified Cake Artists</h3>
+                <h3>Verified Musicians</h3>
               </div>
-              <p>Every Cake Artist on this platform is meticulously screened before being listed to ensure top-tier quality.</p>
+              <p>Every Musician on this platform is meticulously screened before being listed to ensure top-tier quality.</p>
             </div>
 
             <div className="promise-card">
@@ -199,8 +202,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <section className="profiles" id="profiles">
         <div className="wrap">
           <div className="titles-mid">
-            <h2 className="profiles-title">Discover exceptional <em>Cake Artist</em> for your big day.</h2>
-            {/* <p className="profiles-desc">From master bakers to award-winning designers, explore our curated selection of verified Cake Artists ready to bring your vision to life.</p> */}
+            <h2 className="profiles-title">Discover exceptional <em>Musicians</em> for your big day.</h2>
+            {/* <p className="profiles-desc">From master bakers to award-winning designers, explore our curated selection of verified Musicians ready to bring your vision to life.</p> */}
 
           </div>
 
@@ -209,7 +212,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
             return (
               <div key={category} className="category-block">
                 <div className="category-head">
-                  {/* <h3>{category === 'Cake Artist' ? 'Cake Artist' : category}</h3> */}
+                  {/* <h3>{category === 'Musician' ? 'Musician' : category}</h3> */}
                   <a className="view-more" href={`/browse/${slug}`}>Explore All &rarr;</a>
                 </div>
                 <div className="profile-grid">
@@ -285,13 +288,13 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
       <section className="mentor-section">
         <div className="wrap">
           <div className="mentor-header">
-            <h2 className="mentor-title">Hear from our Mentor for Cake Artists</h2>
+            <h2 className="mentor-title">Hear from our Mentor for Musicians</h2>
           </div>
           <div className="mentor-content">
             <div className="mentor-video">
-              <a href="https://youtu.be/oP_zj-8T0WE?si=JchovtiMF9eA1CHC" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
+              <a href="https://youtube.com/watch?v=s1dcnMwllSc" target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
                 <div className="video-box-large">
-                  <div className="video-bg" style={{ background: 'url(/oP_zj-8T0WE-HD.jpg) center/cover no-repeat' }}></div>
+                  <div className="video-bg" style={{ background: 'url(/s1dcnMwllSc-HD.jpg) center/cover no-repeat' }}></div>
                   <div className="watch-badge">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.5 12 3.5 12 3.5s-7.505 0-9.377.55a3.016 3.016 0 0 0-2.122 2.136C0 8.07 0 12 0 12s0 3.93.501 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.55 9.377.55 9.377.55s7.505 0 9.377-.55a3.016 3.016 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" /></svg>
                     <span>Watch on YouTube</span>
@@ -302,9 +305,9 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
                     </svg>
                   </div>
                   <div className="video-caption-large">
-                    <strong>Ms. Orancy Siriwardene</strong>
+                    <strong>Mr. Sohan Weerasinghe</strong>
                     <span className="caption-divider"></span>
-                    <span>Cake Artist mentor</span>
+                    <span>Musician mentor</span>
                   </div>
                 </div>
               </a>
@@ -313,8 +316,8 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
               <svg className="quote-mark" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M10 11L8 15H11V19H5V15L7 11H5V7H11V11H10ZM20 11L18 15H21V19H15V15L17 11H15V7H21V11H20Z" fill="currentColor" />
               </svg>
-              <h3>Ms. Orancy Siriwardene</h3>
-              <p>In this exclusive interview, we seek advice from Ms. Orancy Siriwardene, Sri Lanka's renowned cake artist, with over 30 years working as a cake artist.</p>
+              <h3>Mr. Sohan Weerasinghe</h3>
+              <p>Five decades into his musical journey, Mr. Sohan Weerasinghe continues to perform and mentor Soloists, Band Members & DJs. He remains to be a respected professional in Sri Lanka’s music industry, shaped by experience, humility, and an enduring love for music.</p>
               {/* <a href="https://youtu.be/4Axj6aj-wtQ?si=ECZc3P_FvhJAEz8X" target="_blank" rel="noopener noreferrer" className="mentor-link">Watch full interview &rarr;</a> */}
             </div>
           </div>
@@ -326,7 +329,7 @@ export default async function PublicSearchPage(props: { searchParams: Promise<{ 
           <div className="join-container">
             <div className="join-header">
 
-              <h2>Become a Cake Artist</h2>
+              <h2>Become a Musician</h2>
               <p>Fill this in and we'll call you to confirm your details and walk you through membership.</p>
             </div>
             <JoinForm />

@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from 'react';
+import { CATEGORIES } from '@/lib/constants';
 
 export function JoinForm() {
   const [name, setName] = useState('');
+  const [category, setCategory] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
   const [city, setCity] = useState('');
@@ -22,6 +24,7 @@ export function JoinForm() {
         },
         body: JSON.stringify({
           name,
+          category,
           whatsapp,
           email,
           city,
@@ -35,6 +38,7 @@ export function JoinForm() {
 
       setStatus('success');
       setName('');
+      setCategory('');
       setWhatsapp('');
       setEmail('');
       setCity('');
@@ -61,6 +65,20 @@ export function JoinForm() {
             <input id="join-name" type="text" placeholder="Your full name" required value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div className="join-field">
+            <label htmlFor="join-category">Category</label>
+            <select
+              id="join-category"
+              required
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="" disabled>Select your category</option>
+              {CATEGORIES[0].items.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+          </div>
+          <div className="join-field">
             <label htmlFor="join-whatsapp">WhatsApp number</label>
             <input id="join-whatsapp" type="text" placeholder="07X XXX XXXX" required value={whatsapp} onChange={(e) => setWhatsapp(e.target.value)} />
           </div>
@@ -83,7 +101,7 @@ export function JoinForm() {
             {status === 'loading' ? 'Submitting...' : 'Submit'}
           </button>
 
-          <p className="join-disclaimer">No payment now. We will confirm pricing and next steps via Ruvi@mentspire.com before anything is finalised. Please do not make any payment to any bank account sent via any other email except Ruvi@mentspire.com only and that too upon speaking with you. We will not take responsibility if you use any other modes.</p>
+          <p className="join-disclaimer">No payment now. We will confirm pricing and next steps via ruvindya@mentspire.com before anything is finalised. Please do not make any payment to any bank account sent via any other email except ruvindya@mentspire.com only and that too upon speaking with you. We will not take responsibility if you use any other modes.</p>
         </form>
       )}
     </div>

@@ -21,11 +21,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Sri Lankan Event Portal | Find & Book Top Cake Artists",
+    default: "Sri Lankan Event Portal | Find & Book Top Musicians",
     template: "%s | Sri Lankan Event Portal",
   },
-  description: "Search and book the best Cake Artists in Sri Lanka for weddings and corporate events.",
-  keywords: ["Sri Lanka events", "wedding vendors Sri Lanka", "Cake Artists Sri Lanka", "wedding cakes Colombo", "event talent"],
+  description: "Search and book the best Musicians in Sri Lanka for weddings and corporate events.",
+  keywords: ["Sri Lanka events", "wedding vendors Sri Lanka", "Musicians Sri Lanka", "wedding cakes Colombo", "event talent"],
   authors: [{ name: "MentSpire" }],
   creator: "MentSpire",
 };
